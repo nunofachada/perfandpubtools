@@ -75,7 +75,7 @@ for i=1:nimpl
             ie_spec.folder, ie_spec.files);
         times(i, e) = mean(times_raw{i, e}.elapsed);
         std_times(i, e) = std(times_raw{i, e}.elapsed);
-[GNU time]: https://www.gnu.org/software/time/
+
         % Compose experiments legend
         exp_legends{e} = ie_spec.exp_name;
 
@@ -94,7 +94,7 @@ if do_plot
     for i=1:nexp
         xticks(i) = str2double(exp_legends{i});
         if isnan(xticks(i))
-            error(['Cannot convert experiment name "' exp_legends{i} ...[GNU time]: https://www.gnu.org/software/time/
+            error(['Cannot convert experiment name "' exp_legends{i} ...
                 '" to scalar, which is required for plotting.']);
         end;
     end;

@@ -34,6 +34,46 @@ if different experiments correspond to different computational work sizes
 
 ### Examples
 
-To do.
+These examples use the datasets available at 
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34053.svg)](http://dx.doi.org/10.5281/zenodo.34053).
+Unpack the datasets to any folder and put the complete path to this folder in
+variable `datafolder`, e.g.:
+
+```matlab
+datafolder = 'path/to/datasets/';
+```
+
+#### Example 1. Extract performance data from a file
+
+* Extract performance data from file
+
+```matlab
+p = get_time([datafolder 'times/NL/time100v1r1.txt'])
+```
+
+* See CPU usage (percentage)
+
+```matlab
+p.cpu
+```
+
+#### Example 2. Extract execution lengths from files in a folder
+
+* Extract execution lengths from files
+
+```matlab
+exec_len = gather_times('NetLogo', [datafolder 'times/NL'], 'time100v1*.txt')
+```
+
+* See execution lengths
+
+```matlab
+exec_len.elapsed
+```
+
+#### Example 3. Get average execution lengths and standard deviations from a number of simulation runs
+
+
+
 
 [GNU time]: https://www.gnu.org/software/time/
