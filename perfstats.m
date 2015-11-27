@@ -28,16 +28,16 @@ function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
 % Output:
 %        times - Matrix of average computational times where each row 
 %                corresponds to an implementation and each column to a 
-%                setup.
+%                setup
 %    std_times - Matrix of the sample standard deviation of the 
 %                computational times. Each row corresponds to an 
-%                implementation and each column to a setup.
+%                implementation and each column to a setup
 %    times_raw - Cell matrix where each cell contais a complete time struct 
 %                for each setup. Rows correspond to implementations,
-%                columns to setups.
-%          fid - ID of generated plot (if doPlot == 1).
-%  impl_legend - Implementations legend.
-%   set_legend - Setups legend.
+%                columns to setups
+%          fid - ID of generated plot (if doPlot == 1)
+%  impl_legend - Implementations legend
+%   set_legend - Setups legend
 %
 %    
 % Copyright (c) 2015 Nuno Fachada

@@ -25,19 +25,19 @@ function [speedups, times, std_times, times_raw, fids, impl_legends, ...
 % Output:
 %     speedups - Cell array where each cell contains a matrix of speedups 
 %                for a given implementation. Number of cells depends on the 
-%                number of elements in parameter "compare".
+%                number of elements in parameter "compare"
 %        times - Matrix of average computational times where each row 
 %                corresponds to an implementation and each column to a 
-%                setup.
+%                setup
 %    std_times - Matrix of the sample standard deviation of the 
 %                computational times. Each row corresponds to an 
-%                implementation and each column to a setup.
+%                implementation and each column to a setup
 %    times_raw - Cell matrix where each cell contais a complete time struct 
 %                for each setup. Rows correspond to implementations,
-%                columns to setups.
-%         fids - Figure IDs (only if doPlot == 1).
-% impl_legends - Implementations legend.
-%  set_legends - Setups legend.
+%                columns to setups
+%         fids - Figure IDs (only if doPlot == 1)
+% impl_legends - Implementations legend
+%  set_legends - Setups legend
 %
 %    
 % Copyright (c) 2015 Nuno Fachada
