@@ -8,11 +8,16 @@ function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
 % [times, std_times, times_raw, fids] = PERFSTATS(do_plot, varargin)
 %
 % Parameters:
-%    do_plot - Draw scalability graph (1, 0)?
+%    do_plot - Draw scalability graph?
+%                     0 - No plot
+%                     1 - Regular plot
+%                     2 - Semi-log x plot
+%                     3 - Semi-log y plot
+%                     4 - Log-Log plot
 %   varargin - Pairs of implementation name and implementation specs. An
 %              implementation name is simply a string specifying the name
 %              of an implementation. An implementation spec is a cell array
-%              where each cell contains a struct with three fields:
+%              where each cell contains a struct with the following fields:
 %                 sname - Name of setup, e.g. of series of runs with a 
 %                         given parameter set
 %                folder - Folder containing GNU time output files
@@ -83,7 +88,7 @@ for i = 1:nimpl
 end;
 
 % Draw scalability plot, if required
-if do_plot
+if do_plot > 0
     
     if numel(unique(set_sizes)) ~= nset
         error(['Can''t plot if different setups within an ' ...
@@ -93,6 +98,18 @@ if do_plot
     if nset == 1
         warning('Can''t plot with only one setup per implementation.');
     else
+        
+        % Type of plot
+        switch do_plot
+            case 1
+                plotfunc = @plot;
+            case 2
+                plotfunc = @semilogx;
+            case 3
+                plotfunc = @semilogy;
+            otherwise
+                plotfunc = @loglog;
+        end;
         
         % Adjust for weird plotting behavior if number of implementations
         % is the same as the number of setups within each implementation
@@ -104,7 +121,7 @@ if do_plot
 
         % Draw figure
         fid = figure();
-        loglog(set_sizes, times_to_plot, '-o');
+        plotfunc(set_sizes, times_to_plot, '-o');
         grid on;
         legend(impl_legend, 'Location', 'NorthWest');
         set(gca,'XTick', set_sizes);
