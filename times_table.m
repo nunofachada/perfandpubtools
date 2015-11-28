@@ -28,8 +28,8 @@ function data = times_table(compare, varargin)
 % at http://opensource.org/licenses/MIT)
 %
 
-[speedup, times, std_times, ~, ~, impl_legends, set_legends] = ...
-    speedups(0, compare, varargin{:});
+[speedups, times, std_times, ~, ~, impl_legends, set_legends] = ...
+    speedup(0, compare, varargin{:});
 
 [nimpl, nset] = size(times);
 
@@ -43,7 +43,7 @@ for i=1:nimpl
     t(istart:iend, 2) = std_times(i, :);
     t(istart:iend, 3) = 100 * std_times(i, :) ./ times(i, :);
     for c = 1:numel(compare)
-        t(istart:iend, 3 + c) = speedup{c}(i, :);
+        t(istart:iend, 3 + c) = speedups{c}(i, :);
     end;
     
 end;

@@ -33,13 +33,17 @@ files containing the default output of the GNU time command, optionally
 plotting a scalability graph if different setups correspond to different
 computational work sizes.
 
-* [speedup](speedup.m) - Determine speedups using folders of files obtained with
-GNU time command, and optionally plot speedups in a bar plot.
+* [speedup](speedup.m) - Determine speedups using folders of files 
+obtained with GNU time command, and optionally plot speedups in a bar 
+plot.
 
-* [times_table](times_table.m) - Returns a matrix with useful contents for using
-in tables for publication, namely times (in seconds), absolute standard 
-deviations (seconds), relative standard deviations, speedups (vs the 
-implementations specified in the `compare` input variable).
+* [times_table](times_table.m) - Returns a matrix with useful contents 
+for using in tables for publication, namely times (in seconds), absolute 
+standard deviations (seconds), relative standard deviations, speedups 
+(vs the implementations specified in the `compare` input variable).
+
+* [times_table_f](times_table_f.m) - Print a timing table formatted in 
+plain text or in Latex.
 
 ### Examples
 
