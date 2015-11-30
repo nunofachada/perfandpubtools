@@ -1,14 +1,16 @@
 function times_table_f(type, varargin)
-% TIMES_TABLE_F Print a timing table formatted in plain text or in Latex.
+% TIMES_TABLE_F Print a timing table formatted in plain text or in Latex
+% (the latter requires the siunitx, multirow and booktabs packages)
 %
 % times_table_f(type, varargin)
 %
 % Parameters:
-%     type - Table format, 0 for plain text, 1 for Latex.
+%     type - Table format, 0 for plain text, 1 for Latex (the latter
+%            require the following packages: siunitx, multirow, booktabs)
 % varargin - Pairs of name and data, where data is the output of the
 %            TIMES_TABLE function. All varargin data parameters must have
 %            the t field with the same dimensions, and the compare, iname 
-%            and ename fields with the same data.
+%            and ename fields with the same data
 %
 %    
 % Copyright (c) 2015 Nuno Fachada

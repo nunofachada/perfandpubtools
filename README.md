@@ -42,8 +42,9 @@ for using in tables for publication, namely times (in seconds), absolute
 standard deviations (seconds), relative standard deviations, speedups 
 (vs the implementations specified in the `compare` input variable).
 
-* [times_table_f](times_table_f.m) - Print a timing table formatted in 
-plain text or in Latex.
+* [times_table_f](times_table_f.m) - Print a timing table formatted in plain 
+text or in Latex (the latter requires the [siunitx], [multirow] and [booktabs] 
+packages)
 
 ### Examples
 
@@ -359,6 +360,156 @@ od1600v2 = {od1600v2b20, od1600v2b50, od1600v2b100, od1600v2b200, od1600v2b500, 
 % Show plot
 perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '1600', od1600v2);
 ```
+#### Example 12. Same as example 6, but show a table instead of a plot
+
+* Compare NetLogo (NL) and Java single-thread (ST) PPHPC implementations
+for sizes 100 to 1600, parameter set 1 (using data from Example 6).
+
+```matlab
+% Put data in table format
+tdata = times_table(1, 'NL', nlv1, 'ST', stv1);
+
+% Print a plain text table
+times_table_f(0, 'NL vs ST', tdata)
+
+% Print a Latex table
+ times_table_f(1, 'NL vs ST', tdata)
+```
+#### Example 13. Complex tables
+
+* Print table 7 of the specified manuscript, containing times and speedups for
+different model implementations, different sizes and different parameter sets,
+showing speedups of all implementations versus the NetLogo and Java ST 
+versions. 
+
+```matlab
+% %%%%%%%%%%%%%%%%%%%%%%%%% %
+% Specs for parameter set 1 %
+% %%%%%%%%%%%%%%%%%%%%%%%%% %
+
+% Specify NetLogo implementation specs, parameter set 1
+nl100v1 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/NL'], 'files', 't*100v1*.txt');
+nl200v1 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/NL'], 'files', 't*200v1*.txt');
+nl400v1 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/NL'], 'files', 't*400v1*.txt');
+nl800v1 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/NL'], 'files', 't*800v1*.txt');
+nl1600v1 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/NL'], 'files', 't*1600v1*.txt');
+nlv1 = {nl100v1, nl200v1, nl400v1, nl800v1, nl1600v1};
+
+% Specify Java ST implementation specs, parameter set 1
+st100v1 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/ST'], 'files', 't*100v1*.txt');
+st200v1 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/ST'], 'files', 't*200v1*.txt');
+st400v1 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/ST'], 'files', 't*400v1*.txt');
+st800v1 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/ST'], 'files', 't*800v1*.txt');
+st1600v1 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/ST'], 'files', 't*1600v1*.txt');
+stv1 = {st100v1, st200v1, st400v1, st800v1, st1600v1};
+
+% Specify Java EQ implementation specs (runs with 12 threads), parameter set 1
+eq100v1t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/EQ'], 'files', 't*100v1*t12r*.txt');
+eq200v1t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/EQ'], 'files', 't*200v1*t12r*.txt');
+eq400v1t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/EQ'], 'files', 't*400v1*t12r*.txt');
+eq800v1t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/EQ'], 'files', 't*800v1*t12r*.txt');
+eq1600v1t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/EQ'], 'files', 't*1600v1*t12r*.txt');
+eqv1t12 = {eq100v1t12, eq200v1t12, eq400v1t12, eq800v1t12, eq1600v1t12};
+
+% Specify Java EX implementation specs (runs with 12 threads), parameter set 1
+ex100v1t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/EX'], 'files', 't*100v1*t12r*.txt');
+ex200v1t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/EX'], 'files', 't*200v1*t12r*.txt');
+ex400v1t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/EX'], 'files', 't*400v1*t12r*.txt');
+ex800v1t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/EX'], 'files', 't*800v1*t12r*.txt');
+ex1600v1t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/EX'], 'files', 't*1600v1*t12r*.txt');
+exv1t12 = {ex100v1t12, ex200v1t12, ex400v1t12, ex800v1t12, ex1600v1t12};
+
+% Specify Java ER implementation specs (runs with 12 threads), parameter set 1
+er100v1t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/ER'], 'files', 't*100v1*t12r*.txt');
+er200v1t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/ER'], 'files', 't*200v1*t12r*.txt');
+er400v1t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/ER'], 'files', 't*400v1*t12r*.txt');
+er800v1t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/ER'], 'files', 't*800v1*t12r*.txt');
+er1600v1t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/ER'], 'files', 't*1600v1*t12r*.txt');
+erv1t12 = {er100v1t12, er200v1t12, er400v1t12, er800v1t12, er1600v1t12};
+
+% Specify Java OD implementation specs (runs with 12 threads, b = 500), parameter set 1
+od100v1t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/OD'], 'files', 't*100v1*b500t12r*.txt');
+od200v1t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/OD'], 'files', 't*200v1*b500t12r*.txt');
+od400v1t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/OD'], 'files', 't*400v1*b500t12r*.txt');
+od800v1t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/OD'], 'files', 't*800v1*b500t12r*.txt');
+od1600v1t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/OD'], 'files', 't*1600v1*b500t12r*.txt');
+odv1t12 = {od100v1t12, od200v1t12, od400v1t12, od800v1t12, od1600v1t12};
+
+% %%%%%%%%%%%%%%%%%%%%%%%%% %
+% Specs for parameter set 2 %
+% %%%%%%%%%%%%%%%%%%%%%%%%% %
+
+% Specify NetLogo implementation specs, parameter set 2
+nl100v2 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/NL'], 'files', 't*100v2*.txt');
+nl200v2 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/NL'], 'files', 't*200v2*.txt');
+nl400v2 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/NL'], 'files', 't*400v2*.txt');
+nl800v2 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/NL'], 'files', 't*800v2*.txt');
+nl1600v2 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/NL'], 'files', 't*1600v2*.txt');
+nlv2 = {nl100v2, nl200v2, nl400v2, nl800v2, nl1600v2};
+
+% Specify Java ST implementation specs, parameter set 2
+st100v2 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/ST'], 'files', 't*100v2*.txt');
+st200v2 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/ST'], 'files', 't*200v2*.txt');
+st400v2 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/ST'], 'files', 't*400v2*.txt');
+st800v2 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/ST'], 'files', 't*800v2*.txt');
+st1600v2 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/ST'], 'files', 't*1600v2*.txt');
+stv2 = {st100v2, st200v2, st400v2, st800v2, st1600v2};
+
+% Specify Java EQ implementation specs (runs with 12 threads), parameter set 2
+eq100v2t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/EQ'], 'files', 't*100v2*t12r*.txt');
+eq200v2t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/EQ'], 'files', 't*200v2*t12r*.txt');
+eq400v2t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/EQ'], 'files', 't*400v2*t12r*.txt');
+eq800v2t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/EQ'], 'files', 't*800v2*t12r*.txt');
+eq1600v2t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/EQ'], 'files', 't*1600v2*t12r*.txt');
+eqv2t12 = {eq100v2t12, eq200v2t12, eq400v2t12, eq800v2t12, eq1600v2t12};
+
+% Specify Java EX implementation specs (runs with 12 threads), parameter set 2
+ex100v2t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/EX'], 'files', 't*100v2*t12r*.txt');
+ex200v2t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/EX'], 'files', 't*200v2*t12r*.txt');
+ex400v2t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/EX'], 'files', 't*400v2*t12r*.txt');
+ex800v2t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/EX'], 'files', 't*800v2*t12r*.txt');
+ex1600v2t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/EX'], 'files', 't*1600v2*t12r*.txt');
+exv2t12 = {ex100v2t12, ex200v2t12, ex400v2t12, ex800v2t12, ex1600v2t12};
+
+% Specify Java ER implementation specs (runs with 12 threads), parameter set 2
+er100v2t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/ER'], 'files', 't*100v2*t12r*.txt');
+er200v2t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/ER'], 'files', 't*200v2*t12r*.txt');
+er400v2t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/ER'], 'files', 't*400v2*t12r*.txt');
+er800v2t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/ER'], 'files', 't*800v2*t12r*.txt');
+er1600v2t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/ER'], 'files', 't*1600v2*t12r*.txt');
+erv2t12 = {er100v2t12, er200v2t12, er400v2t12, er800v2t12, er1600v2t12};
+
+% Specify Java OD implementation specs (runs with 12 threads, b = 500), parameter set 2
+od100v2t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/OD'], 'files', 't*100v2*b500t12r*.txt');
+od200v2t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/OD'], 'files', 't*200v2*b500t12r*.txt');
+od400v2t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/OD'], 'files', 't*400v2*b500t12r*.txt');
+od800v2t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/OD'], 'files', 't*800v2*b500t12r*.txt');
+od1600v2t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/OD'], 'files', 't*1600v2*b500t12r*.txt');
+odv2t12 = {od100v2t12, od200v2t12, od400v2t12, od800v2t12, od1600v2t12};
+
+% %%%%%%%%%%%%%%%%%%% %
+% Intermediate tables %
+% %%%%%%%%%%%%%%%%%%% %
+
+% Parameter set 1
+data_v1 = times_table([1 2], 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
+
+% Parameter set 2
+data_v2 = times_table([1 2], 'NL', nlv2, 'ST', stv2, 'EQ', eqv2t12, 'EX', exv2t12, 'ER', erv2t12, 'OD', odv2t12);
+
+% %%%%%%%%%%%% %
+% Print tables %
+% %%%%%%%%%%%% %
+
+% Plain text table
+times_table_f(0, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
+
+% Latex table
+times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
+```
+
 
 [GNU time]: https://www.gnu.org/software/time/
-
+[siunitx]: https://www.ctan.org/pkg/siunitx
+[multirow]: https://www.ctan.org/pkg/multirow
+[booktabs]: https://www.ctan.org/pkg/booktabs
