@@ -3,7 +3,7 @@ function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
 % PERFSTATS Determine mean times and respective standard deviations of a
 % computational experiment using folders of files containing the default
 % output of the GNU time command, optionally plotting a scalability graph 
-% if different setups correspond to different computational work sizes
+% if different setups correspond to different computational work sizes.
 %
 % [times, std_times, times_raw, fids] = PERFSTATS(do_plot, varargin)
 %
@@ -19,25 +19,25 @@ function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
 %              of an implementation. An implementation spec is a cell array
 %              where each cell contains a struct with the following fields:
 %                 sname - Name of setup, e.g. of series of runs with a 
-%                         given parameter set
-%                folder - Folder containing GNU time output files
-%                files  - Time output file names (use wildcards)
+%                         given parameter set.
+%                folder - Folder containing GNU time output files.
+%                files  - Time output file names (use wildcards).
 %                 csize - Computational size associated with setup (can be
-%                         ignored if a plot was not requested)
+%                         ignored if a plot was not requested).
 %              
 % Output:
 %        times - Matrix of average computational times where each row 
 %                corresponds to an implementation and each column to a 
-%                setup
+%                setup.
 %    std_times - Matrix of the sample standard deviation of the 
 %                computational times. Each row corresponds to an 
-%                implementation and each column to a setup
+%                implementation and each column to a setup.
 %    times_raw - Cell matrix where each cell contais a complete time struct 
 %                for each setup. Rows correspond to implementations,
-%                columns to setups
-%          fid - ID of generated plot (if doPlot == 1)
-%  impl_legend - Implementations legend
-%   set_legend - Setups legend
+%                columns to setups.
+%          fid - ID of generated plot (if doPlot == 1).
+%  impl_legend - Implementations legend.
+%   set_legend - Setups legend.
 %
 %    
 % Copyright (c) 2015 Nuno Fachada

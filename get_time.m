@@ -1,17 +1,17 @@
 function timing = get_time(filename)
 % GET_TIME Given a file containing the default output of the GNU time
 % command, extract the user, system and elapsed time in seconds, as well as
-% the percentage of CPU usage
+% the percentage of CPU usage.
 %
 %   GET_TIME(filename)
 %
 % Parameters:
-%   filename - File containing output of GNU time command
+%   filename - File containing output of GNU time command.
 %
 % Returns:
 %  A struct with fields 'user', 'sys', 'elapsed' and 'cpu', containing the
 %  user, system and elapsed time in seconds, and the percentage of CPU 
-%  usage, respectively
+%  usage, respectively.
 %    
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 

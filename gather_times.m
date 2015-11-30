@@ -1,17 +1,17 @@
 function timings = gather_times(name, folder, files)
-% GATHER_TIMES Load execution times from all files in a given folder
+% GATHER_TIMES Load execution times from all files in a given folder.
 %
 %   GATHER_TIMES(name, folder, files)
 %
 % Parameters:
 %    name - Name of this list of times
 %  folder - Folder containing files with times (output of GNU time command)
-%   files - Files with times (output of GNU time command), use wildcards
+%   files - Files with times (output of GNU time command), use wildcards.
 %
 % Returns:
 %  A struct with fields 'name' and 'elapsed', the former containing the
 %  name of this list of times, the latter containing a vector of times (in
-%  seconds) extracted from the specified files
+%  seconds) extracted from the specified files.
 %    
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 

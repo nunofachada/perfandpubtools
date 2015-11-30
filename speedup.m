@@ -1,7 +1,7 @@
 function [speedups, times, std_times, times_raw, fids, impl_legends, ...
     set_legends] = speedup(do_plot, compare, varargin)
 % SPEEDUP Determine speedups using folders of files obtained with GNU time
-% command, and optionally plot speedups in a bar plot 
+% command, and optionally plot speedups in a bar plot.
 %
 % [speedups, times, std_times, times_raw, fids, impl_legends, set_legends] 
 %   = SPEEDUP(doPlot, compare, varargin)
@@ -16,28 +16,28 @@ function [speedups, times, std_times, times_raw, fids, impl_legends, ...
 %              of an implementation. An implementation spec is a cell array
 %              where each cell contains a struct with the following fields:
 %                 sname - Name of setup, e.g. of series of runs with a 
-%                         given parameter set
+%                         given parameter set.
 %                folder - Folder containing time output files.
 %                files  - Time output files (w/ wildcards if necessary).
 %                 csize - Computational size associated with setup (can be
-%                         ignored if a plot was not requested)
+%                         ignored if a plot was not requested).
 %
 % Output:
 %     speedups - Cell array where each cell contains a matrix of speedups 
 %                for a given implementation. Number of cells depends on the 
-%                number of elements in parameter "compare"
+%                number of elements in parameter "compare".
 %        times - Matrix of average computational times where each row 
 %                corresponds to an implementation and each column to a 
-%                setup
+%                setup.
 %    std_times - Matrix of the sample standard deviation of the 
 %                computational times. Each row corresponds to an 
-%                implementation and each column to a setup
+%                implementation and each column to a setup.
 %    times_raw - Cell matrix where each cell contais a complete time struct 
 %                for each setup. Rows correspond to implementations,
-%                columns to setups
-%         fids - Figure IDs (only if doPlot == 1)
-% impl_legends - Implementations legend
-%  set_legends - Setups legend
+%                columns to setups.
+%         fids - Figure IDs (only if doPlot == 1).
+% impl_legends - Implementations legend.
+%  set_legends - Setups legend.
 %
 %    
 % Copyright (c) 2015 Nuno Fachada

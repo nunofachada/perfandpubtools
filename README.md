@@ -43,7 +43,7 @@ standard deviations (seconds), relative standard deviations, speedups
 (vs the implementations specified in the `compare` input variable).
 
 * [times_table_f](times_table_f.m) - Print a timing table formatted in plain 
-text or in Latex (the latter requires the [siunitx], [multirow] and [booktabs] 
+text or in LaTeX (the latter requires the [siunitx], [multirow] and [booktabs] 
 packages)
 
 ### Examples

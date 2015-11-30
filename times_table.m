@@ -2,7 +2,7 @@ function data = times_table(compare, varargin)
 % TIMES_TABLE Returns a matrix with useful contents for using in tables for
 % publication, namely times (in seconds), absolute standard deviations 
 % (seconds), relative standard deviations, speedups (vs the implementations
-% specified in the compare input variable)
+% specified in the compare input variable).
 %
 % data = TIMES_TABLE(compare, varargin)
 %
