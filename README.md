@@ -49,7 +49,7 @@ packages)
 ### Examples
 
 These examples use the datasets available at 
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34053.svg)](http://dx.doi.org/10.5281/zenodo.34053).
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
 Unpack the datasets to any folder and put the complete path to this folder in
 variable `datafolder`, e.g.:
 
