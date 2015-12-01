@@ -16,7 +16,7 @@ function times_table_f(type, varargin)
 % at http://opensource.org/licenses/MIT)
 %
 
-% Get the implementations names, experiments, number of variables to
+% Get the implementations names, setups, number of variables to
 % compare, and all remaining information from the first variable argument. 
 % This function expects that the remaining variable arguments have the same 
 %information (except for the exact data in t of course).
@@ -25,7 +25,7 @@ snames = varargin{2}.snames;
 compare = varargin{2}.compare;
 ncomps = numel(compare);
 nimpl = numel(inames);
-nexp = numel(snames);
+nset = numel(snames);
 
 % Get the names and data separately
 all_data = cell(1, numel(varargin)/2);
@@ -58,7 +58,7 @@ if type == 0 % Plain text table
     print_sep(1, ncomps, ndata);
 
     % Print first part of header
-    fprintf('| Imp. | Exp.  |');
+    fprintf('| Imp. | Set.  |');
     
     % Print remaining parts of header
     for i=1:ndata
@@ -78,19 +78,19 @@ if type == 0 % Plain text table
         % Print implementation name
         fprintf('| %4s ', inames{i});
 
-        % Cycle through experiments
-        for e=1:nexp
+        % Cycle through setups
+        for s=1:nset
 
-            % Print blank spaces if this is not the first experiment
-            if e > 1
+            % Print blank spaces if this is not the first setup
+            if s > 1
                 fprintf('|      ');
             end;
             
-            % Print experiment name
-            fprintf('| %5s |', snames{e});
+            % Print setup name
+            fprintf('| %5s |', snames{s});
 
             % Determine row of t matrix to print
-            row = (i - 1) * nexp + e;
+            row = (i - 1) * nset + s;
             
             % Cycle through varargin data
             for data=all_data
@@ -162,16 +162,16 @@ elseif type == 1 % Print a Latex table
 
         % Print midrule and implementation name
         fprintf('\\midrule\n');
-        fprintf('\\multirow{%d}{*}{%s}\n', nexp, inames{i});
+        fprintf('\\multirow{%d}{*}{%s}\n', nset, inames{i});
 
-        % Cycle through experiments
-        for e=1:nexp
+        % Cycle through setups
+        for s=1:nset
 
-            % Print experiment name
-            fprintf(' & %s ', snames{e});
+            % Print setup name
+            fprintf(' & %s ', snames{s});
 
             % Determine row of t matrix to print
-            row = (i - 1) * nexp + e;
+            row = (i - 1) * nset + s;
             
             % Cycle through varargin data
             for data=all_data
