@@ -8,10 +8,11 @@ function times_table_f(type, varargin)
 %     type - Table format, 0 for plain text, 1 for LaTeX (the latter
 %            require the following packages: siunitx, multirow, booktabs).
 % varargin - Pairs of name and data, where data is the output of the
-%            TIMES_TABLE function. All varargin data parameters must have
+%            times_table function. All varargin data parameters must have
 %            the t field with the same dimensions, and the compare, iname 
 %            and ename fields with the same data.
 %
+% See also TIMES_TABLE.
 %    
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
