@@ -21,11 +21,16 @@ function timing = get_time(filename)
 % Open file containing output of the time command
 fid = fopen(filename);
 if fid==-1
-    error(['Unknown file' filename]);
+    error(['Unknown file "' filename '"']);
 end;
 
-% Scan time info in seconds from file
-tinfo = textscan(fid, '%fuser %fsystem %[^e]elapsed %d');
+% Scan time info in seconds from file - not the most efficient way, but
+% works in both MATLAB and Octave
+tinfo = textscan(fid, '%fuser %fsystem %s %s', 1);
+tinfo{3}{1} = tinfo{3}{1}(1:(numel(tinfo{3}{1}) - numel('elapsed')));
+tinfo{4} = str2double(tinfo{4}{1}(1:(numel(tinfo{4}{1}) - numel('%CPU'))));
+
+% Determine total seconds of elapsed time
 seconds = 0;
 splited = strsplit(tinfo{3}{1}, ':');
 mult = 1;

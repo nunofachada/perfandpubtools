@@ -3,10 +3,6 @@
 These scripts are generic and work with any computational experiment profiled
 with the [GNU time] command.
 
-These scripts are currently not working with Octave due to `strread` not yet 
-supporting some format specifiers used in the [get_time](get_time.m) 
-function.
-
 ### File format
 
 Default output of [GNU time] command.
@@ -65,7 +61,7 @@ These datasets correspond to the results presented in the manuscript
 * Extract performance data from file
 
 ```matlab
-p = get_time([datafolder 'times/NL/time100v1r1.txt'])
+p = get_time([datafolder '/times/NL/time100v1r1.txt'])
 ```
 
 * See CPU usage (percentage)
@@ -373,7 +369,7 @@ tdata = times_table(1, 'NL', nlv1, 'ST', stv1);
 times_table_f(0, 'NL vs ST', tdata)
 
 % Print a Latex table
- times_table_f(1, 'NL vs ST', tdata)
+times_table_f(1, 'NL vs ST', tdata)
 ```
 #### Example 13. Complex tables
 
