@@ -1,11 +1,12 @@
 function timings = gather_times(name, folder, files)
 % GATHER_TIMES Load execution times from all files in a given folder.
 %
-%   GATHER_TIMES(name, folder, files)
+%   timings = GATHER_TIMES(name, folder, files)
 %
 % Parameters:
-%    name - Name of this list of times
-%  folder - Folder containing files with times (output of GNU time command)
+%    name - Name of this list of times.
+%  folder - Folder containing files with times (output of GNU time
+%           command).
 %   files - Files with times (output of GNU time command), use wildcards.
 %
 % Returns:

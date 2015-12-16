@@ -24,7 +24,7 @@ time in seconds, as well as the percentage of CPU usage.
 files in a given folder.
 
 * [perfstats](perfstats.m) - Determine mean times and respective 
-standard deviations of a computational experiments using folders of 
+standard deviations of a computational experiment using folders of 
 files containing the default output of the GNU time command, optionally 
 plotting a scalability graph if different setups correspond to different
 computational work sizes.

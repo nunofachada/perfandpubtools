@@ -3,7 +3,7 @@ function timing = get_time(filename)
 % command, extract the user, system and elapsed time in seconds, as well as
 % the percentage of CPU usage.
 %
-%   GET_TIME(filename)
+%   timing = GET_TIME(filename)
 %
 % Parameters:
 %   filename - File containing output of GNU time command.

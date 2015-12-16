@@ -5,7 +5,7 @@ function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
 % output of the GNU time command, optionally plotting a scalability graph 
 % if different setups correspond to different computational work sizes.
 %
-% [times, std_times, times_raw, fids] = PERFSTATS(do_plot, varargin)
+% [times, std_times, times_raw, fid] = PERFSTATS(do_plot, varargin)
 %
 % Parameters:
 %    do_plot - Draw scalability graph?
