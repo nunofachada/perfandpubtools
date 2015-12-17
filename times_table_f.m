@@ -47,7 +47,7 @@ if type == 0 % Plain text table
     print_sep(0, ncomps, ndata);
     
     % Print data names
-    fprintf('               |');
+    fprintf('                |');
     for i=1:ndata
         fprintf('                 % 12s ', all_names{i});
         for j=1:ncomps
@@ -61,7 +61,7 @@ if type == 0 % Plain text table
     print_sep(1, ncomps, ndata);
 
     % Print first part of header
-    fprintf('| Imp. | Set.  |');
+    fprintf('| Imp. | Set.   |');
     
     % Print remaining parts of header
     for i=1:ndata
@@ -90,7 +90,7 @@ if type == 0 % Plain text table
             end;
             
             % Print setup name
-            fprintf('| %5s |', snames{s});
+            fprintf('| %6s |', snames{s});
 
             % Determine row of t matrix to print
             row = (i - 1) * nset + s;
@@ -213,9 +213,9 @@ end;
 function print_sep(beg, ncomps, ndata)
 
 if beg == 1
-    fprintf('----------------');
+    fprintf('-----------------');
 else
-    fprintf('                ');
+    fprintf('                -');
 end;
 for i=1:ndata
     fprintf('-------------------------------');
