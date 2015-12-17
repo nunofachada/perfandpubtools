@@ -44,8 +44,8 @@ packages).
 
 These examples use the datasets available at 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
-Unpack the datasets to any folder and put the complete path to this 
-folder in variable `datafolder`, e.g.:
+Unpack the datasets to any folder and put the complete path to this folder in 
+variable `datafolder`, e.g.:
 
 ```matlab
 datafolder = 'path/to/datasets';
@@ -56,13 +56,13 @@ These datasets correspond to the results presented in the manuscript
 
 #### Example 1. Extract performance data from a file
 
-* Extract performance data from file
+* Extract performance data from file:
 
 ```matlab
 p = get_time([datafolder '/times/NL/time100v1r1.txt'])
 ```
 
-* See CPU usage (percentage)
+* See CPU usage (percentage):
 
 ```matlab
 p.cpu
@@ -70,13 +70,13 @@ p.cpu
 
 #### Example 2. Extract execution times from files in a folder
 
-* Extract execution times from files
+* Extract execution times from files:
 
 ```matlab
 exec_time = gather_times('NetLogo', [datafolder '/times/NL'], 'time100v1*.txt')
 ```
 
-* See execution times
+* See execution times:
 
 ```matlab
 exec_time.elapsed
@@ -84,9 +84,9 @@ exec_time.elapsed
 
 #### Example 3. Average execution times and standard deviations
 
-* Get average execution times and standard deviations from ten 
-simulation runs of the Java implementation of PPHPC (single-thread, ST)
-for size 800, parameter set 2.
+* Get average execution times and standard deviations from ten simulation runs 
+of the Java implementation of PPHPC (single-thread, ST) for size 800, parameter
+set 2.
 
 ```matlab
 st800v2 = struct('sname', '800v1', 'folder', [datafolder '/times/ST'], 'files', 't*800v2*.txt');
@@ -95,8 +95,8 @@ st800v2 = struct('sname', '800v1', 'folder', [datafolder '/times/ST'], 'files', 
 
 #### Example 4. Compare multiple setups within the same implementation
 
-* For the same PPHPC implementation (Java ST), compare performance for
-sizes 100, 200, 400, 800 and 1600.
+* For the same PPHPC implementation (Java ST), compare performance for sizes 
+100, 200, 400, 800 and 1600.
 
 ```matlab
 st100v2 = struct('sname', '100v2', 'folder', [datafolder '/times/ST'], 'files', 't*100v2*.txt');
@@ -109,11 +109,11 @@ avg_time = perfstats(0, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2})
 
 #### Example 5. Same as previous, with a log-log plot
 
-* Compare performance of the Java ST implementation for sizes 100, 200, 
-400, 800 and 1600, and plot a scalability graph.
+* Compare performance of the Java ST implementation for sizes 100, 200, 400, 800
+and 1600, and plot a scalability graph.
 
-* In this case, implementation specs must specify a computational size
-and `perfstats` must be called with 1 instead of 0 in the first 
+* In this case, implementation specs must specify a computational size, `cize`,
+and [perfstats](perfstats.m) must be called with 1 instead of 0 in the first 
 argument.
 
 ```matlab
@@ -123,9 +123,11 @@ st400v2 = struct('sname', '400v2', 'csize', 400, 'folder', [datafolder '/times/S
 st800v2 = struct('sname', '800v2', 'csize', 800, 'folder', [datafolder '/times/ST'], 'files', 't*800v2*.txt');
 st1600v2 = struct('sname', '1600v2', 'csize', 1600, 'folder', [datafolder '/times/ST'], 'files', 't*1600v2*.txt');
 
-# The first parameter defines the plot type: 4 is a log-log plot
+% The first parameter defines the plot type: 4 is a log-log plot
 perfstats(4, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2});
 ```
+
+![ex05](https://cloud.githubusercontent.com/assets/3018963/11914709/b521c1c4-a67e-11e5-9e20-f05bfbe6921d.png)
 
 #### Example 6. Compare different implementations
 
@@ -153,6 +155,8 @@ stv1 = {st100v1, st200v1, st400v1, st800v1, st1600v1};
 perfstats(4, 'NL', nlv1, 'ST', stv1);
 ```
 
+![ex06](https://cloud.githubusercontent.com/assets/3018963/11914710/b524dd5a-a67e-11e5-82d0-8f2ef0401e30.png)
+
 #### Example 7. Speedup
 
 * Using the variables defined in the previous example, plot the speedup of the 
@@ -161,6 +165,8 @@ Java ST version vs the NetLogo implementation for different model sizes.
 ```matlab
 speedup(1, 1, 'NL', nlv1, 'ST', stv1);
 ```
+
+![ex07](https://cloud.githubusercontent.com/assets/3018963/11914711/b5259966-a67e-11e5-9faf-32770a2f080e.png)
 
 #### Example 8. Speedup for multiple parallel implementations and sizes
 
@@ -212,6 +218,9 @@ speedup(1, 1, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t1
 speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 ```
 
+![ex08_1](https://cloud.githubusercontent.com/assets/3018963/11914712/b52c33b6-a67e-11e5-8ea6-489f025329f6.png)
+![ex08_2](https://cloud.githubusercontent.com/assets/3018963/11914714/b52fdcbe-a67e-11e5-8da2-7aae819e1337.png)
+
 #### Example 9. Scalability of the different implementations for increasing model sizes
 
 * Plot the scalability of the different implementations for increasing model 
@@ -221,6 +230,8 @@ plotted results are equivalent to figure 5a of the aforementioned manuscript.
 ```matlab
 perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 ```
+
+![ex09](https://cloud.githubusercontent.com/assets/3018963/11914713/b52f195a-a67e-11e5-9a69-761526351f6d.png)
 
 #### Example 10. Scalability of parallel implementations for increasing number of threads
 
@@ -290,6 +301,8 @@ odv2 = {od400v2t1, od400v2t2, od400v2t4, od400v2t6, od400v2t8, od400v2t12, od400
 perfstats(1, 'ST', stv2, 'EQ', eqv2, 'EX', exv2, 'ER', erv2, 'OD', odv2);
 ```
 
+![perf_ex10](https://cloud.githubusercontent.com/assets/3018963/11870039/2289f07a-a4bc-11e5-9285-0281f9e20ed9.png)
+
 #### Example 11. Performance of OD strategy for different values of _b_
 
 * Plot the performance of OD for different values of _b_ (12 threads). The 
@@ -354,6 +367,9 @@ od1600v2 = {od1600v2b20, od1600v2b50, od1600v2b100, od1600v2b200, od1600v2b500, 
 % Show plot
 perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '1600', od1600v2);
 ```
+
+![perf_ex11](https://cloud.githubusercontent.com/assets/3018963/11870038/22888bc2-a4bc-11e5-8f3d-96880d3d52df.png)
+
 #### Example 12. Same as example 6, but show a table instead of a plot
 
 * Compare NetLogo (NL) and Java single-thread (ST) PPHPC implementations
