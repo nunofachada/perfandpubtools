@@ -228,7 +228,9 @@ The second parameter indicates the reference implementation from which to
 calculate speedups. In this case, specifying 1 will return speedups against the
 NetLogo implementation. The first row of the previous matrix shows the speedup
 of the NetLogo implementation against itself, thus it is composed of ones. The
-second row shows the speedup 
+second row shows the speedup of the Java ST implementation versus the NetLogo
+implementation. If the second parameter is a vector, speedups against more than
+one implementation are returned.
 
 Setting the 1st parameter to 1 will yield a bar plot displaying the relative
 speedups:

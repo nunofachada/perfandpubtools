@@ -63,27 +63,28 @@ end;
 speedups = cell(numel(compare), 1);
 fids = zeros(numel(compare), 1);
 
-for c = 1:numel(compare)
-    speedups{c} = zeros(nimpl, nset);
+for cidx = 1:numel(compare)
+    speedups{cidx} = zeros(nimpl, nset);
 end;
 
-
-% Determine speedup of all implementations versus the ith implementation
+% Determine speedup of all implementations versus the c^th implementation
 for cidx = 1:numel(compare)
 
+    % Get the index of current reference implementation from which to 
+    % calculate speedups
     c = compare(cidx);
     
     % All implementations
     allimpl = 1:nimpl;
     
-    % For all setups...
-    for e = 1:nset
+    % For each setup...
+    for s = 1:nset
 
-        % ...determine speedup of the jth implementation vs the ith 
+        % ...determine speedup of the i^th implementation vs the c^th 
         % implementation
         for i = allimpl
         
-            speedups{cidx}(i, e) = times(c, e) / times(i, e);
+            speedups{cidx}(i, s) = times(c, s) / times(i, s);
 
         end;        
     end;
@@ -94,7 +95,7 @@ for cidx = 1:numel(compare)
         % Remove c^th implementation, i.e. the reference speedup of 1
         allimpl(c) = [];
         
-        % Get a new figure
+        % Create a new figure
         fids(c) = figure();
         
         % Get the speedups matrix
@@ -113,7 +114,7 @@ for cidx = 1:numel(compare)
         if size(speedup_matrix, 1) == 1 % Only one implementation
             
             % x tick labels will correspond to setup names
-            set(gca,'XTickLabel', set_legends);
+            set(gca, 'XTickLabel', set_legends);
 
             % Set x,y labels
             xlabel('Setups');
@@ -123,7 +124,7 @@ for cidx = 1:numel(compare)
         
             % x tick label with correspond to implementation names (except
             % the reference implementation)
-            set(gca,'XTickLabel', loc_leg);
+            set(gca, 'XTickLabel', loc_leg);
             
             % Set legend for setups
             legend(set_legends);
