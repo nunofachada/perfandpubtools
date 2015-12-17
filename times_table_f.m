@@ -2,7 +2,7 @@ function times_table_f(type, varargin)
 % TIMES_TABLE_F Print a timing table formatted in plain text or in LaTeX
 % (the latter requires the siunitx, multirow and booktabs packages).
 %
-% times_table_f(type, varargin)
+% TIMES_TABLE_F(type, varargin)
 %
 % Parameters:
 %     type - Table format, 0 for plain text, 1 for LaTeX (the latter

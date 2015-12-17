@@ -16,31 +16,29 @@ Default output of [GNU time] command.
 
 ### Utilities
 
-* [get_time](get_time.m) - Given a file containing the default 
-output of the GNU time command, extract the user, system and elapsed 
-time in seconds, as well as the percentage of CPU usage.
+* [get_time](get_time.m) - Given a file containing the default output of the GNU
+time command, extract the user, system and elapsed time in seconds, as well as 
+the percentage of CPU usage.
 
-* [gather_times](gather_times.m) - Load execution times from all 
-files in a given folder.
+* [gather_times](gather_times.m) - Load execution times from all files in a 
+given folder.
 
-* [perfstats](perfstats.m) - Determine mean times and respective 
-standard deviations of a computational experiment using folders of 
-files containing the default output of the GNU time command, optionally 
-plotting a scalability graph if different setups correspond to different
-computational work sizes.
+* [perfstats](perfstats.m) - Determine mean times and respective standard 
+deviations of a computational experiment using folders of files containing the 
+default output of the GNU time command, optionally plotting a scalability graph 
+if different setups correspond to different computational work sizes.
 
-* [speedup](speedup.m) - Determine speedups using folders of files 
-obtained with GNU time command, and optionally plot speedups in a bar 
-plot.
+* [speedup](speedup.m) - Determine speedups using folders of files obtained with
+GNU time command, and optionally plot speedups in a bar plot.
 
-* [times_table](times_table.m) - Returns a matrix with useful contents 
-for using in tables for publication, namely times (in seconds), absolute 
-standard deviations (seconds), relative standard deviations, speedups 
-(vs the implementations specified in the `compare` input variable).
+* [times_table](times_table.m) - Returns a matrix with useful contents for using
+in tables for publication, namely times (in seconds), absolute standard
+deviations (seconds), relative standard deviations, speedups (vs the 
+implementations specified in the `compare` input variable).
 
 * [times_table_f](times_table_f.m) - Print a timing table formatted in plain 
 text or in LaTeX (the latter requires the [siunitx], [multirow] and [booktabs] 
-packages)
+packages).
 
 ### Examples
 
@@ -292,7 +290,7 @@ odv2 = {od400v2t1, od400v2t2, od400v2t4, od400v2t6, od400v2t8, od400v2t12, od400
 perfstats(1, 'ST', stv2, 'EQ', eqv2, 'EX', exv2, 'ER', erv2, 'OD', odv2);
 ```
 
-#### Example 11. Performance of OD strategy for different values of b
+#### Example 11. Performance of OD strategy for different values of _b_
 
 * Plot the performance of OD for different values of _b_ (12 threads). The 
 plotted results are equivalent to figure 7b of the aforementioned manuscript.
