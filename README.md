@@ -56,47 +56,81 @@ These datasets correspond to the results presented in the manuscript
 
 #### Example 1. Extract performance data from a file
 
-* Extract performance data from file:
+The [get_time](get_time.m) function extracts performance data from one file
+containing the default output of [GNU time] command. For example:
 
 ```matlab
 p = get_time([datafolder '/times/NL/time100v1r1.txt'])
 ```
 
-* See CPU usage (percentage):
+The function returns a structure with several fields:
 
-```matlab
-p.cpu
 ```
+p = 
+
+       user: 17.6800
+        sys: 0.3200
+    elapsed: 16.5900
+        cpu: 108
+```
+
+The [get_time](get_time.m) function is the basic building block of _PerfAndPubTools_
+for analyzing performance data. Replacing or modifying this function allows to 
+use performance formats other than the output of the [GNU time] command. 
+Alternatives to [get_time](get_time.m) are only required to return a structure 
+with the `elapsed` field, indicating the duration (in seconds) of a replication.
 
 #### Example 2. Extract execution times from files in a folder
 
-* Extract execution times from files:
+The [gather_times](gather_times.m) function extracts execution times from
+multiple files in a folder, as shown in the following command:
 
 ```matlab
 exec_time = gather_times('NetLogo', [datafolder '/times/NL'], 'time100v1*.txt')
 ```
 
-* See execution times:
+The vector of execution times is in the `elapsed` field of the returned
+structure:
 
 ```matlab
 exec_time.elapsed
 ```
 
+The [gather_times](gather_times.m) function uses [get_time](get_time.m) 
+internally.
+
 #### Example 3. Average execution times and standard deviations
 
-* Get average execution times and standard deviations from ten simulation runs 
-of the Java implementation of PPHPC (single-thread, ST) for size 800, parameter
-set 2.
+In its most basic usage, the [perfstats](perfstats.m) function obtains 
+performance statistics. In this example, average execution times and standard
+deviations are obtained from 10 replications of the Java implementation of PPHPC
+(single-thread, ST) for size 800, parameter set 2:
 
 ```matlab
 st800v2 = struct('sname', '800v1', 'folder', [datafolder '/times/ST'], 'files', 't*800v2*.txt');
 [avg_time, std_time] = perfstats(0, 'ST', {st800v2})
 ```
 
+```
+avg_time =
+
+  699.5920
+
+
+std_time =
+
+    3.6676
+```
+
+The [perfstats](perfstats.m) function uses [gather_times](gather_times.m)
+internally.
+
 #### Example 4. Compare multiple setups within the same implementation
 
-* For the same PPHPC implementation (Java ST), compare performance for sizes 
-100, 200, 400, 800 and 1600.
+A more advanced use case for [perfstats](perfstats.m) consists of comparing
+multiple setups, associated with different computational sizes, within the same
+implementation. For example, considering the Java ST implementation of the PPHPC
+model, lets analyze how its performance varies for increasing model sizes:
 
 ```matlab
 st100v2 = struct('sname', '100v2', 'folder', [datafolder '/times/ST'], 'files', 't*100v2*.txt');
@@ -107,14 +141,20 @@ st1600v2 = struct('sname', '1600v2', 'folder', [datafolder '/times/ST'], 'files'
 avg_time = perfstats(0, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2})
 ```
 
+```
+avg_time =
+
+   1.0e+03 *
+
+    0.0053    0.0361    0.1589    0.6996    2.9572
+```
+
 #### Example 5. Same as previous, with a log-log plot
 
-* Compare performance of the Java ST implementation for sizes 100, 200, 400, 800
-and 1600, and plot a scalability graph.
-
-* In this case, implementation specs must specify a computational size, `cize`,
-and [perfstats](perfstats.m) must be called with 1 instead of 0 in the first 
-argument.
+The [perfstats](perfstats.m) function can also be used to plot scalability 
+graphs. For this purpose, the computational size, `cize`, must be specified in
+each implementation spec, and the first parameter should be a value between 1
+(linear plot) and 4 (log-log plot), as shown in the following commands:
 
 ```matlab
 st100v2 = struct('sname', '100v2', 'csize', 100, 'folder', [datafolder '/times/ST'], 'files', 't*100v2*.txt');
@@ -131,8 +171,14 @@ perfstats(4, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2});
 
 #### Example 6. Compare different implementations
 
-* Compare NetLogo (NL) and Java single-thread (ST) PPHPC implementations
-for sizes 100 to 1600, parameter set 1.
+Besides comparing multiple setups within the same implementation, the 
+[perfstats](perfstats.m) function is also able to compare multiple setups
+within multiple implementations. The requirement is that, from implementation
+to implementation, the multiple setups are directly comparable, i.e., 
+corresponding implementation specs should have the same `sname` and `csize`
+parameters, as shown in the following commands, where the NetLogo (NL) and Java 
+single-thread (ST) PPHPC implementations are compared for sizes 100 to 1600, 
+parameter set 1:
 
 ```matlab
 % Specify NetLogo implementation specs
@@ -159,8 +205,33 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 
 #### Example 7. Speedup
 
-* Using the variables defined in the previous example, plot the speedup of the 
-Java ST version vs the NetLogo implementation for different model sizes.
+The [speedup](speedup.m) function is used to obtain relative speedups between
+different implementations. Using the variables defined in the previous example,
+lets obtain the speedup of the Java ST version versus the NetLogo implementation
+for different model sizes:
+
+```matlab
+s = speedup(0, 1, 'NL', nlv1, 'ST', stv1);
+```
+
+Speedups can be obtained by getting the first element of the returned cell, i.e.
+by invoking `s{1}`:
+
+```
+ans =
+
+    1.0000    1.0000    1.0000    1.0000    1.0000
+    5.8513    8.2370    5.7070    5.4285    5.4331
+```
+
+The second parameter indicates the reference implementation from which to 
+calculate speedups. In this case, specifying 1 will return speedups against the
+NetLogo implementation. The first row of the previous matrix shows the speedup
+of the NetLogo implementation against itself, thus it is composed of ones. The
+second row shows the speedup 
+
+Setting the 1st parameter to 1 will yield a bar plot displaying the relative
+speedups:
 
 ```matlab
 speedup(1, 1, 'NL', nlv1, 'ST', stv1);
@@ -214,7 +285,7 @@ odv1t12 = {od100v1t12, od200v1t12, od400v1t12, od800v1t12, od1600v1t12};
 speedup(1, 1, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 ```
 
-![perf_ex08_1](https://cloud.githubusercontent.com/assets/3018963/11870035/226e2796-a4bc-11e5-9b63-1f9b8f51fa75.png)
+![ex08_1](https://cloud.githubusercontent.com/assets/3018963/11914712/b52c33b6-a67e-11e5-8ea6-489f025329f6.png)
 
 ```matlab
 % Plot speedup of multiple parallel implementations against Java ST implementation
@@ -222,7 +293,6 @@ speedup(1, 1, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t1
 speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 ```
 
-![ex08_1](https://cloud.githubusercontent.com/assets/3018963/11914712/b52c33b6-a67e-11e5-8ea6-489f025329f6.png)
 ![ex08_2](https://cloud.githubusercontent.com/assets/3018963/11914714/b52fdcbe-a67e-11e5-8da2-7aae819e1337.png)
 
 #### Example 9. Scalability of the different implementations for increasing model sizes

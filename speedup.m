@@ -4,13 +4,13 @@ function [speedups, times, std_times, times_raw, fids, impl_legends, ...
 % command, and optionally plot speedups in a bar plot.
 %
 % [speedups, times, std_times, times_raw, fids, impl_legends, set_legends] 
-%   = SPEEDUP(doPlot, compare, varargin)
+%   = SPEEDUP(do_plot, compare, varargin)
 %
 % Parameters:
 %    do_plot - Draw bar graph (1, 0)?
-%    compare - Vector containing indexes of reference results from which
-%              to calculate speedups. Number of elements will determine 
-%              number of plots.
+%    compare - Vector containing indexes of reference implementation from 
+%              which to calculate speedups. Number of elements will 
+%              determine number of plots.
 %   varargin - Pairs of implementation name and implementation specs. An
 %              implementation name is simply a string specifying the name
 %              of an implementation. An implementation spec is a cell array
@@ -63,25 +63,27 @@ end;
 speedups = cell(numel(compare), 1);
 fids = zeros(numel(compare), 1);
 
-for c=1:numel(compare)
+for c = 1:numel(compare)
     speedups{c} = zeros(nimpl, nset);
 end;
 
 
 % Determine speedup of all implementations versus the ith implementation
-for c=compare
+for cidx = 1:numel(compare)
 
+    c = compare(cidx);
+    
     % All implementations
     allimpl = 1:nimpl;
     
     % For all setups...
-    for e=1:nset
+    for e = 1:nset
 
         % ...determine speedup of the jth implementation vs the ith 
         % implementation
-        for i=allimpl
+        for i = allimpl
         
-            speedups{c}(i, e) = times(c, e) / times(i, e);
+            speedups{cidx}(i, e) = times(c, e) / times(i, e);
 
         end;        
     end;
@@ -90,20 +92,20 @@ for c=compare
     if do_plot
 
         % Remove c^th implementation, i.e. the reference speedup of 1
-        allimpl(c)=[];
+        allimpl(c) = [];
         
         % Get a new figure
         fids(c) = figure();
         
         % Get the speedups matrix
-        speedup_matrix = speedups{c}(allimpl, :);
+        speedup_matrix = speedups{cidx}(allimpl, :);
         
         % Plot speedups versus the ith implementation
         bar(speedup_matrix);
      
         % Get implementation names without the reference implementation
         loc_leg = impl_legends;
-        loc_leg(c)=[];
+        loc_leg(c) = [];
 
         % Legends and x-ticks will be different if there is only one 
         % implementation to plot, or more than one implementation to plot
