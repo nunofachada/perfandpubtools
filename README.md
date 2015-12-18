@@ -1,4 +1,4 @@
-## Analysis of performance data
+## PerfAndPubTools
 
 These scripts are generic and work with any computational experiment profiled
 with the [GNU time] command.
@@ -74,11 +74,12 @@ p =
         cpu: 108
 ```
 
-The [get_time](get_time.m) function is the basic building block of _PerfAndPubTools_
-for analyzing performance data. Replacing or modifying this function allows to 
-use performance formats other than the output of the [GNU time] command. 
-Alternatives to [get_time](get_time.m) are only required to return a structure 
-with the `elapsed` field, indicating the duration (in seconds) of a replication.
+The [get_time](get_time.m) function is the basic building block of 
+_PerfAndPubTools_ for analyzing performance data. Replacing or modifying this 
+function allows to use performance formats other than the output of the
+[GNU time] command. Alternatives to [get_time](get_time.m) are only required to
+return a structure with the `elapsed` field, indicating the duration (in
+seconds) of a replication.
 
 #### Example 2. Extract execution times from files in a folder
 
@@ -243,11 +244,14 @@ speedup(1, 1, 'NL', nlv1, 'ST', stv1);
 
 #### Example 8. Speedup for multiple parallel implementations and sizes
 
-* Plot speedup of parallel implementations against NL and ST for multiple sizes.
+The [speedup](speedup.m) function is also able to determine relative speedups 
+between different implementations for multiple computational sizes. In this
+example we plot the speedup of several PPHPC parallel Java implementations 
+against the NetLogo and Java single-thread implementations for multiple sizes.
 This example uses the variables defined in example 6, and the plotted results 
 are equivalent to figures 4a and 4b of the 
 "[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
-manuscript.
+manuscript:
 
 ```matlab
 % Specify Java EQ implementation specs (runs with 12 threads)
@@ -299,9 +303,12 @@ speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv
 
 #### Example 9. Scalability of the different implementations for increasing model sizes
 
-* Plot the scalability of the different implementations for increasing model 
-sizes. This example uses the variables defined in the previous examples, and the
-plotted results are equivalent to figure 5a of the aforementioned manuscript.
+In a slightly more complex scenario than the one described in example 6, here
+we use the [perfstats](perfstats.m) function to plot the scalability of the 
+different PPHPC implementations for increasing model sizes. Using the variables
+defined in the previous examples, the following command plot the equivalent to 
+figure 5a of the "[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
+manuscript:
 
 ```matlab
 perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
@@ -311,9 +318,14 @@ perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12
 
 #### Example 10. Scalability of parallel implementations for increasing number of threads
 
-* Plot the scalability of parallel implementations for increasing number of 
-threads. The plotted results are equivalent to figure 6d of the aforementioned 
-manuscript.
+The 'computational size', i.e. the `csize` field, defined in the implementation
+specs passed to the [perfstats](perfstats.m) function can be used in alternative
+contexts. In this example, we use the `csize` field to specify the number of
+threads used to perform a set of simulation runs, i.e., replications. The
+following commands will plot the scalability of the several PPHPC parallel 
+implementations for increasing number of threads. The plotted results are 
+equivalent to figure 6d of the "[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
+manuscript:
 
 ```matlab
 % Specify ST implementation specs, note that the data is always the same
@@ -381,8 +393,13 @@ perfstats(1, 'ST', stv2, 'EQ', eqv2, 'EX', exv2, 'ER', erv2, 'OD', odv2);
 
 #### Example 11. Performance of OD strategy for different values of _b_
 
-* Plot the performance of OD for different values of _b_ (12 threads). The 
-plotted results are equivalent to figure 7b of the aforementioned manuscript.
+In yet another possible use of the [perfstats](perfstats.m) function, in this
+example we use the `csize` field to specify the value of the _b_ parameter of
+the PPHPC model Java OD variant. This allows us to analyze the performance of 
+the OD parallelization strategy for different values of _b_. The plot created by
+the following commands is equivalent to figure 7b of the 
+"[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
+manuscript:
 
 ```matlab
 % Specify the OD implementation specs for size 100 and increasing values of b
@@ -448,8 +465,12 @@ perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '16
 
 #### Example 12. Same as example 6, but show a table instead of a plot
 
-* Compare NetLogo (NL) and Java single-thread (ST) PPHPC implementations
-for sizes 100 to 1600, parameter set 1 (using data from Example 6).
+
+The [times_table](times_table.m) and [times_table_f](times_table_f.m) functions
+can be used to create performance tables formatted in plain text or LaTeX. Using
+the data defined in example 6, the following commands produces a plain text
+table comparing the NetLogo (NL) and Java single-thread (ST) PPHPC
+implementations for sizes 100 to 1600, parameter set 1:
 
 ```matlab
 % Put data in table format
@@ -479,6 +500,9 @@ times_table_f(0, 'NL vs ST', tdata)
 ----------------------------------------------------------
 ```
 
+In order to produce the equivalent LaTeX table, we set the first parameter to 1
+instead of 0:
+
 ```matlab
 % Print a Latex table
 times_table_f(1, 'NL vs ST', tdata)
@@ -488,10 +512,14 @@ times_table_f(1, 'NL vs ST', tdata)
 
 #### Example 13. Complex tables
 
-* Print table 7 of the specified manuscript, containing times and speedups for
-different model implementations, different sizes and different parameter sets,
-showing speedups of all implementations versus the NetLogo and Java ST 
-versions. 
+The [times_table](times_table.m) and [times_table_f](times_table_f.m) functions
+are capable of producing more complex tables. In this example, we show how to
+reproduce table 7 of the "[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
+manuscript, containing times and speedups for different model implementations, 
+different sizes and different parameter sets, showing speedups of all 
+implementations versus the NetLogo and Java ST versions.
+
+The first step consists of specifying the implementation specs:
 
 ```matlab
 % %%%%%%%%%%%%%%%%%%%%%%%%% %
@@ -597,7 +625,11 @@ od400v2t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/
 od800v2t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/OD'], 'files', 't*800v2*b500t12r*.txt');
 od1600v2t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/OD'], 'files', 't*1600v2*b500t12r*.txt');
 odv2t12 = {od100v2t12, od200v2t12, od400v2t12, od800v2t12, od1600v2t12};
+```
 
+After the implementation specs are specified, we create two intermediate table:
+
+```matlab
 % %%%%%%%%%%%%%%%%%%% %
 % Intermediate tables %
 % %%%%%%%%%%%%%%%%%%% %
@@ -607,7 +639,11 @@ data_v1 = times_table([1 2], 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t1
 
 % Parameter set 2
 data_v2 = times_table([1 2], 'NL', nlv2, 'ST', stv2, 'EQ', eqv2t12, 'EX', exv2t12, 'ER', erv2t12, 'OD', odv2t12);
+```
 
+We first print a plain text table, to check how the information is organized:
+
+```matlab
 % %%%%%%%%%%%% %
 % Print tables %
 % %%%%%%%%%%%% %
@@ -659,6 +695,10 @@ times_table_f(0, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 |      |   1600 |    292.16 |    8.51 |   2.91 |   31.20 |    5.74 |    478.83 |    9.32 |   1.95 |   40.85 |    6.18 |
 -----------------------------------------------------------------------------------------------------------------------
 ```
+
+Finally, we produce the LaTeX table, as shown in the
+"[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
+manuscript:
 
 ```matlab
 % Latex table
