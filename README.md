@@ -119,12 +119,6 @@ p =
         cpu: 108
 ```
 
-The [get_time] function is the basic building block of _PerfAndPubTools_ for
-analyzing performance data. Replacing or modifying this function allows to use
-performance formats other than the output of the [GNU time] command.
-Alternatives to [get_time] are only required to return a structure with the
-`elapsed` field, indicating the duration (in seconds) of a replication.
-
 <a name="extractexecutiontimesfromfilesinafolder"></a>
 
 ### 4.2\. Extract execution times from files in a folder
@@ -143,8 +137,12 @@ structure:
 exec_time.elapsed
 ```
 
-The [gather_times] function uses [get_time] 
-internally.
+The [gather_times] function uses [get_time] internally by default. However, 
+other functions can be specified in the first line of the [gather_times]
+function body, allowing _PerfAndPubTools_ to support benchmarking formats other
+than the output of [GNU time]. Alternatives to [get_time] are only required to
+return a struct with the `elapsed` field, indicating the duration (in seconds)
+of a program execution.
 
 <a name="averageexecutiontimesandstandarddeviations"></a>
 
