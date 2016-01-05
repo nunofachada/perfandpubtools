@@ -1,29 +1,38 @@
 PerfAndPubTools
 ===============
 
-1\.  [File format](#fileformat)  
-2\.  [Utilities](#utilities)  
-3\.  [Examples](#examples)  
-3.1\.  [Example 1. Extract performance data from a file](#example1.extractperformancedatafromafile)  
-3.2\.  [Example 2. Extract execution times from files in a folder](#example2.extractexecutiontimesfromfilesinafolder)  
-3.3\.  [Example 3. Average execution times and standard deviations](#example3.averageexecutiontimesandstandarddeviations)  
-3.4\.  [Example 4. Compare multiple setups within the same implementation](#example4.comparemultiplesetupswithinthesameimplementation)  
-3.5\.  [Example 5. Same as previous, with a log-log plot](#example5.sameaspreviouswithalog-logplot)  
-3.6\.  [Example 6. Compare different implementations](#example6.comparedifferentimplementations)  
-3.7\.  [Example 7. Speedup](#example7.speedup)  
-3.8\.  [Example 8. Speedup for multiple parallel implementations and sizes](#example8.speedupformultipleparallelimplementationsandsizes)  
-3.9\.  [Example 9. Scalability of the different implementations for increasing model sizes](#example9.scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
-3.10\.  [Example 10. Scalability of parallel implementations for increasing number of threads](#example10.scalabilityofparallelimplementationsforincreasingnumberofthreads)  
-3.11\.  [Example 11. Performance of OD strategy for different values of _b_](#example11.performanceofodstrategyfordifferentvaluesof_b_)  
-3.12\.  [Example 12. Same as example 6, but show a table instead of a plot](#example12.sameasexample6butshowatableinsteadofaplot)  
-3.13\.  [Example 13. Complex tables](#example13.complextables)  
+1\.  [What is PerfAndPubTools?](#whatisperfandpubtools?)  
+2\.  [File format](#fileformat)  
+3\.  [List of functions](#listoffunctions)  
+4\.  [Examples](#examples)  
+4.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
+4.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder)  
+4.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations)  
+4.4\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation)  
+4.5\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
+4.6\.  [Compare different implementations](#comparedifferentimplementations)  
+4.7\.  [Speedup](#speedup)  
+4.8\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
+4.9\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
+4.10\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
+4.11\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
+4.12\.  [Same as example 6, but show a table instead of a plot](#sameasexample6butshowatableinsteadofaplot)  
+4.13\.  [Complex tables](#complextables)  
+5\.  [License](#license)  
+6\.  [References](#references)  
 
-These scripts are generic and work with any computational experiment profiled
+<a name="whatisperfandpubtools?"></a>
+
+## 1\. What is PerfAndPubTools?
+
+Tools for software performance analysis and publishing of results.
+
+These functions are generic and work with any computational experiment profiled
 with the [GNU time] command.
 
 <a name="fileformat"></a>
 
-### 1\. File format
+## 2\. File format
 
 Default output of [GNU time] command.
 
@@ -34,37 +43,35 @@ Default output of [GNU time] command.
 0inputs+2136outputs (0major+49345minor)pagefaults 0swaps
 ```
 
-<a name="utilities"></a>
+<a name="listoffunctions"></a>
 
-### 2\. Utilities
+## 3\. List of functions
 
-* [get_time](get_time.m) - Given a file containing the default output of the GNU
-time command, extract the user, system and elapsed time in seconds, as well as 
-the percentage of CPU usage.
+* [get_time] - Given a file containing the default output of the GNU time
+command, extract the user, system and elapsed time in seconds, as well as the
+percentage of CPU usage.
 
-* [gather_times](gather_times.m) - Load execution times from all files in a 
-given folder.
+* [gather_times] - Load execution times from all files in a given folder.
 
-* [perfstats](perfstats.m) - Determine mean times and respective standard 
-deviations of a computational experiment using folders of files containing the 
-default output of the GNU time command, optionally plotting a scalability graph 
-if different setups correspond to different computational work sizes.
+* [perfstats] - Determine mean times and respective standard deviations of a
+computational experiment using folders of files containing the default output of
+the GNU time command, optionally plotting a scalability graph if different
+setups correspond to different computational work sizes.
 
-* [speedup](speedup.m) - Determine speedups using folders of files obtained with
-GNU time command, and optionally plot speedups in a bar plot.
+* [speedup] - Determine speedups using folders of files obtained with GNU time
+command, and optionally plot speedups in a bar plot.
 
-* [times_table](times_table.m) - Returns a matrix with useful contents for using
-in tables for publication, namely times (in seconds), absolute standard
-deviations (seconds), relative standard deviations, speedups (vs the 
-implementations specified in the `compare` input variable).
+* [times_table] - Returns a matrix with useful contents for using in tables for
+publication, namely times (in seconds), absolute standard deviations (seconds),
+relative standard deviations, speedups (vs the implementations specified in the
+`compare` input variable).
 
-* [times_table_f](times_table_f.m) - Print a timing table formatted in plain 
-text or in LaTeX (the latter requires the [siunitx], [multirow] and [booktabs] 
-packages).
+* [times_table_f] - Print a timing table formatted in plain text or in LaTeX
+(the latter requires the [siunitx], [multirow] and [booktabs] packages).
 
 <a name="examples"></a>
 
-### 3\. Examples
+## 4\. Examples
 
 These examples use the datasets available at 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
@@ -75,15 +82,14 @@ variable `datafolder`, e.g.:
 datafolder = 'path/to/datasets';
 ```
 
-These datasets correspond to the results presented in the manuscript
-[Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047).
+These datasets correspond to the results presented in reference [\[1\]][ref1].
 
-<a name="example1.extractperformancedatafromafile"></a>
+<a name="extractperformancedatafromafile"></a>
 
-#### 3.1\. Example 1. Extract performance data from a file
+### 4.1\. Extract performance data from a file
 
-The [get_time](get_time.m) function extracts performance data from one file
-containing the default output of [GNU time] command. For example:
+The [get_time] function extracts performance data from one file containing the
+default output of [GNU time] command. For example:
 
 ```matlab
 p = get_time([datafolder '/times/NL/time100v1r1.txt'])
@@ -100,19 +106,18 @@ p =
         cpu: 108
 ```
 
-The [get_time](get_time.m) function is the basic building block of 
-_PerfAndPubTools_ for analyzing performance data. Replacing or modifying this 
-function allows to use performance formats other than the output of the
-[GNU time] command. Alternatives to [get_time](get_time.m) are only required to
-return a structure with the `elapsed` field, indicating the duration (in
-seconds) of a replication.
+The [get_time] function is the basic building block of _PerfAndPubTools_ for
+analyzing performance data. Replacing or modifying this function allows to use
+performance formats other than the output of the [GNU time] command.
+Alternatives to [get_time] are only required to return a structure with the
+`elapsed` field, indicating the duration (in seconds) of a replication.
 
-<a name="example2.extractexecutiontimesfromfilesinafolder"></a>
+<a name="extractexecutiontimesfromfilesinafolder"></a>
 
-#### 3.2\. Example 2. Extract execution times from files in a folder
+### 4.2\. Extract execution times from files in a folder
 
-The [gather_times](gather_times.m) function extracts execution times from
-multiple files in a folder, as shown in the following command:
+The [gather_times] function extracts execution times from multiple files in a
+folder, as shown in the following command:
 
 ```matlab
 exec_time = gather_times('NetLogo', [datafolder '/times/NL'], 'time100v1*.txt')
@@ -125,16 +130,16 @@ structure:
 exec_time.elapsed
 ```
 
-The [gather_times](gather_times.m) function uses [get_time](get_time.m) 
+The [gather_times] function uses [get_time] 
 internally.
 
-<a name="example3.averageexecutiontimesandstandarddeviations"></a>
+<a name="averageexecutiontimesandstandarddeviations"></a>
 
-#### 3.3\. Example 3. Average execution times and standard deviations
+### 4.3\. Average execution times and standard deviations
 
-In its most basic usage, the [perfstats](perfstats.m) function obtains 
-performance statistics. In this example, average execution times and standard
-deviations are obtained from 10 replications of the Java implementation of PPHPC
+In its most basic usage, the [perfstats] function obtains performance
+statistics. In this example, average execution times and standard deviations are
+obtained from 10 replications of the Java implementation of [PPHPC]
 (single-thread, ST) for size 800, parameter set 2:
 
 ```matlab
@@ -153,17 +158,17 @@ std_time =
     3.6676
 ```
 
-The [perfstats](perfstats.m) function uses [gather_times](gather_times.m)
+The [perfstats] function uses [gather_times]
 internally.
 
-<a name="example4.comparemultiplesetupswithinthesameimplementation"></a>
+<a name="comparemultiplesetupswithinthesameimplementation"></a>
 
-#### 3.4\. Example 4. Compare multiple setups within the same implementation
+### 4.4\. Compare multiple setups within the same implementation
 
-A more advanced use case for [perfstats](perfstats.m) consists of comparing
-multiple setups, associated with different computational sizes, within the same
-implementation. For example, considering the Java ST implementation of the PPHPC
-model, lets analyze how its performance varies for increasing model sizes:
+A more advanced use case for [perfstats] consists of comparing multiple setups,
+associated with different computational sizes, within the same implementation.
+For example, considering the Java ST implementation of the [PPHPC] model, lets
+analyze how its performance varies for increasing model sizes:
 
 ```matlab
 st100v2 = struct('sname', '100v2', 'folder', [datafolder '/times/ST'], 'files', 't*100v2*.txt');
@@ -182,14 +187,14 @@ avg_time =
     0.0053    0.0361    0.1589    0.6996    2.9572
 ```
 
-<a name="example5.sameaspreviouswithalog-logplot"></a>
+<a name="sameaspreviouswithalog-logplot"></a>
 
-#### 3.5\. Example 5. Same as previous, with a log-log plot
+### 4.5\. Same as previous, with a log-log plot
 
-The [perfstats](perfstats.m) function can also be used to plot scalability 
-graphs. For this purpose, the computational size, `cize`, must be specified in
-each implementation spec, and the first parameter should be a value between 1
-(linear plot) and 4 (log-log plot), as shown in the following commands:
+The [perfstats] function can also be used to plot scalability graphs. For this
+purpose, the computational size, `cize`, must be specified in each
+implementation spec, and the first parameter should be a value between 1 (linear
+plot) and 4 (log-log plot), as shown in the following commands:
 
 ```matlab
 st100v2 = struct('sname', '100v2', 'csize', 100, 'folder', [datafolder '/times/ST'], 'files', 't*100v2*.txt');
@@ -204,18 +209,17 @@ perfstats(4, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2});
 
 ![ex05](https://cloud.githubusercontent.com/assets/3018963/11914709/b521c1c4-a67e-11e5-9e20-f05bfbe6921d.png)
 
-<a name="example6.comparedifferentimplementations"></a>
+<a name="comparedifferentimplementations"></a>
 
-#### 3.6\. Example 6. Compare different implementations
+### 4.6\. Compare different implementations
 
-Besides comparing multiple setups within the same implementation, the 
-[perfstats](perfstats.m) function is also able to compare multiple setups
-within multiple implementations. The requirement is that, from implementation
-to implementation, the multiple setups are directly comparable, i.e., 
-corresponding implementation specs should have the same `sname` and `csize`
-parameters, as shown in the following commands, where the NetLogo (NL) and Java 
-single-thread (ST) PPHPC implementations are compared for sizes 100 to 1600, 
-parameter set 1:
+Besides comparing multiple setups within the same implementation, the
+[perfstats] function is also able to compare multiple setups within multiple
+implementations. The requirement is that, from implementation to implementation,
+the multiple setups are directly comparable, i.e., corresponding implementation
+specs should have the same `sname` and `csize` parameters, as shown in the
+following commands, where the NetLogo (NL) and Java single-thread (ST) [PPHPC]
+implementations are compared for sizes 100 to 1600, parameter set 1:
 
 ```matlab
 % Specify NetLogo implementation specs
@@ -240,14 +244,14 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 
 ![ex06](https://cloud.githubusercontent.com/assets/3018963/11914710/b524dd5a-a67e-11e5-82d0-8f2ef0401e30.png)
 
-<a name="example7.speedup"></a>
+<a name="speedup"></a>
 
-#### 3.7\. Example 7. Speedup
+### 4.7\. Speedup
 
-The [speedup](speedup.m) function is used to obtain relative speedups between
-different implementations. Using the variables defined in the previous example,
-lets obtain the speedup of the Java ST version versus the NetLogo implementation
-for different model sizes:
+The [speedup] function is used to obtain relative speedups between different
+implementations. Using the variables defined in the previous example, lets
+obtain the speedup of the Java ST version versus the NetLogo implementation for
+different model sizes:
 
 ```matlab
 s = speedup(0, 1, 'NL', nlv1, 'ST', stv1);
@@ -280,18 +284,16 @@ speedup(1, 1, 'NL', nlv1, 'ST', stv1);
 
 ![ex07](https://cloud.githubusercontent.com/assets/3018963/11914711/b5259966-a67e-11e5-9faf-32770a2f080e.png)
 
-<a name="example8.speedupformultipleparallelimplementationsandsizes"></a>
+<a name="speedupformultipleparallelimplementationsandsizes"></a>
 
-#### 3.8\. Example 8. Speedup for multiple parallel implementations and sizes
+### 4.8\. Speedup for multiple parallel implementations and sizes
 
-The [speedup](speedup.m) function is also able to determine relative speedups 
-between different implementations for multiple computational sizes. In this
-example we plot the speedup of several PPHPC parallel Java implementations 
-against the NetLogo and Java single-thread implementations for multiple sizes.
-This example uses the variables defined in example 6, and the plotted results 
-are equivalent to figures 4a and 4b of the 
-"[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
-manuscript:
+The [speedup] function is also able to determine relative speedups between
+different implementations for multiple computational sizes. In this example we
+plot the speedup of several [PPHPC] parallel Java implementations against the
+NetLogo and Java single-thread implementations for multiple sizes. This example
+uses the variables defined in example 6, and the plotted results are equivalent
+to figures 4a and 4b of reference [\[1\]][ref1]:
 
 ```matlab
 % Specify Java EQ implementation specs (runs with 12 threads)
@@ -341,16 +343,15 @@ speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv
 
 ![ex08_2](https://cloud.githubusercontent.com/assets/3018963/11914714/b52fdcbe-a67e-11e5-8da2-7aae819e1337.png)
 
-<a name="example9.scalabilityofthedifferentimplementationsforincreasingmodelsizes"></a>
+<a name="scalabilityofthedifferentimplementationsforincreasingmodelsizes"></a>
 
-#### 3.9\. Example 9. Scalability of the different implementations for increasing model sizes
+### 4.9\. Scalability of the different implementations for increasing model sizes
 
 In a slightly more complex scenario than the one described in example 6, here
-we use the [perfstats](perfstats.m) function to plot the scalability of the 
-different PPHPC implementations for increasing model sizes. Using the variables
-defined in the previous examples, the following command plot the equivalent to 
-figure 5a of the "[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
-manuscript:
+we use the [perfstats] function to plot the scalability of the different [PPHPC]
+implementations for increasing model sizes. Using the variables defined in the
+previous examples, the following command plot the equivalent to figure 5a of
+reference [\[1\]][ref1]:
 
 ```matlab
 perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
@@ -358,18 +359,17 @@ perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12
 
 ![ex09](https://cloud.githubusercontent.com/assets/3018963/11914713/b52f195a-a67e-11e5-9a69-761526351f6d.png)
 
-<a name="example10.scalabilityofparallelimplementationsforincreasingnumberofthreads"></a>
+<a name="scalabilityofparallelimplementationsforincreasingnumberofthreads"></a>
 
-#### 3.10\. Example 10. Scalability of parallel implementations for increasing number of threads
+### 4.10\. Scalability of parallel implementations for increasing number of threads
 
 The 'computational size', i.e. the `csize` field, defined in the implementation
-specs passed to the [perfstats](perfstats.m) function can be used in alternative
-contexts. In this example, we use the `csize` field to specify the number of
-threads used to perform a set of simulation runs, i.e., replications. The
-following commands will plot the scalability of the several PPHPC parallel 
-implementations for increasing number of threads. The plotted results are 
-equivalent to figure 6d of the "[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
-manuscript:
+specs passed to the [perfstats] function can be used in alternative contexts. In
+this example, we use the `csize` field to specify the number of threads used to
+perform a set of simulation runs, i.e., replications. The following commands
+will plot the scalability of the several [PPHPC] parallel implementations for
+increasing number of threads. The plotted results are equivalent to figure 6d of
+reference [\[1\]][ref1]:
 
 ```matlab
 % Specify ST implementation specs, note that the data is always the same
@@ -435,17 +435,15 @@ perfstats(1, 'ST', stv2, 'EQ', eqv2, 'EX', exv2, 'ER', erv2, 'OD', odv2);
 
 ![ex10](https://cloud.githubusercontent.com/assets/3018963/11914715/b53d4b74-a67e-11e5-85e3-4cd1349152a1.png)
 
-<a name="example11.performanceofodstrategyfordifferentvaluesof_b_"></a>
+<a name="performanceofodstrategyfordifferentvaluesof_b_"></a>
 
-#### 3.11\. Example 11. Performance of OD strategy for different values of _b_
+### 4.11\. Performance of OD strategy for different values of _b_
 
-In yet another possible use of the [perfstats](perfstats.m) function, in this
-example we use the `csize` field to specify the value of the _b_ parameter of
-the PPHPC model Java OD variant. This allows us to analyze the performance of 
-the OD parallelization strategy for different values of _b_. The plot created by
-the following commands is equivalent to figure 7b of the 
-"[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
-manuscript:
+In yet another possible use of the [perfstats] function, in this example we use
+the `csize` field to specify the value of the _b_ parameter of the [PPHPC] model
+Java OD variant. This allows us to analyze the performance of the OD
+parallelization strategy for different values of _b_. The plot created by the
+following commands is equivalent to figure 7b of reference [\[1\]][ref1]:
 
 ```matlab
 % Specify the OD implementation specs for size 100 and increasing values of b
@@ -509,16 +507,15 @@ perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '16
 
 ![ex11](https://cloud.githubusercontent.com/assets/3018963/11914716/b543721a-a67e-11e5-9a34-cfd1eac7a3ba.png)
 
-<a name="example12.sameasexample6butshowatableinsteadofaplot"></a>
+<a name="sameasexample6butshowatableinsteadofaplot"></a>
 
-#### 3.12\. Example 12. Same as example 6, but show a table instead of a plot
+### 4.12\. Same as example 6, but show a table instead of a plot
 
-
-The [times_table](times_table.m) and [times_table_f](times_table_f.m) functions
-can be used to create performance tables formatted in plain text or LaTeX. Using
-the data defined in example 6, the following commands produces a plain text
-table comparing the NetLogo (NL) and Java single-thread (ST) PPHPC
-implementations for sizes 100 to 1600, parameter set 1:
+The [times_table] and [times_table_f] functions can be used to create
+performance tables formatted in plain text or LaTeX. Using the data defined in
+example 6, the following commands produces a plain text table comparing the
+NetLogo (NL) and Java single-thread (ST) [PPHPC] implementations for sizes 100
+to 1600, parameter set 1:
 
 ```matlab
 % Put data in table format
@@ -558,16 +555,15 @@ times_table_f(1, 'NL vs ST', tdata)
 
 ![ex12](https://cloud.githubusercontent.com/assets/3018963/11914717/b543e4ca-a67e-11e5-9d57-6348aabb91ad.png)
 
-<a name="example13.complextables"></a>
+<a name="complextables"></a>
 
-#### 3.13\. Example 13. Complex tables
+### 4.13\. Complex tables
 
-The [times_table](times_table.m) and [times_table_f](times_table_f.m) functions
-are capable of producing more complex tables. In this example, we show how to
-reproduce table 7 of the "[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
-manuscript, containing times and speedups for different model implementations, 
-different sizes and different parameter sets, showing speedups of all 
-implementations versus the NetLogo and Java ST versions.
+The [times_table] and [times_table_f] functions are capable of producing more
+complex tables. In this example, we show how to reproduce table 7 of reference
+[\[1\]][ref1], containing times and speedups for different model
+implementations, different sizes and different parameter sets, showing speedups
+of all implementations versus the NetLogo and Java ST versions.
 
 The first step consists of specifying the implementation specs:
 
@@ -746,9 +742,7 @@ times_table_f(0, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 -----------------------------------------------------------------------------------------------------------------------
 ```
 
-Finally, we produce the LaTeX table, as shown in the
-"[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
-manuscript:
+Finally, we produce the LaTeX table, as shown in reference [\[1\]][ref1]:
 
 ```matlab
 % Latex table
@@ -757,7 +751,33 @@ times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 
 ![ex13](https://cloud.githubusercontent.com/assets/3018963/11914718/b54b70be-a67e-11e5-8ed0-5d3c99d2e93f.png)
 
+<a name="license"></a>
+
+## 5\. License
+
+[MIT License](LICENSE)
+
+<a name="references"></a>
+
+## 6\. References
+
+<a name="ref1"></a>
+
+[\[1\]][ref1] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
+Strategies for Spatial Agent-Based Models. *International Journal of Parallel
+Programming*. https://doi.org/10.1007/s10766-015-0399-9 (arXiv version available
+at http://arxiv.org/abs/1507.04047)
+
+[ref1]: #ref1
+[PPHPC]: https://github.com/fakenmc/pphpc
 [GNU time]: https://www.gnu.org/software/time/
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [multirow]: https://www.ctan.org/pkg/multirow
 [booktabs]: https://www.ctan.org/pkg/booktabs
+[get_time]: get_time.m
+[gather_times]: gather_times.m
+[perfstats]: perfstats.m
+[speedup]: speedup.m
+[times_table]: times_table.m
+[times_table_f]: times_table_f.m
+

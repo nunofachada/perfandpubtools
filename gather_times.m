@@ -5,19 +5,28 @@ function timings = gather_times(name, folder, files)
 %
 % Parameters:
 %    name - Name of this list of times.
-%  folder - Folder containing files with times (output of GNU time
-%           command).
-%   files - Files with times (output of GNU time command), use wildcards.
+%  folder - Folder containing files with times.
+%   files - Files with times, use wildcards.
 %
 % Returns:
 %  A struct with fields 'name' and 'elapsed', the former containing the
 %  name of this list of times, the latter containing a vector of times (in
 %  seconds) extracted from the specified files.
+%
+% Note:
+%  By default, the get_time function is used to read individual files. This
+%  function expects files containing the output of the GNU time function.
+%  To use use other type of output change the function used by default by
+%  editing the first line of the body of this function.
 %    
-% Copyright (c) 2015 Nuno Fachada
+% Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
+
+% Function used to read individual files - Edit this line to use another
+% function to read different file types
+tfun = @get_time;
 
 % Get file list
 listing = dir([folder '/' files]);
@@ -35,11 +44,12 @@ end;
 for i = 1:numFiles
     
     % Get timing information from current file
-    timing = get_time([folder '/' listing(i).name]);
+    timing = tfun([folder '/' listing(i).name]);
     
     % Gather timing
     elapsed(i, 1) = timing.elapsed;
 
 end;
 
+% Return struct with name and elapsed times
 timings = struct('name', name, 'elapsed', elapsed);

@@ -40,7 +40,7 @@ function [speedups, times, std_times, times_raw, fids, impl_legends, ...
 %  set_legends - Setups legend.
 %
 %    
-% Copyright (c) 2015 Nuno Fachada
+% Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %

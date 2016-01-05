@@ -13,7 +13,7 @@ function timing = get_time(filename)
 %  user, system and elapsed time in seconds, and the percentage of CPU 
 %  usage, respectively.
 %    
-% Copyright (c) 2015 Nuno Fachada
+% Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
