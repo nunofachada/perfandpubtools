@@ -1,7 +1,7 @@
 function [speedups, times, std_times, times_raw, fids, impl_legends, ...
     set_legends] = speedup(do_plot, compare, varargin)
-% SPEEDUP Determine speedups using folders of files obtained with GNU time
-% command, and optionally plot speedups in a bar plot.
+% SPEEDUP Determine speedups using folders of files containing benchmarking
+% results, and optionally plot speedups in a bar plot.
 %
 % [speedups, times, std_times, times_raw, fids, impl_legends, set_legends] 
 %   = SPEEDUP(do_plot, compare, varargin)
@@ -17,8 +17,10 @@ function [speedups, times, std_times, times_raw, fids, impl_legends, ...
 %              where each cell contains a struct with the following fields:
 %                 sname - Name of setup, e.g. of series of runs with a 
 %                         given parameter set.
-%                folder - Folder containing time output files.
-%                files  - Time output files (w/ wildcards if necessary).
+%                folder - Folder with files containing benchmarking
+%                         results.
+%                files  - Name of files containing benchmarking results
+%                         (use wildcards if necessary).
 %                 csize - Computational size associated with setup (can be
 %                         ignored if a plot was not requested).
 %

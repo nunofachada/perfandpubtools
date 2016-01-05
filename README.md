@@ -2,8 +2,8 @@ PerfAndPubTools
 ===============
 
 1\.  [What is PerfAndPubTools?](#whatisperfandpubtools?)  
-2\.  [File format](#fileformat)  
-3\.  [List of functions](#listoffunctions)  
+2\.  [Benchmark file format](#benchmarkfileformat)  
+3\.  [Architecture and functions](#architectureandfunctions)  
 4\.  [Examples](#examples)  
 4.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
 4.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder)  
@@ -25,41 +25,54 @@ PerfAndPubTools
 
 ## 1\. What is PerfAndPubTools?
 
-Tools for software performance analysis and publishing of results.
+_PerfAndPubTools_ consists of a set of functions for analysing software
+performance benchmarking results and producing associated publication quality
+materials.
 
-These functions are generic and work with any computational experiment profiled
-with the [GNU time] command.
+<a name="benchmarkfileformat"></a>
 
-<a name="fileformat"></a>
+## 2\. Benchmark file format
 
-## 2\. File format
-
-Default output of [GNU time] command.
-
-**Example:**
+By default, _PerfAndPubTools_ expects individual benchmarking results to be
+available as files containing the default output of [GNU time] command, for
+example:
 
 ```
 512.66user 2.17system 8:01.34elapsed 106%CPU (0avgtext+0avgdata 1271884maxresident)k
 0inputs+2136outputs (0major+49345minor)pagefaults 0swaps
 ```
 
-<a name="listoffunctions"></a>
+This preset selection can be easily modified as will be described further ahead.
 
-## 3\. List of functions
+<a name="architectureandfunctions"></a>
+
+## 3\. Architecture and functions
+
+_PerfAndPubTools_ is implemented in a layered architecture with procedural
+programming style, as shown in the following figure:
+
+![arch](https://cloud.githubusercontent.com/assets/3018963/12123108/e368c31a-b3d6-11e5-8da3-2a4786d247c2.png)
+
+*TO DO: Define implementation and setup.*
+
+The following is a list of available functions, from lowest to highest-level of
+functionality:
 
 * [get_time] - Given a file containing the default output of the GNU time
 command, extract the user, system and elapsed time in seconds, as well as the
 percentage of CPU usage.
 
-* [gather_times] - Load execution times from all files in a given folder.
+* [gather_times] - Load execution times from all files in a given folder. Uses
+the [get_time] function by default, but can be configured to use another
+function to load individual benchmark files with a different format.
 
 * [perfstats] - Determine mean times and respective standard deviations of a
-computational experiment using folders of files containing the default output of
-the GNU time command, optionally plotting a scalability graph if different
-setups correspond to different computational work sizes.
+computational experiment using folders of files containing benchmarking results,
+optionally plotting a scalability graph if different setups correspond to
+different computational work sizes.
 
-* [speedup] - Determine speedups using folders of files obtained with GNU time
-command, and optionally plot speedups in a bar plot.
+* [speedup] - Determine speedups using folders of files containing benchmarking
+results, and optionally plot speedups in a bar plot.
 
 * [times_table] - Returns a matrix with useful contents for using in tables for
 publication, namely times (in seconds), absolute standard deviations (seconds),

@@ -1,9 +1,9 @@
 function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
     = perfstats(do_plot, varargin)
 % PERFSTATS Determine mean times and respective standard deviations of a
-% computational experiment using folders of files containing the default
-% output of the GNU time command, optionally plotting a scalability graph 
-% if different setups correspond to different computational work sizes.
+% computational experiment using folders of files containing benchmarking
+% results, optionally plotting a scalability graph if different setups
+% correspond to different computational work sizes.
 %
 % [times, std_times, times_raw, fid] = PERFSTATS(do_plot, varargin)
 %
@@ -20,8 +20,10 @@ function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
 %              where each cell contains a struct with the following fields:
 %                 sname - Name of setup, e.g. of series of runs with a 
 %                         given parameter set.
-%                folder - Folder containing GNU time output files.
-%                files  - Time output file names (use wildcards).
+%                folder - Folder containing files with benchmarking
+%                         results.
+%                files  - Names of files with benchmarking results (use
+%                         wildcards).
 %                 csize - Computational size associated with setup (can be
 %                         ignored if a plot was not requested).
 %              
@@ -35,7 +37,7 @@ function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
 %    times_raw - Cell matrix where each cell contais a complete time struct 
 %                for each setup. Rows correspond to implementations,
 %                columns to setups.
-%          fid - ID of generated plot (if doPlot == 1).
+%          fid - ID of generated plot (if do_plot == 1).
 %  impl_legend - Implementations legend.
 %   set_legend - Setups legend.
 %
