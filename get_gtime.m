@@ -1,9 +1,9 @@
-function timing = get_time(filename)
-% GET_TIME Given a file containing the default output of the GNU time
-% command, extract the user, system and elapsed time in seconds, as well as
-% the percentage of CPU usage.
+function timing = get_gtime(filename)
+% GET_GTIME Given a file containing the default output of the GNU time
+% command, this function extracts the user, system and elapsed time in
+% seconds, as well as the percentage of CPU usage.
 %
-%   timing = GET_TIME(filename)
+%   timing = GET_GTIME(filename)
 %
 % Parameters:
 %   filename - File containing output of GNU time command.
@@ -20,7 +20,7 @@ function timing = get_time(filename)
 
 % Open file containing output of the time command
 fid = fopen(filename);
-if fid==-1
+if fid == -1
     error(['Unknown file "' filename '"']);
 end;
 

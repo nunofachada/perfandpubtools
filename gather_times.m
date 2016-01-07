@@ -14,10 +14,10 @@ function timings = gather_times(name, folder, files)
 %  seconds) extracted from the specified files.
 %
 % Note:
-%  By default, the get_time function is used to read individual files. This
-%  function expects files containing the output of the GNU time function.
-%  To use use other type of output change the function used by default by
-%  editing the first line of the body of this function.
+%  By default, the get_gtime function is used to read individual files.
+%  This function expects files containing the output of the GNU time
+%  program. To use use other type of output change the function used by
+%  default by editing the first line of the body of this function.
 %    
 % Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
@@ -26,7 +26,7 @@ function timings = gather_times(name, folder, files)
 
 % Function used to read individual files - Edit this line to use another
 % function to read different file types
-tfun = @get_time;
+tfun = @get_gtime;
 
 % Get file list
 listing = dir([folder '/' files]);

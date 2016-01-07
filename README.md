@@ -5,19 +5,23 @@ PerfAndPubTools
 2\.  [Benchmark file format](#benchmarkfileformat)  
 3\.  [Architecture and functions](#architectureandfunctions)  
 4\.  [Examples](#examples)  
-4.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
-4.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder)  
-4.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations)  
-4.4\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation)  
-4.5\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
-4.6\.  [Compare different implementations](#comparedifferentimplementations)  
-4.7\.  [Speedup](#speedup)  
-4.8\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
-4.9\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
-4.10\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
-4.11\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
-4.12\.  [Same as example 6, but show a table instead of a plot](#sameasexample6butshowatableinsteadofaplot)  
-4.13\.  [Complex tables](#complextables)  
+4.1\.  [Comparing sorting algorithms](#comparingsortingalgorithms)  
+4.1.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
+4.1.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder)  
+4.2\.  [Replicating results of an existing publication](#replicatingresultsofanexistingpublication)  
+4.2.1\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
+4.2.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
+4.2.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations)  
+4.2.4\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation)  
+4.2.5\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
+4.2.6\.  [Compare different implementations](#comparedifferentimplementations)  
+4.2.7\.  [Speedup](#speedup)  
+4.2.8\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
+4.2.9\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
+4.2.10\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
+4.2.11\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
+4.2.12\.  [Same as example 6, but show a table instead of a plot](#sameasexample6butshowatableinsteadofaplot)  
+4.2.13\.  [Complex tables](#complextables)  
 5\.  [License](#license)  
 6\.  [References](#references)  
 
@@ -25,9 +29,9 @@ PerfAndPubTools
 
 ## 1\. What is PerfAndPubTools?
 
-_PerfAndPubTools_ consists of a set of functions for analysing software
-performance benchmarking results and producing associated publication quality
-materials.
+_PerfAndPubTools_ consists of a set of [MATLAB]/[Octave] functions for analyzing
+software performance benchmark results and producing associated publication
+quality materials.
 
 <a name="benchmarkfileformat"></a>
 
@@ -42,7 +46,7 @@ example:
 0inputs+2136outputs (0major+49345minor)pagefaults 0swaps
 ```
 
-This preset selection can be easily modified as will be described further ahead.
+This preset selection can be easily modified as described in the next sections.
 
 <a name="architectureandfunctions"></a>
 
@@ -51,19 +55,19 @@ This preset selection can be easily modified as will be described further ahead.
 _PerfAndPubTools_ is implemented in a layered architecture with procedural
 programming style, as shown in the following figure:
 
-![arch](https://cloud.githubusercontent.com/assets/3018963/12123108/e368c31a-b3d6-11e5-8da3-2a4786d247c2.png)
+![arch](https://cloud.githubusercontent.com/assets/3018963/12177843/3354c2ee-b566-11e5-8d19-48f0a57d4b60.png)
 
 *TO DO: Define implementation and setup.*
 
 The following is a list of available functions, from lowest to highest-level of
 functionality:
 
-* [get_time] - Given a file containing the default output of the GNU time
-command, extract the user, system and elapsed time in seconds, as well as the
-percentage of CPU usage.
+* [get_gtime] - Given a file containing the default output of the [GNU time]
+command, this function extracts the user, system and elapsed time in seconds, as
+well as the percentage of CPU usage.
 
-* [gather_times] - Load execution times from all files in a given folder. Uses
-the [get_time] function by default, but can be configured to use another
+* [gather_times] - Load execution times from all files in a given folder. This
+function uses [get_gtime] by default, but can be configured to use another
 function to load individual benchmark files with a different format.
 
 * [perfstats] - Determine mean times and respective standard deviations of a
@@ -86,7 +90,110 @@ relative standard deviations, speedups (vs the implementations specified in the
 
 ## 4\. Examples
 
-These examples use the datasets available at 
+<a name="comparingsortingalgorithms"></a>
+
+### 4.1\. Comparing sorting algorithms
+
+In following examples _PerfAndPubTools_ is used to analyzing the performance
+of several sorting algorithms implemented in C. Before proceeding:
+
+1. Download and compile the [sorttest.c] program (instructions are available by
+clicking on the link).
+2. Confirm that the [GNU time] program is installed (instructions also available
+in [sorttest.c]).
+3. In [MATLAB]/[Octave] create a `sortfolder` variable containing the full path
+of the [sorttest.c] program.
+
+[GNU time] is invoked as `/usr/bin/time`, but this can vary for different Linux
+distributions. On OSX it is invoked as `gtime`. The former invocation is used
+for throughout the examples, replace it as appropriate.
+
+Since the [GNU time] program does not seem to be available for Windows, these
+examples only run unmodified on Linux and OSX. On Windows, benchmark the
+[sorttest.c] program using an [alternative] approach and replace [get_gtime]
+with a function which parses the produced output.
+
+<a name="extractperformancedatafromafile"></a>
+
+#### 4.1.1\. Extract performance data from a file
+
+First, test that the [sorttest.c] program is working by testing the [QuickSort]
+algorithm with a vector of 1,000,000 random integers:
+
+```
+$ ./sorttest quick 1000000 2362 yes
+Sorting Ok!
+```
+
+The value `2362` is the seed to the random number generator, and the optional
+`yes` parameter asks the program to output a message confirming if the sorting
+was successful.
+
+Now, create a benchmark file with [GNU time]:
+
+```
+$ /usr/bin/time ./sorttest quick 1000000 2362 2> out.txt 
+```
+
+The `2>` redirects the output of [GNU time] to a file called `out.txt`. This
+file can be parsed with the [get_gtime] function from [MATLAB]:
+
+```matlab
+p = get_gtime('out.txt')
+```
+
+The function returns a structure with several fields:
+
+```
+p = 
+
+       user: 0.1400
+        sys: 0
+    elapsed: 0.1400
+        cpu: 98
+```
+
+<a name="extractexecutiontimesfromfilesinafolder"></a>
+
+#### 4.1.2\. Extract execution times from files in a folder
+
+The [gather_times] function extracts execution times from multiple files in a
+folder. This is useful for analyzing average run times over a number of runs.
+First, we need to perform these runs. From a terminal, run the following
+command, which performs 10 runs of the [sorttest.c] program:
+
+```
+$ for RUN in {1..10}; do /usr/bin/time ./sorttest quick 1000000 $RUN 2> time$RUN.txt; done
+```
+
+Note that each run is performed with a different seed, so that different vectors
+are sorted by [QuickSort] each turn. In [MATLAB], use the [gather_times]
+function to extract execution times:
+
+```matlab
+exec_time = gather_times('QuickSort', sortfolder, 'time*.txt');
+```
+
+The first parameter of [gather_times] names the list of gathered times, and is
+used as metadata by other functions. The vector of execution times is in the
+`elapsed` field of the returned structure:
+
+```matlab
+exec_time.elapsed
+```
+
+The [gather_times] function uses [get_gtime] internally by default. However, 
+other functions can be specified in the first line of the [gather_times]
+function body, allowing _PerfAndPubTools_ to support benchmarking formats other
+than the output of [GNU time]. Alternatives to [get_gtime] are only required to
+return a struct with the `elapsed` field, indicating the duration (in seconds)
+of a program execution.
+
+<a name="replicatingresultsofanexistingpublication"></a>
+
+### 4.2\. Replicating results of an existing publication
+
+The following examples use the dataset available at 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
 Unpack the datasets to any folder and put the complete path to this folder in 
 variable `datafolder`, e.g.:
@@ -97,15 +204,15 @@ datafolder = 'path/to/datasets';
 
 These datasets correspond to the results presented in reference [\[1\]][ref1].
 
-<a name="extractperformancedatafromafile"></a>
+<a name="extractperformancedatafromafile-1"></a>
 
-### 4.1\. Extract performance data from a file
+#### 4.2.1\. Extract performance data from a file
 
-The [get_time] function extracts performance data from one file containing the
+The [get_gtime] function extracts performance data from one file containing the
 default output of [GNU time] command. For example:
 
 ```matlab
-p = get_time([datafolder '/times/NL/time100v1r1.txt'])
+p = get_gtime([datafolder '/times/NL/time100v1r1.txt'])
 ```
 
 The function returns a structure with several fields:
@@ -119,15 +226,15 @@ p =
         cpu: 108
 ```
 
-<a name="extractexecutiontimesfromfilesinafolder"></a>
+<a name="extractexecutiontimesfromfilesinafolder-1"></a>
 
-### 4.2\. Extract execution times from files in a folder
+#### 4.2.2\. Extract execution times from files in a folder
 
 The [gather_times] function extracts execution times from multiple files in a
 folder, as shown in the following command:
 
 ```matlab
-exec_time = gather_times('NetLogo', [datafolder '/times/NL'], 'time100v1*.txt')
+exec_time = gather_times('NetLogo', [datafolder '/times/NL'], 'time100v1*.txt');
 ```
 
 The vector of execution times is in the `elapsed` field of the returned
@@ -137,16 +244,16 @@ structure:
 exec_time.elapsed
 ```
 
-The [gather_times] function uses [get_time] internally by default. However, 
+The [gather_times] function uses [get_gtime] internally by default. However, 
 other functions can be specified in the first line of the [gather_times]
 function body, allowing _PerfAndPubTools_ to support benchmarking formats other
-than the output of [GNU time]. Alternatives to [get_time] are only required to
+than the output of [GNU time]. Alternatives to [get_gtime] are only required to
 return a struct with the `elapsed` field, indicating the duration (in seconds)
 of a program execution.
 
 <a name="averageexecutiontimesandstandarddeviations"></a>
 
-### 4.3\. Average execution times and standard deviations
+#### 4.2.3\. Average execution times and standard deviations
 
 In its most basic usage, the [perfstats] function obtains performance
 statistics. In this example, average execution times and standard deviations are
@@ -174,7 +281,7 @@ internally.
 
 <a name="comparemultiplesetupswithinthesameimplementation"></a>
 
-### 4.4\. Compare multiple setups within the same implementation
+#### 4.2.4\. Compare multiple setups within the same implementation
 
 A more advanced use case for [perfstats] consists of comparing multiple setups,
 associated with different computational sizes, within the same implementation.
@@ -200,7 +307,7 @@ avg_time =
 
 <a name="sameaspreviouswithalog-logplot"></a>
 
-### 4.5\. Same as previous, with a log-log plot
+#### 4.2.5\. Same as previous, with a log-log plot
 
 The [perfstats] function can also be used to plot scalability graphs. For this
 purpose, the computational size, `cize`, must be specified in each
@@ -222,7 +329,7 @@ perfstats(4, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2});
 
 <a name="comparedifferentimplementations"></a>
 
-### 4.6\. Compare different implementations
+#### 4.2.6\. Compare different implementations
 
 Besides comparing multiple setups within the same implementation, the
 [perfstats] function is also able to compare multiple setups within multiple
@@ -257,7 +364,7 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 
 <a name="speedup"></a>
 
-### 4.7\. Speedup
+#### 4.2.7\. Speedup
 
 The [speedup] function is used to obtain relative speedups between different
 implementations. Using the variables defined in the previous example, lets
@@ -297,7 +404,7 @@ speedup(1, 1, 'NL', nlv1, 'ST', stv1);
 
 <a name="speedupformultipleparallelimplementationsandsizes"></a>
 
-### 4.8\. Speedup for multiple parallel implementations and sizes
+#### 4.2.8\. Speedup for multiple parallel implementations and sizes
 
 The [speedup] function is also able to determine relative speedups between
 different implementations for multiple computational sizes. In this example we
@@ -356,7 +463,7 @@ speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv
 
 <a name="scalabilityofthedifferentimplementationsforincreasingmodelsizes"></a>
 
-### 4.9\. Scalability of the different implementations for increasing model sizes
+#### 4.2.9\. Scalability of the different implementations for increasing model sizes
 
 In a slightly more complex scenario than the one described in example 6, here
 we use the [perfstats] function to plot the scalability of the different [PPHPC]
@@ -372,7 +479,7 @@ perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12
 
 <a name="scalabilityofparallelimplementationsforincreasingnumberofthreads"></a>
 
-### 4.10\. Scalability of parallel implementations for increasing number of threads
+#### 4.2.10\. Scalability of parallel implementations for increasing number of threads
 
 The 'computational size', i.e. the `csize` field, defined in the implementation
 specs passed to the [perfstats] function can be used in alternative contexts. In
@@ -448,7 +555,7 @@ perfstats(1, 'ST', stv2, 'EQ', eqv2, 'EX', exv2, 'ER', erv2, 'OD', odv2);
 
 <a name="performanceofodstrategyfordifferentvaluesof_b_"></a>
 
-### 4.11\. Performance of OD strategy for different values of _b_
+#### 4.2.11\. Performance of OD strategy for different values of _b_
 
 In yet another possible use of the [perfstats] function, in this example we use
 the `csize` field to specify the value of the _b_ parameter of the [PPHPC] model
@@ -520,7 +627,7 @@ perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '16
 
 <a name="sameasexample6butshowatableinsteadofaplot"></a>
 
-### 4.12\. Same as example 6, but show a table instead of a plot
+#### 4.2.12\. Same as example 6, but show a table instead of a plot
 
 The [times_table] and [times_table_f] functions can be used to create
 performance tables formatted in plain text or LaTeX. Using the data defined in
@@ -568,7 +675,7 @@ times_table_f(1, 'NL vs ST', tdata)
 
 <a name="complextables"></a>
 
-### 4.13\. Complex tables
+#### 4.2.13\. Complex tables
 
 The [times_table] and [times_table_f] functions are capable of producing more
 complex tables. In this example, we show how to reproduce table 7 of reference
@@ -780,12 +887,17 @@ Programming*. https://doi.org/10.1007/s10766-015-0399-9 (arXiv version available
 at http://arxiv.org/abs/1507.04047)
 
 [ref1]: #ref1
+[Matlab]: http://www.mathworks.com/products/matlab/
+[Octave]: https://gnu.org/software/octave/
+[sorttest.c]: https://github.com/fakenmc/sorttest_c
+[alternative]: http://stackoverflow.com/questions/673523/how-to-measure-execution-time-of-command-in-windows-command-line
+[QuickSort]: https://en.wikipedia.org/wiki/Quicksort
 [PPHPC]: https://github.com/fakenmc/pphpc
 [GNU time]: https://www.gnu.org/software/time/
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [multirow]: https://www.ctan.org/pkg/multirow
 [booktabs]: https://www.ctan.org/pkg/booktabs
-[get_time]: get_time.m
+[get_gtime]: get_gtime.m
 [gather_times]: gather_times.m
 [perfstats]: perfstats.m
 [speedup]: speedup.m
