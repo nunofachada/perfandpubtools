@@ -8,14 +8,20 @@ PerfAndPubTools
 4.1\.  [Comparing sorting algorithms](#comparingsortingalgorithms)  
 4.1.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
 4.1.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder)  
+4.1.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations)  
+4.1.4\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation)  
+4.1.5\.  [Same as previous, with a linear plot](#sameaspreviouswithalinearplot)  
+4.1.6\.  [Compare different implementations](#comparedifferentimplementations)  
+4.1.7\.  [Speedup](#speedup)  
+4.1.8\.  [Speedup for multiple algorithms and vector sizes](#speedupformultiplealgorithmsandvectorsizes)  
 4.2\.  [Replicating results of an existing publication](#replicatingresultsofanexistingpublication)  
 4.2.1\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
 4.2.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
-4.2.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations)  
-4.2.4\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation)  
+4.2.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations-1)  
+4.2.4\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation-1)  
 4.2.5\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
-4.2.6\.  [Compare different implementations](#comparedifferentimplementations)  
-4.2.7\.  [Speedup](#speedup)  
+4.2.6\.  [Compare different implementations](#comparedifferentimplementations-1)  
+4.2.7\.  [Speedup](#speedup-1)  
 4.2.8\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
 4.2.9\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
 4.2.10\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
@@ -57,7 +63,14 @@ programming style, as shown in the following figure:
 
 ![arch](https://cloud.githubusercontent.com/assets/3018963/12177843/3354c2ee-b566-11e5-8d19-48f0a57d4b60.png)
 
-*TO DO: Define implementation and setup.*
+Performance analysis in _PerfAndPubTools_ takes place at two levels:
+*implementation* and *setup*. The *implementation* level is meant to be
+associated with specific software implementations for performing a given task,
+for example a particular sorting algorithm or a simulation model implemented in
+a certain programming language. Within the context of each implementation, the
+software can be executed under different *setups*. These can be different
+computational sizes (e.g. vector lengths in a sorting algorithm context) or
+distinct execution parameters (e.g. number of threads to use).
 
 The following is a list of available functions, from lowest to highest-level of
 functionality:
@@ -117,7 +130,7 @@ with a function which parses the produced output.
 
 #### 4.1.1\. Extract performance data from a file
 
-First, test that the [sorttest.c] program is working by testing the [QuickSort]
+First, test that the [sorttest.c] program is working by testing the [Quicksort]
 algorithm with a vector of 1,000,000 random integers:
 
 ```
@@ -167,11 +180,11 @@ $ for RUN in {1..10}; do /usr/bin/time ./sorttest quick 1000000 $RUN 2> time$RUN
 ```
 
 Note that each run is performed with a different seed, so that different vectors
-are sorted by [QuickSort] each turn. In [MATLAB], use the [gather_times]
+are sorted by [Quicksort] each turn. In [MATLAB], use the [gather_times]
 function to extract execution times:
 
 ```matlab
-exec_time = gather_times('QuickSort', sortfolder, 'time*.txt');
+exec_time = gather_times('Quicksort', sortfolder, 'time*.txt');
 ```
 
 The first parameter of [gather_times] names the list of gathered times, and is
@@ -188,6 +201,181 @@ function body, allowing _PerfAndPubTools_ to support benchmarking formats other
 than the output of [GNU time]. Alternatives to [get_gtime] are only required to
 return a struct with the `elapsed` field, indicating the duration (in seconds)
 of a program execution.
+
+
+<a name="averageexecutiontimesandstandarddeviations"></a>
+
+#### 4.1.3\. Average execution times and standard deviations
+
+In its most basic usage, the [perfstats] function obtains performance
+statistics. In this example, average execution times and standard deviations are
+obtained from the runs performed in the previous example:
+
+```matlab
+qs1M = struct('sname', 'Quicksort', 'folder', sortfolder, 'files', 'time*.txt');
+[avg_time, std_time] = perfstats(0, sortfolder, {qs1M})
+```
+
+```
+avg_time =
+
+    0.1427
+
+
+std_time =
+
+    0.0326
+```
+
+The [perfstats] function uses [gather_times] internally.
+
+<a name="comparemultiplesetupswithinthesameimplementation"></a>
+
+#### 4.1.4\. Compare multiple setups within the same implementation
+
+A more advanced use case for [perfstats] consists of comparing multiple setups,
+associated with different computational sizes, within the same implementation
+(e.g., sorting algorithm). In this example we analyze how the performance of the
+[Bubble sort] algorithm varies for increasing vector sizes.
+
+First, perform a number of runs with [sorttest.c] using [Bubble sort] for
+vectors of size 10,000, 20,000 and 30,000:
+
+```
+$ for RUN in {1..10}; do for SIZE in 10000 20000 30000; do /usr/bin/time ./sorttest bubble $SIZE $RUN 2> time_bubble_${SIZE}_${RUN}.txt; done; done
+```
+
+Second, obtain the average times for the several vector sizes using [perfstats]:
+
+```matlab
+bs10k = struct('sname', 'bs10k', 'folder', sortfolder, 'files', 'time_bubble_10000_*.txt');
+bs20k = struct('sname', 'bs20k', 'folder', sortfolder, 'files', 'time_bubble_20000_*.txt');
+bs30k = struct('sname', 'bs30k', 'folder', sortfolder, 'files', 'time_bubble_30000_*.txt');
+avg_time = perfstats(0, 'bubble', {bs10k, bs20k, bs30k})
+```
+
+```
+avg_time =
+
+    0.3220    1.3370    3.1070
+```
+
+<a name="sameaspreviouswithalinearplot"></a>
+
+#### 4.1.5\. Same as previous, with a linear plot
+
+The [perfstats] function can also be used to plot scalability graphs. For this
+purpose, the computational size, `cize`, must be specified in each
+implementation spec, and the first parameter should be a value between 1 (linear
+plot) and 4 (log-log plot), as shown in the following commands:
+
+```matlab
+bs10k = struct('sname', 'bs10k', 'csize', 1e4, 'folder', sortfolder, 'files', 'time_bubble_10000_*.txt');
+bs20k = struct('sname', 'bs20k', 'csize', 2e4, 'folder', sortfolder, 'files', 'time_bubble_20000_*.txt');
+bs30k = struct('sname', 'bs30k', 'csize', 3e4, 'folder', sortfolder, 'files', 'time_bubble_30000_*.txt');
+
+% The first parameter defines the plot type: 1 is a linear plot
+perfstats(1, 'bubble', {bs10k, bs20k, bs30k});
+```
+
+![ex05s](https://cloud.githubusercontent.com/assets/3018963/12179235/9ed764d4-b56d-11e5-997d-d7a2fbca7ea4.png)
+
+<a name="comparedifferentimplementations"></a>
+
+#### 4.1.6\. Compare different implementations
+
+Besides comparing multiple setups within the same implementation, the
+[perfstats] function is also able to compare multiple setups within multiple
+implementations. The requirement is that, from implementation to implementation,
+the multiple setups are directly comparable, i.e., corresponding implementation
+specs should have the same `sname` and `csize` parameters.
+
+First, perform a number of runs with [sorttest.c] using [Merge sort] and
+[Quicksort] for vectors of size 1e4, 1e5, 1e6 and 1e7:
+
+```
+$ for RUN in {1..10}; do for IMPL in merge quick; do for SIZE in 100000 1000000 10000000 100000000; do /usr/bin/time ./sorttest $IMPL $SIZE $RUN 2> time_${IMPL}_${SIZE}_${RUN}.txt; done; done; done
+```
+
+Second, use [perfstats] to plot the respective scalability graph:
+
+```matlab
+% Specify Merge sort implementation specs
+ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_merge_100000_*.txt');
+ms1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', sortfolder, 'files', 'time_merge_1000000_*.txt');
+ms1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', sortfolder, 'files', 'time_merge_10000000_*.txt');
+ms1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', sortfolder, 'files', 'time_merge_100000000_*.txt');
+ms = {ms1e5, ms1e6, ms1e7, ms1e8};
+
+% Specify Quicksort implementation specs
+qs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_quick_100000_*.txt');
+qs1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', sortfolder, 'files', 'time_quick_1000000_*.txt');
+qs1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', sortfolder, 'files', 'time_quick_10000000_*.txt');
+qs1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', sortfolder, 'files', 'time_quick_100000000_*.txt');
+qs = {qs1e5, qs1e6, qs1e7, qs1e8};
+
+% Plot comparison with a log-log plot
+perfstats(4, 'Merge sort', ms, 'Quicksort', qs);
+```
+
+![ex06s](https://cloud.githubusercontent.com/assets/3018963/12180504/d9c1cdee-b574-11e5-81c5-b34f40945a6f.png)
+
+<a name="speedup"></a>
+
+#### 4.1.7\. Speedup
+
+The [speedup] function is used to obtain relative speedups between different
+implementations. Using the variables defined in the previous example, lets
+obtain the speedup of [Quicksort] versus [Merge sort] for different vector
+sizes:
+
+```matlab
+s = speedup(0, 1, 'Merge sort', ms, 'Quicksort', qs);
+```
+
+Speedups can be obtained by getting the first element of the returned cell, i.e.
+by invoking `s{1}`:
+
+```
+ans =
+
+    1.0000    1.0000    1.0000    1.0000
+    1.0500    1.7164    1.7520    1.6314
+```
+
+The second parameter indicates the reference implementation from which to 
+calculate speedups. In this case, specifying 1 will return speedups against
+Merge sort. The first row of the previous matrix shows the speedup of
+[Merge sort] against itself, thus it is composed of ones. The second row shows
+the speedup of [Quicksort] versus [Merge sort]. If the second parameter is a
+vector, speedups against more than one implementation are returned.
+
+Setting the 1st parameter to 1 will yield a bar plot displaying the relative
+speedups:
+
+```matlab
+s = speedup(1, 1, 'Merge sort', ms, 'Quicksort', qs);
+```
+
+![ex07s](https://cloud.githubusercontent.com/assets/3018963/12180905/0c18a928-b577-11e5-8e93-912b534cbd61.png)
+
+<a name="speedupformultiplealgorithmsandvectorsizes"></a>
+
+#### 4.1.8\. Speedup for multiple algorithms and vector sizes
+
+The [speedup] function is also able to determine relative speedups between
+different implementations for multiple computational sizes. In this example we
+plot the speedup of several sorting algorithms against [Bubble sort] and
+[Selection sort] for vector sizes 1e5, 2e5, 3e5 and 4e5. 
+
+First, perform a number of runs using the four sorting algorithms made available
+by [sorttest.c] for the specified vector sizes:
+
+```
+$ for RUN in {1..10}; do for IMPL in bubble selection merge quick; do for SIZE in 100000 200000 300000 400000; do /usr/bin/time ./sorttest $IMPL $SIZE $RUN 2> time_${IMPL}_${SIZE}_${RUN}.txt; done; done; done
+```
+
+TO DO: rest of example
 
 <a name="replicatingresultsofanexistingpublication"></a>
 
@@ -251,7 +439,7 @@ than the output of [GNU time]. Alternatives to [get_gtime] are only required to
 return a struct with the `elapsed` field, indicating the duration (in seconds)
 of a program execution.
 
-<a name="averageexecutiontimesandstandarddeviations"></a>
+<a name="averageexecutiontimesandstandarddeviations-1"></a>
 
 #### 4.2.3\. Average execution times and standard deviations
 
@@ -276,10 +464,9 @@ std_time =
     3.6676
 ```
 
-The [perfstats] function uses [gather_times]
-internally.
+The [perfstats] function uses [gather_times] internally.
 
-<a name="comparemultiplesetupswithinthesameimplementation"></a>
+<a name="comparemultiplesetupswithinthesameimplementation-1"></a>
 
 #### 4.2.4\. Compare multiple setups within the same implementation
 
@@ -327,7 +514,7 @@ perfstats(4, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2});
 
 ![ex05](https://cloud.githubusercontent.com/assets/3018963/11914709/b521c1c4-a67e-11e5-9e20-f05bfbe6921d.png)
 
-<a name="comparedifferentimplementations"></a>
+<a name="comparedifferentimplementations-1"></a>
 
 #### 4.2.6\. Compare different implementations
 
@@ -362,7 +549,7 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 
 ![ex06](https://cloud.githubusercontent.com/assets/3018963/11914710/b524dd5a-a67e-11e5-82d0-8f2ef0401e30.png)
 
-<a name="speedup"></a>
+<a name="speedup-1"></a>
 
 #### 4.2.7\. Speedup
 
@@ -891,7 +1078,10 @@ at http://arxiv.org/abs/1507.04047)
 [Octave]: https://gnu.org/software/octave/
 [sorttest.c]: https://github.com/fakenmc/sorttest_c
 [alternative]: http://stackoverflow.com/questions/673523/how-to-measure-execution-time-of-command-in-windows-command-line
-[QuickSort]: https://en.wikipedia.org/wiki/Quicksort
+[Bubble sort]: https://en.wikipedia.org/wiki/Bubble_sort
+[Selection sort]: https://en.wikipedia.org/wiki/Selection_sort
+[Merge sort]: https://en.wikipedia.org/wiki/Merge_sort
+[Quicksort]: https://en.wikipedia.org/wiki/Quicksort
 [PPHPC]: https://github.com/fakenmc/pphpc
 [GNU time]: https://www.gnu.org/software/time/
 [siunitx]: https://www.ctan.org/pkg/siunitx
