@@ -375,7 +375,51 @@ by [sorttest.c] for the specified vector sizes:
 $ for RUN in {1..10}; do for IMPL in bubble selection merge quick; do for SIZE in 100000 200000 300000 400000; do /usr/bin/time ./sorttest $IMPL $SIZE $RUN 2> time_${IMPL}_${SIZE}_${RUN}.txt; done; done; done
 ```
 
-TO DO: rest of example
+Then, in [MATLAB], use the [speedup] function to specify implementation specs
+and plot the respective speedup graph:
+
+```matlab
+% Specify Bubble sort implementation specs
+bs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_bubble_100000_*.txt');
+bs2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_bubble_200000_*.txt');
+bs3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_bubble_300000_*.txt');
+bs4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_bubble_400000_*.txt');
+bs = {bs1e5, bs2e5, bs3e5, bs4e5};
+
+% Specify Selection sort implementation specs
+ss1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_selection_100000_*.txt');
+ss2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_selection_200000_*.txt');
+ss3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_selection_300000_*.txt');
+ss4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_selection_400000_*.txt');
+ss = {ss1e5, ss2e5, ss3e5, ss4e5};
+
+% Specify Merge sort implementation specs
+ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_merge_100000_*.txt');
+ms2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_merge_200000_*.txt');
+ms3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_merge_300000_*.txt');
+ms4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_merge_400000_*.txt');
+ms = {ms1e5, ms2e5, ms3e5, ms4e5};
+
+% Specify Quicksort implementation specs
+qs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_quick_100000_*.txt');
+qs2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_quick_200000_*.txt');
+qs3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_quick_300000_*.txt');
+qs4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_quick_400000_*.txt');
+qs = {qs1e5, qs2e5, qs3e5, qs4e5};
+
+% Plot speedup of multiple sorting algorithms against Bubble sort
+% Setting the first parameter to 2 will yields a log-scale bar plot
+speedup(2, 1, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+```
+
+![ex08s_1](https://cloud.githubusercontent.com/assets/3018963/12197277/9af46e9e-b5fd-11e5-9184-07043179b17e.png)
+
+```matlab
+% Plot speedup of multiple sorting algorithms against Selection sort
+speedup(1, 1, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+```
+
+![ex08s_2](https://cloud.githubusercontent.com/assets/3018963/12197278/9b1263f4-b5fd-11e5-928b-377699add9f2.png)
 
 <a name="replicatingresultsofanexistingpublication"></a>
 

@@ -7,7 +7,10 @@ function [speedups, times, std_times, times_raw, fids, impl_legends, ...
 %   = SPEEDUP(do_plot, compare, varargin)
 %
 % Parameters:
-%    do_plot - Draw bar graph (1, 0)?
+%     do_plot - Draw speedup plot?
+%                     0 - No plot
+%                     1 - Regular plot
+%                     2 - Log plot (bars only)
 %    compare - Vector containing indexes of reference implementation from 
 %              which to calculate speedups. Number of elements will 
 %              determine number of plots.
@@ -139,6 +142,11 @@ for cidx = 1:numel(compare)
         
         % Set grid
         grid on;
+        
+        % Log scale?
+        if do_plot > 1
+            set(gca,'YScale','log');
+        end;
 
     end;    
     
