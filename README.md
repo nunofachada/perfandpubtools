@@ -14,6 +14,8 @@ PerfAndPubTools
 4.1.6\.  [Compare different implementations](#comparedifferentimplementations)  
 4.1.7\.  [Speedup](#speedup)  
 4.1.8\.  [Speedup for multiple algorithms and vector sizes](#speedupformultiplealgorithmsandvectorsizes)  
+4.1.9\.  [Scalability of the different sorting algorithms for increasing vector sizes](#scalabilityofthedifferentsortingalgorithmsforincreasingvectorsizes)  
+4.1.10\.  [Produce a table instead of a plot](#produceatableinsteadofaplot)  
 4.2\.  [Replicating results of an existing publication](#replicatingresultsofanexistingpublication)  
 4.2.1\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
 4.2.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
@@ -420,6 +422,87 @@ speedup(1, 1, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 ```
 
 ![ex08s_2](https://cloud.githubusercontent.com/assets/3018963/12197278/9b1263f4-b5fd-11e5-928b-377699add9f2.png)
+
+<a name="scalabilityofthedifferentsortingalgorithmsforincreasingvectorsizes"></a>
+
+#### 4.1.9\. Scalability of the different sorting algorithms for increasing vector sizes
+
+Using data from the previous example, we can use [perfstats] to determine and
+plot the scalability of the different sorting algorithms for increasing vector
+sizes:
+
+```matlab
+p = perfstats(4, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+```
+
+![ex09s](https://cloud.githubusercontent.com/assets/3018963/12200186/6be79b18-b615-11e5-845a-f27c6c2b7ef8.png)
+
+The values plotted are returned in variable `p`:
+
+```
+ps =
+
+   36.0040  144.8210  325.1730  577.8600
+    9.5270   38.0500   88.5130  153.6560
+    0.0200    0.0410    0.0600    0.0850
+    0.0100    0.0200    0.0300    0.0510
+```
+
+<a name="produceatableinsteadofaplot"></a>
+
+#### 4.1.10\. Produce a table instead of a plot
+
+The [times_table] and [times_table_f] functions can be used to create
+performance tables formatted in plain text or LaTeX. Using the data defined in
+the previous examples, the following commands produces a plain text table
+comparing the ... :
+
+```matlab
+% Put data in table format
+tdata = times_table(1, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+
+% Print a plain text table
+times_table_f(0, 'vs Bubble', tdata)
+```
+
+```
+                  -----------------------------------------------
+                  |                       vs Bubble             |
+-----------------------------------------------------------------
+| Imp.   | Set.   |   t(s)     |   std     |  std%  | x Bubble  |
+-----------------------------------------------------------------
+| Bubble |    1e5 |         36 |     0.887 |   2.46 |         1 |
+|        |    2e5 |        145 |      2.92 |   2.02 |         1 |
+|        |    3e5 |        325 |      6.19 |   1.90 |         1 |
+|        |    4e5 |        578 |      6.38 |   1.10 |         1 |
+-----------------------------------------------------------------
+| Select |    1e5 |       9.53 |     0.069 |   0.72 |      3.78 |
+|        |    2e5 |         38 |     0.283 |   0.74 |      3.81 |
+|        |    3e5 |       88.5 |       3.7 |   4.18 |      3.67 |
+|        |    4e5 |        154 |      3.06 |   1.99 |      3.76 |
+-----------------------------------------------------------------
+|  Merge |    1e5 |       0.02 |  3.66e-18 |   0.00 |   1.8e+03 |
+|        |    2e5 |      0.041 |   0.00316 |   7.71 |  3.53e+03 |
+|        |    3e5 |       0.06 |  1.46e-17 |   0.00 |  5.42e+03 |
+|        |    4e5 |      0.085 |    0.0127 |  14.93 |   6.8e+03 |
+-----------------------------------------------------------------
+|  Quick |    1e5 |       0.01 |  1.83e-18 |   0.00 |   3.6e+03 |
+|        |    2e5 |       0.02 |  3.66e-18 |   0.00 |  7.24e+03 |
+|        |    3e5 |       0.03 |  7.31e-18 |   0.00 |  1.08e+04 |
+|        |    4e5 |      0.051 |   0.00316 |   6.20 |  1.13e+04 |
+-----------------------------------------------------------------
+```
+
+In order to produce the equivalent LaTeX table, we set the first parameter to 1
+instead of 0:
+
+```matlab
+% Print a Latex table
+times_table_f(1, 'vs Bubble', tdata)
+```
+
+![ex10s](https://cloud.githubusercontent.com/assets/3018963/12204259/f166cd94-b62a-11e5-88ee-ec8ac6bb24c0.png)
+
 
 <a name="replicatingresultsofanexistingpublication"></a>
 

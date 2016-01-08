@@ -31,11 +31,11 @@ nimpl = numel(inames);
 nset = numel(snames);
 
 % Get the names and data separately
-all_data = cell(1, numel(varargin)/2);
-all_names = cell(1, numel(varargin)/2);
-for i=1:(numel(varargin)/2)
-    all_data{i} = varargin{i*2};
-    all_names{i} = varargin{(i-1)*2 + 1};
+all_data = cell(1, numel(varargin) / 2);
+all_names = cell(1, numel(varargin) / 2);
+for i = 1:(numel(varargin) / 2)
+    all_data{i} = varargin{i * 2};
+    all_names{i} = varargin{(i - 1) * 2 + 1};
 end;
 
 % How many datas were passed to this function?
@@ -47,11 +47,11 @@ if type == 0 % Plain text table
     print_sep(0, ncomps, ndata);
     
     % Print data names
-    fprintf('                |');
-    for i=1:ndata
-        fprintf('                 % 12s ', all_names{i});
-        for j=1:ncomps
-            fprintf('          ');
+    fprintf('                  |');
+    for i = 1:ndata
+        fprintf(' %31s ', all_names{i});
+        for j = 1:ncomps
+            fprintf('            ');
         end;
         fprintf('|');
     end;
@@ -61,13 +61,13 @@ if type == 0 % Plain text table
     print_sep(1, ncomps, ndata);
 
     % Print first part of header
-    fprintf('| Imp. | Set.   |');
+    fprintf('| Imp.   | Set.   |');
     
     % Print remaining parts of header
     for i=1:ndata
-        fprintf('   t(s)    |   std   |  std%%  |');
-        for c=compare
-            fprintf(' x%5s  |', inames{c});
+        fprintf('   t(s)     |   std     |  std%%  |');
+        for c = compare
+            fprintf(' x%7s  |', inames{c}(1:min(7, numel(inames{c}))));
         end;
     end;
     fprintf('\n');
@@ -76,17 +76,17 @@ if type == 0 % Plain text table
     print_sep(1, ncomps, ndata);
 
     % Cycle through implementations
-    for i=1:nimpl
+    for i = 1:nimpl
 
         % Print implementation name
-        fprintf('| %4s ', inames{i});
+        fprintf('| %6s ', inames{i}(1:min(6, numel(inames{i}))));
 
         % Cycle through setups
-        for s=1:nset
+        for s = 1:nset
 
             % Print blank spaces if this is not the first setup
             if s > 1
-                fprintf('|      ');
+                fprintf('|        ');
             end;
             
             % Print setup name
@@ -96,18 +96,18 @@ if type == 0 % Plain text table
             row = (i - 1) * nset + s;
             
             % Cycle through varargin data
-            for data=all_data
+            for data = all_data
 
                 % Get current timing matrix
                 t = data{1}.t;
 
                 % Print time, std. and std%
-                fprintf(' % 9.2f | % 7.2f | % 6.2f |', ...
+                fprintf(' % 10.3g | % 9.3g | % 6.2f |', ...
                    t(row, 1), t(row, 2), t(row, 3));
 
                 % Cycle through speedups
-                for c=1:numel(compare)
-                    fprintf(' % 7.2f |', t(row,3+c));
+                for c = 1:numel(compare)
+                    fprintf(' % 9.3g |', t(row,3+c));
                 end;
 
             end;            
@@ -128,7 +128,7 @@ elseif type == 1 % Print a Latex table
     
     % How many r's (number columns) in table?
     rs = '';
-    for i=1:ncols*ndata
+    for i = 1:(ncols * ndata)
         rs = sprintf('%sr', rs);
     end;
 
@@ -138,13 +138,13 @@ elseif type == 1 % Print a Latex table
     fprintf('\\multirow{2}{*}{Version} & \\multirow{2}{*}{Size}');
 
     % Print repeatable header for each data name
-    for i=1:ndata
+    for i = 1:ndata
         fprintf(' & \\multicolumn{%d}{c}{%s}', ncols, all_names{i}); 
     end;
     fprintf(' \\\\\n');
 
     % Print cmidrules
-    for i=1:ndata
+    for i = 1:ndata
         basecol = 3 + (i - 1) * ncols;
         fprintf('\\cmidrule(r){%d-%d} ', basecol, basecol + ncols - 1); 
     end;
@@ -152,23 +152,23 @@ elseif type == 1 % Print a Latex table
     
     % Print headers
     fprintf(' & ');
-    for i=1:ndata
+    for i = 1:ndata
         fprintf('& $\\bar{t}(\\text{s})$ & $s(\\%%)$ ');
-        for c=compare
+        for c = compare
             fprintf('& $S_p^{\\text{%s}}$ ', inames{c});
         end;
     end;
     fprintf(' \\\\\n');
 
     % Cycle through implementations
-    for i=1:nimpl
+    for i = 1:nimpl
 
         % Print midrule and implementation name
         fprintf('\\midrule\n');
         fprintf('\\multirow{%d}{*}{%s}\n', nset, inames{i});
 
         % Cycle through setups
-        for s=1:nset
+        for s = 1:nset
 
             % Print setup name
             fprintf(' & %s ', snames{s});
@@ -177,7 +177,7 @@ elseif type == 1 % Print a Latex table
             row = (i - 1) * nset + s;
             
             % Cycle through varargin data
-            for data=all_data
+            for data = all_data
 
                 % Get current timing matrix
                 t = data{1}.t;
@@ -187,8 +187,8 @@ elseif type == 1 % Print a Latex table
                     t(row, 1), t(row, 3));
 
                 % Cycle through speedups
-                for c=1:numel(compare)
-                    fprintf('& \\num{% 7.2f} ', t(row,3+c));
+                for c = 1:numel(compare)
+                    fprintf('& \\num{% 7.2f} ', t(row, 3 + c));
                 end;
 
             end;            
@@ -213,14 +213,14 @@ end;
 function print_sep(beg, ncomps, ndata)
 
 if beg == 1
-    fprintf('-----------------');
+    fprintf('-------------------');
 else
-    fprintf('                -');
+    fprintf('                  -');
 end;
-for i=1:ndata
-    fprintf('-------------------------------');
-    for j=1:ncomps
-        fprintf('----------');
+for i = 1:ndata
+    fprintf('----------------------------------');
+    for j = 1:ncomps
+        fprintf('------------');
     end;
 end;
 fprintf('\n');
