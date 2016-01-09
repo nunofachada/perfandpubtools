@@ -107,14 +107,13 @@ invocation is used for throughout the examples, replace it as appropriate.
 Since the [GNU time] program does not seem to be available for Windows, these
 examples only run unmodified on Linux and OSX. On Windows, benchmark the
 [sorttest.c] program using an [alternative] approach and replace [get_gtime]
-with a function which parses the produced output.
-
-
-Alternatively download the [data][sort_data] produced by these runs.
+with a function which parses the produced output. Otherwise, simply download the
+benchmark [data][sort_data] produced the sorting algorithms and skip the actual
+benchmarking steps within the examples.
 
 #### Extract performance data from a file
 
-First, test that the [sorttest.c] program is working by testing the [Quicksort]
+First, check that the [sorttest.c] program is working by testing the [Quicksort]
 algorithm with a vector of 1,000,000 random integers:
 
 ```
@@ -133,7 +132,7 @@ $ /usr/bin/time ./sorttest quick 1000000 2362 2> out.txt
 ```
 
 The `2>` redirects the output of [GNU time] to a file called `out.txt`. This
-file can be parsed with the [get_gtime] function from [MATLAB]:
+file can be parsed with the [get_gtime] function from [MATLAB] or [Octave]:
 
 ```matlab
 p = get_gtime('out.txt')
@@ -471,18 +470,17 @@ times_table_f(1, 'vs Bubble', tdata)
 
 ### Performance analysis of simulation models
 
-Replicating results of an existing publication.
-
-The following examples use the dataset available at 
+The examples in this section use the dataset available at 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
-Unpack the datasets to any folder and put the complete path to this folder in 
+Unpack the dataset to any folder and put the complete path to this folder in 
 variable `datafolder`, e.g.:
 
 ```matlab
 datafolder = 'path/to/datasets';
 ```
 
-These datasets correspond to the results presented in reference [\[1\]](#ref1).
+The dataset corresponds to the results presented in reference [\[1\]](#ref1).
+The following examples show how to replicate some of these results.
 
 #### Extract performance data from a file
 
@@ -1139,7 +1137,7 @@ at http://arxiv.org/abs/1507.04047)
 [Octave]: https://gnu.org/software/octave/
 [sorttest.c]: https://github.com/fakenmc/sorttest_c
 [alternative]: http://stackoverflow.com/questions/673523/how-to-measure-execution-time-of-command-in-windows-command-line
-[sort_data]: https://github.com/fakenmc/perfandpubtools/files/83777/sorttest_c.zip
+[sort_data]: https://github.com/fakenmc/perfandpubtools/files/83822/sorttest_c.zip
 [pphpc_data]: http://dx.doi.org/10.5281/zenodo.34049
 [Bubble sort]: https://en.wikipedia.org/wiki/Bubble_sort
 [Selection sort]: https://en.wikipedia.org/wiki/Selection_sort
