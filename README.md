@@ -5,7 +5,7 @@ PerfAndPubTools
 2\.  [Benchmark file format](#benchmarkfileformat)  
 3\.  [Architecture and functions](#architectureandfunctions)  
 4\.  [Examples](#examples)  
-4.1\.  [Comparing sorting algorithms](#comparingsortingalgorithms)  
+4.1\.  [Performance analysis of sorting algorithms](#performanceanalysisofsortingalgorithms)  
 4.1.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
 4.1.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder)  
 4.1.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations)  
@@ -16,7 +16,7 @@ PerfAndPubTools
 4.1.8\.  [Speedup for multiple algorithms and vector sizes](#speedupformultiplealgorithmsandvectorsizes)  
 4.1.9\.  [Scalability of the different sorting algorithms for increasing vector sizes](#scalabilityofthedifferentsortingalgorithmsforincreasingvectorsizes)  
 4.1.10\.  [Produce a table instead of a plot](#produceatableinsteadofaplot)  
-4.2\.  [Replicating results of an existing publication](#replicatingresultsofanexistingpublication)  
+4.2\.  [Performance analysis of simulation models](#performanceanalysisofsimulationmodels)  
 4.2.1\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
 4.2.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
 4.2.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations-1)  
@@ -105,9 +105,29 @@ plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
 
 ## 4\. Examples
 
-<a name="comparingsortingalgorithms"></a>
+Examples are organized into two sections:
 
-### 4.1\. Comparing sorting algorithms
+1. [Performance analysis of sorting algorithms](#exsortalgs)
+2. [Performance analysis of simulation models](#exsimmods)
+
+Examples in the first section demonstrate the complete process of benchmarking a
+number of sorting algorithms with the [GNU time] command and then analyzing
+results with _PerfAndPubTools_. Since the [GNU time] command is not available on
+Windows, the data produced by the algorithm testing is also
+[provided][sort_data].
+
+Examples in the second section focus on showing how _PerfAndPubTools_ was used
+to analyze performance data of multiple implementations of a
+[simulation model][PPHPC], replicating results presented in a peer-reviewed
+article [\[1\]](#ref1). The initial benchmarking steps are skipped in these
+examples, but the produced data and the scripts used to generate it are also
+made [available][pphpc_data].
+
+<a name="exsortalgs">
+
+<a name="performanceanalysisofsortingalgorithms"></a>
+
+### 4.1\. Performance analysis of sorting algorithms
 
 In following examples, we use _PerfAndPubTools_ to analyze the performance of
 several sorting algorithms implemented in C. Perform the following steps before
@@ -128,6 +148,9 @@ Since the [GNU time] program does not seem to be available for Windows, these
 examples only run unmodified on Linux and OSX. On Windows, benchmark the
 [sorttest.c] program using an [alternative] approach and replace [get_gtime]
 with a function which parses the produced output.
+
+
+Alternatively download the [data][sort_data] produced by these runs.
 
 <a name="extractperformancedatafromafile"></a>
 
@@ -504,10 +527,13 @@ times_table_f(1, 'vs Bubble', tdata)
 
 ![ex10s](https://cloud.githubusercontent.com/assets/3018963/12204259/f166cd94-b62a-11e5-88ee-ec8ac6bb24c0.png)
 
+<a name="exsimmods">
 
-<a name="replicatingresultsofanexistingpublication"></a>
+<a name="performanceanalysisofsimulationmodels"></a>
 
-### 4.2\. Replicating results of an existing publication
+### 4.2\. Performance analysis of simulation models
+
+Replicating results of an existing publication.
 
 The following examples use the dataset available at 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
@@ -518,7 +544,7 @@ variable `datafolder`, e.g.:
 datafolder = 'path/to/datasets';
 ```
 
-These datasets correspond to the results presented in reference [\[1\]][ref1].
+These datasets correspond to the results presented in reference [\[1\]](#ref1).
 
 <a name="extractperformancedatafromafile-1"></a>
 
@@ -726,7 +752,7 @@ different implementations for multiple computational sizes. In this example we
 plot the speedup of several [PPHPC] parallel Java implementations against the
 NetLogo and Java single-thread implementations for multiple sizes. This example
 uses the variables defined in example 6, and the plotted results are equivalent
-to figures 4a and 4b of reference [\[1\]][ref1]:
+to figures 4a and 4b of reference [\[1\]](#ref1):
 
 ```matlab
 % Specify Java EQ implementation specs (runs with 12 threads)
@@ -784,7 +810,7 @@ In a slightly more complex scenario than the one described in example 6, here
 we use the [perfstats] function to plot the scalability of the different [PPHPC]
 implementations for increasing model sizes. Using the variables defined in the
 previous examples, the following command plot the equivalent to figure 5a of
-reference [\[1\]][ref1]:
+reference [\[1\]](#ref1):
 
 ```matlab
 perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
@@ -802,7 +828,7 @@ this example, we use the `csize` field to specify the number of threads used to
 perform a set of simulation runs, i.e., replications. The following commands
 will plot the scalability of the several [PPHPC] parallel implementations for
 increasing number of threads. The plotted results are equivalent to figure 6d of
-reference [\[1\]][ref1]:
+reference [\[1\]](#ref1):
 
 ```matlab
 % Specify ST implementation specs, note that the data is always the same
@@ -876,7 +902,7 @@ In yet another possible use of the [perfstats] function, in this example we use
 the `csize` field to specify the value of the _b_ parameter of the [PPHPC] model
 Java OD variant. This allows us to analyze the performance of the OD
 parallelization strategy for different values of _b_. The plot created by the
-following commands is equivalent to figure 7b of reference [\[1\]][ref1]:
+following commands is equivalent to figure 7b of reference [\[1\]](#ref1):
 
 ```matlab
 % Specify the OD implementation specs for size 100 and increasing values of b
@@ -994,7 +1020,7 @@ times_table_f(1, 'NL vs ST', tdata)
 
 The [times_table] and [times_table_f] functions are capable of producing more
 complex tables. In this example, we show how to reproduce table 7 of reference
-[\[1\]][ref1], containing times and speedups for different model
+[\[1\]](#ref1), containing times and speedups for different model
 implementations, different sizes and different parameter sets, showing speedups
 of all implementations versus the NetLogo and Java ST versions.
 
@@ -1175,7 +1201,7 @@ times_table_f(0, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 ---------------------------------------------------------------------------------------------------------------------------------------
 ```
 
-Finally, we produce the LaTeX table, as shown in reference [\[1\]][ref1]:
+Finally, we produce the LaTeX table, as shown in reference [\[1\]](#ref1):
 
 ```matlab
 % Latex table
@@ -1196,16 +1222,17 @@ times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 
 <a name="ref1"></a>
 
-[\[1\]][ref1] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
+[\[1\]](#ref1) Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
 Strategies for Spatial Agent-Based Models. *International Journal of Parallel
 Programming*. https://doi.org/10.1007/s10766-015-0399-9 (arXiv version available
 at http://arxiv.org/abs/1507.04047)
 
-[ref1]: #ref1
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
 [sorttest.c]: https://github.com/fakenmc/sorttest_c
 [alternative]: http://stackoverflow.com/questions/673523/how-to-measure-execution-time-of-command-in-windows-command-line
+[sort_data]: https://github.com/fakenmc/perfandpubtools/files/83777/sorttest_c.zip
+[pphpc_data]: http://dx.doi.org/10.5281/zenodo.34049
 [Bubble sort]: https://en.wikipedia.org/wiki/Bubble_sort
 [Selection sort]: https://en.wikipedia.org/wiki/Selection_sort
 [Merge sort]: https://en.wikipedia.org/wiki/Merge_sort
