@@ -55,7 +55,7 @@ optionally plotting a scalability graph if different setups correspond to
 different computational work sizes.
 
 * [speedup] - Determine speedups using folders of files containing benchmarking
-results, and optionally plot speedups in a bar plot.
+results, and optionally display speedups in a bar plot.
 
 * [times_table] - Returns a matrix with useful contents for using in tables for
 publication, namely times (in seconds), absolute standard deviations (seconds),
@@ -64,6 +64,14 @@ relative standard deviations, speedups (vs the specified implementations).
 * [times_table_f] - Print a table with performance analysis results formatted in
 plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
 [booktabs] packages).
+
+Although the [perfstats] and [speedup] function optionally create plots, these
+are mainly intended to provide visual feedback on the performance analysis being
+undertaken. Those needing more control over the final figures should create
+custom plots using the data provided by [perfstats] and [speedup]. Either way,
+[MATLAB]/[Octave] plots can be used directly in publications, or converted to
+LaTeX using the excellent [matlab2tikz] script, as will be shown in some of the
+examples.
 
 ## Examples
 
@@ -143,10 +151,10 @@ The function returns a structure with several fields:
 ```
 p = 
 
-       user: 0.1400
+       user: 0.2000
         sys: 0
-    elapsed: 0.1400
-        cpu: 98
+    elapsed: 0.2000
+        cpu: 99
 ```
 
 #### Extract execution times from files in a folder
@@ -157,7 +165,7 @@ First, we need to perform these runs. From a terminal, run the following
 command, which performs 10 runs of the [sorttest.c] program:
 
 ```
-$ for RUN in {1..10}; do /usr/bin/time ./sorttest quick 1000000 $RUN 2> time$RUN.txt; done
+$ for RUN in {1..10}; do /usr/bin/time ./sorttest quick 1000000 $RUN 2> time_quick_1000000_$RUN.txt; done
 ```
 
 Note that each run is performed with a different seed, so that different vectors
@@ -165,12 +173,13 @@ are sorted by [Quicksort] each turn. In [MATLAB], use the [gather_times]
 function to extract execution times:
 
 ```matlab
-exec_time = gather_times('Quicksort', sortfolder, 'time*.txt');
+exec_time = gather_times('Quicksort', sortfolder, 'time_quick_1000000_*.txt');
 ```
 
 The first parameter of [gather_times] names the list of gathered times, and is
-used as metadata by other functions. The vector of execution times is in the
-`elapsed` field of the returned structure:
+used as metadata by other functions. The second parameter specifies the folder
+where the [GNU time] output files are located. The vector of execution times is
+in the `elapsed` field of the returned structure:
 
 ```matlab
 exec_time.elapsed
@@ -183,7 +192,6 @@ than the output of [GNU time]. Alternatives to [get_gtime] are only required to
 return a struct with the `elapsed` field, indicating the duration (in seconds)
 of a program execution.
 
-
 #### Average execution times and standard deviations
 
 In its most basic usage, the [perfstats] function obtains performance
@@ -191,27 +199,27 @@ statistics. In this example, average execution times and standard deviations are
 obtained from the runs performed in the previous example:
 
 ```matlab
-qs1M = struct('sname', 'Quicksort', 'folder', sortfolder, 'files', 'time*.txt');
+qs1M = struct('sname', 'Quicksort', 'folder', sortfolder, 'files', 'time_quick_1000000_*.txt');
 [avg_time, std_time] = perfstats(0, sortfolder, {qs1M})
 ```
 
 ```
 avg_time =
 
-    0.1427
+    0.1340
 
 
 std_time =
 
-    0.0326r
+    0.0052
 ```
 
 The [perfstats] function uses [gather_times] internally.
 
 #### Compare multiple setups within the same implementation
 
-A more advanced use case for [perfstats] consists of comparing multiple setups,
-associated with different computational sizes, within the same implementation
+A more advanced use case for [perfstats] consists of comparing multiple setups
+associated with different computational sizes within the same implementation
 (e.g., sorting algorithm). In this example we analyze how the performance of the
 [Bubble sort] algorithm varies for increasing vector sizes.
 
@@ -225,9 +233,15 @@ $ for RUN in {1..10}; do for SIZE in 10000 20000 30000; do /usr/bin/time ./sortt
 Second, obtain the average times for the several vector sizes using [perfstats]:
 
 ```matlab
+% Specify the setups
 bs10k = struct('sname', 'bs10k', 'folder', sortfolder, 'files', 'time_bubble_10000_*.txt');
 bs20k = struct('sname', 'bs20k', 'folder', sortfolder, 'files', 'time_bubble_20000_*.txt');
 bs30k = struct('sname', 'bs30k', 'folder', sortfolder, 'files', 'time_bubble_30000_*.txt');
+
+% Specify the implementation spec
+bs =  {bs10k, bs20k, bs30k};
+
+% Determine average time for each setup
 avg_time = perfstats(0, 'bubble', {bs10k, bs20k, bs30k})
 ```
 
@@ -239,18 +253,22 @@ avg_time =
 
 #### Same as previous, with a linear plot
 
-The [perfstats] function can also be used to plot scalability graphs. For this
-purpose, the computational size, `cize`, must be specified in each
-implementation spec, and the first parameter should be a value between 1 (linear
-plot) and 4 (log-log plot), as shown in the following commands:
+The [perfstats] function can also generate scalability plots. For this purpose,
+the computational size, `csize`, must be specified in each implementation spec,
+and the first parameter should be a value between 1 (linear plot) and 4
+(log-log plot), as shown in the following commands:
 
 ```matlab
+% Specify the setups
 bs10k = struct('sname', 'bs10k', 'csize', 1e4, 'folder', sortfolder, 'files', 'time_bubble_10000_*.txt');
 bs20k = struct('sname', 'bs20k', 'csize', 2e4, 'folder', sortfolder, 'files', 'time_bubble_20000_*.txt');
 bs30k = struct('sname', 'bs30k', 'csize', 3e4, 'folder', sortfolder, 'files', 'time_bubble_30000_*.txt');
 
+% Specify the implementation spec
+bs =  {bs10k, bs20k, bs30k};
+
 % The first parameter defines the plot type: 1 is a linear plot
-perfstats(1, 'bubble', {bs10k, bs20k, bs30k});
+perfstats(1, 'bubble', bs);
 ```
 
 ![ex05s](https://cloud.githubusercontent.com/assets/3018963/12179235/9ed764d4-b56d-11e5-997d-d7a2fbca7ea4.png)
@@ -291,7 +309,7 @@ qs = {qs1e5, qs1e6, qs1e7, qs1e8};
 perfstats(4, 'Merge sort', ms, 'Quicksort', qs);
 ```
 
-![ex06s](https://cloud.githubusercontent.com/assets/3018963/12180504/d9c1cdee-b574-11e5-81c5-b34f40945a6f.png)
+![ex06s](https://cloud.githubusercontent.com/assets/3018963/12224504/af621950-b7ea-11e5-939a-c593e103e60b.png)
 
 #### Speedup
 
@@ -311,7 +329,7 @@ by invoking `s{1}`:
 ans =
 
     1.0000    1.0000    1.0000    1.0000
-    1.0500    1.7164    1.7520    1.6314
+    2.0000    1.7164    1.7520    1.6314
 ```
 
 The second parameter indicates the reference implementation from which to 
@@ -390,6 +408,50 @@ speedup(1, 1, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 
 ![ex08s_2](https://cloud.githubusercontent.com/assets/3018963/12197278/9b1263f4-b5fd-11e5-928b-377699add9f2.png)
 
+#### Custom speedup plots
+
+For more control over the speedup plots, it is preferable to use the data
+provided by [speedup]. Continuing from the previous example, the following
+sequence of instructions generates a customized plot showing the speedup of the
+sorting algorithms against [Bubble sort]:
+
+```matlab
+% Obtain speedup of multiple sorting algorithms against Bubble sort, no plot
+s = speedup(0, 1, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+
+% Generate basic speedup bar plot (first element of s cell array and rows 2 to 4,
+% to avoid displaying the speedup of Bubble sort against itself)
+h = bar(s{1}(2:4,:));
+
+% Customize plot
+set(h(1), 'FaceColor', [0 0 0])
+set(h(2), 'FaceColor', [0.33 0.33 0.33])
+set(h(3), 'FaceColor', [0.66 0.66 0.66])
+set(h(4), 'FaceColor', [1 1 1])
+set(gca, 'YScale', 'log')
+legend({'$1 \times 10^5$', '$2 \times 10^5$', '$3 \times 10^5$', '$4 \times 10^5$'}, 'Location', 'NorthWest')
+grid on
+grid minor
+legend({'1 \times 10^5', '2 \times 10^5', '3 \times 10^5', '4 \times 10^5'}, 'Location', 'NorthWest')
+set(gca, 'XTickLabel', {'Selection', 'Merge', 'Quick'})
+ylabel('Speedup')
+```
+
+![ex08s_3](https://cloud.githubusercontent.com/assets/3018963/12224864/c085e952-b7f2-11e5-8fa2-7342b2ed1c8a.png)
+
+Although the figure seems nice for publication purposes, it can be converted to
+native LaTeX via the [matlab2tikz] script:
+
+```matlab
+cleanfigure();
+matlab2tikz('standalone', 1, 'filename', 'image.tex');
+```
+
+Compiling the `image.tex` file with a LaTeX engine yields the following figure:
+
+![ex08s_4](https://cloud.githubusercontent.com/assets/3018963/12224865/c08910a0-b7f2-11e5-869a-df4d1a23cc64.png)
+
+
 #### Scalability of the different sorting algorithms for increasing vector sizes
 
 Using data from the previous example, we can use [perfstats] to determine and
@@ -405,13 +467,17 @@ p = perfstats(4, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 The values plotted are returned in variable `p`:
 
 ```
-ps =
+p =
 
    36.0040  144.8210  325.1730  577.8600
     9.5270   38.0500   88.5130  153.6560
     0.0200    0.0410    0.0600    0.0850
     0.0100    0.0200    0.0300    0.0510
 ```
+
+#### Custom scalability plots
+
+TO DO
 
 #### Produce a table instead of a plot
 
@@ -1139,6 +1205,7 @@ at http://arxiv.org/abs/1507.04047)
 [alternative]: http://stackoverflow.com/questions/673523/how-to-measure-execution-time-of-command-in-windows-command-line
 [sort_data]: https://github.com/fakenmc/perfandpubtools/files/83822/sorttest_c.zip
 [pphpc_data]: http://dx.doi.org/10.5281/zenodo.34049
+[matlab2tikz]: http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
 [Bubble sort]: https://en.wikipedia.org/wiki/Bubble_sort
 [Selection sort]: https://en.wikipedia.org/wiki/Selection_sort
 [Merge sort]: https://en.wikipedia.org/wiki/Merge_sort
