@@ -78,7 +78,7 @@ examples.
 Examples are organized into two sections:
 
 1. [Performance analysis of sorting algorithms](#exsortalgs)
-2. [Performance analysis of simulation models](#exsimmods)
+2. [Performance analysis of a simulation model](#exsimmods)
 
 Examples in the first section demonstrate the complete process of benchmarking a
 number of sorting algorithms with the [GNU time] command and then analyzing
@@ -438,8 +438,8 @@ ylabel('Speedup')
 
 ![ex08s_3](https://cloud.githubusercontent.com/assets/3018963/12224864/c085e952-b7f2-11e5-8fa2-7342b2ed1c8a.png)
 
-Although the figure seems nice for publication purposes, it can be converted to
-native LaTeX via the [matlab2tikz] script:
+Although the figure seems appropriate for publication purposes, it can be
+converted to native LaTeX via the [matlab2tikz] script:
 
 ```matlab
 cleanfigure();
@@ -452,7 +452,7 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 #### Scalability of the different sorting algorithms for increasing vector sizes
 
-Using data from the previous example, we can use [perfstats] to determine and
+Continuing from the previous example, we can use [perfstats] to determine and
 plot the scalability of the different sorting algorithms for increasing vector
 sizes:
 
@@ -476,8 +476,9 @@ p =
 #### Custom scalability plots
 
 In a similar fashion to the speedup plots, finer control over the scalability
-plots is possible by using the data provided by [perfstats]. The following
-sequence of instructions customizes the figure in the previous example:
+plots is possible by directly using the data provided by [perfstats]. The
+following sequence of instructions customizes the figure in the previous
+example:
 
 ```matlab
 % Plot data from perfstats in y-axis in log-scale
@@ -489,7 +490,7 @@ set(h(2), 'Marker', 'o', 'MarkerFaceColor', 'k');
 set(h(3), 'Marker', '*');
 set(h(4), 'Marker', 's', 'MarkerFaceColor', [0.8 0.8 0.8]);
 
-% Add space for legend and put legend
+% Make space for legend and add legend
 ylim([1e-2 3e3]);
 legend({'Bubble', 'Selection', 'Merge', 'Quick'}, 'Location', 'NorthWest');
 
@@ -530,8 +531,8 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 The [times_table] and [times_table_f] functions can be used to create
 performance tables formatted in plain text or LaTeX. Using the data defined in
-the previous examples, the following commands produces a plain text table
-comparing the ... :
+the previous examples, the following commands produce a plain text table
+comparing the performance of the different sorting algorithms:
 
 ```matlab
 % Put data in table format
@@ -569,7 +570,7 @@ times_table_f(0, 'vs Bubble', tdata)
 -----------------------------------------------------------------
 ```
 
-In order to produce the equivalent LaTeX table, we set the first parameter to 1
+In order to obtain the equivalent LaTeX table, we set the first parameter to 1
 instead of 0:
 
 ```matlab
@@ -581,19 +582,23 @@ times_table_f(1, 'vs Bubble', tdata)
 
 <a name="exsimmods">
 
-### Performance analysis of simulation models
+### Performance analysis of a simulation model
 
-The examples in this section use the dataset available at 
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
-Unpack the dataset to any folder and put the complete path to this folder in 
+The examples in this section use the following dataset:
+
+* [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
+
+Unpack the dataset to any folder and specify the complete path to this folder in 
 variable `datafolder`, e.g.:
 
 ```matlab
-datafolder = 'path/to/datasets';
+datafolder = 'path/to/dataset';
 ```
 
-The dataset corresponds to the results presented in reference [\[1\]](#ref1).
-The following examples show how to replicate some of these results.
+This dataset corresponds to the results presented in reference [\[1\]](#ref1),
+which compares the performance of several implementations of the [PPHPC]
+agent-based model. Among several aspects of _PerfAndPubTools_, the following 
+examples show how to replicate these results.
 
 #### Extract performance data from a file
 
@@ -642,8 +647,8 @@ of a program execution.
 
 In its most basic usage, the [perfstats] function obtains performance
 statistics. In this example, average execution times and standard deviations are
-obtained from 10 replications of the Java implementation of [PPHPC]
-(single-thread, ST) for size 800, parameter set 2:
+obtained from 10 replications of the Java single-threaded (ST) implementation of
+[PPHPC] for size 800, parameter set 2:
 
 ```matlab
 st800v2 = struct('sname', '800v1', 'folder', [datafolder '/times/ST'], 'files', 't*800v2*.txt');
@@ -667,15 +672,19 @@ The [perfstats] function uses [gather_times] internally.
 
 A more advanced use case for [perfstats] consists of comparing multiple setups,
 associated with different computational sizes, within the same implementation.
-For example, considering the Java ST implementation of the [PPHPC] model, lets
-analyze how its performance varies for increasing model sizes:
+For example, considering the Java ST implementation of the [PPHPC] model, the
+following instructions analyze how its performance varies for increasing model
+sizes:
 
 ```matlab
+% Specify implementations specs for each model size
 st100v2 = struct('sname', '100v2', 'folder', [datafolder '/times/ST'], 'files', 't*100v2*.txt');
 st200v2 = struct('sname', '200v2', 'folder', [datafolder '/times/ST'], 'files', 't*200v2*.txt');
 st400v2 = struct('sname', '400v2', 'folder', [datafolder '/times/ST'], 'files', 't*400v2*.txt');
 st800v2 = struct('sname', '800v2', 'folder', [datafolder '/times/ST'], 'files', 't*800v2*.txt');
 st1600v2 = struct('sname', '1600v2', 'folder', [datafolder '/times/ST'], 'files', 't*1600v2*.txt');
+
+% Obtain the average time for increasing model sizes
 avg_time = perfstats(0, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2})
 ```
 
@@ -689,12 +698,13 @@ avg_time =
 
 #### Same as previous, with a log-log plot
 
-The [perfstats] function can also be used to plot scalability graphs. For this
-purpose, the computational size, `cize`, must be specified in each
+The [perfstats] function can also be used to generate scalability plots. For
+this purpose, the computational size, `csize`, must be specified in each
 implementation spec, and the first parameter should be a value between 1 (linear
 plot) and 4 (log-log plot), as shown in the following commands:
 
 ```matlab
+% Specify implementations specs for each model size, indicating the csize key
 st100v2 = struct('sname', '100v2', 'csize', 100, 'folder', [datafolder '/times/ST'], 'files', 't*100v2*.txt');
 st200v2 = struct('sname', '200v2', 'csize', 200, 'folder', [datafolder '/times/ST'], 'files', 't*200v2*.txt');
 st400v2 = struct('sname', '400v2', 'csize', 400, 'folder', [datafolder '/times/ST'], 'files', 't*400v2*.txt');
