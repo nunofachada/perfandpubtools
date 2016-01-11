@@ -61,8 +61,8 @@ results, and optionally display speedups in a bar plot.
 publication, namely times (in seconds), absolute standard deviations (seconds),
 relative standard deviations, speedups (vs the specified implementations).
 
-* [times_table_f] - Print a table with performance analysis results formatted in
-plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
+* [times_table_f] - Returns a table with performance analysis results formatted
+in plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
 [booktabs] packages).
 
 Although the [perfstats] and [speedup] function optionally create plots, these

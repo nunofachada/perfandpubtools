@@ -1,9 +1,9 @@
-function times_table_f(type, varargin)
+function tbl = times_table_f(type, varargin)
 % TIMES_TABLE_F Print a table with performance analysis results formatted
 % in plain text or in LaTeX (the latter requires the siunitx, multirow and
 % booktabs packages).
 %
-% TIMES_TABLE_F(type, varargin)
+%   tbl = TIMES_TABLE_F(type, varargin)
 %
 % Parameters:
 %     type - Table format, 0 for plain text, 1 for LaTeX (the latter
@@ -12,6 +12,9 @@ function times_table_f(type, varargin)
 %            times_table function. All varargin data parameters must have
 %            the t field with the same dimensions, and the compare, iname 
 %            and ename fields with the same data.
+%
+% Outputs:
+%        tbl - Plain text or LaTeX table.
 %
 % See also TIMES_TABLE.
 %    
@@ -39,59 +42,64 @@ for i = 1:(numel(varargin) / 2)
     all_names{i} = varargin{(i - 1) * 2 + 1};
 end;
 
+% Table to output
+tbl = '';
+
 % How many datas were passed to this function?
 ndata = numel(all_data);
 
 if type == 0 % Plain text table
     
     % Print pre-header line
-    print_sep(0, ncomps, ndata);
+    tbl = sprintf('%s%s', tbl, print_sep(0, ncomps, ndata));
     
     % Print data names
-    fprintf('                  |');
+    tbl = sprintf('%s                  |', tbl);
     for i = 1:ndata
-        fprintf(' %31s ', all_names{i});
+        tbl = sprintf('%s %31s ', tbl, all_names{i});
         for j = 1:ncomps
-            fprintf('            ');
+            tbl = sprintf('%s            ', tbl);
         end;
-        fprintf('|');
+        tbl = sprintf('%s|', tbl);
     end;
-    fprintf('\n');
+    tbl = sprintf('%s\n', tbl);
     
     % Print header line
-    print_sep(1, ncomps, ndata);
+    tbl = sprintf('%s%s', tbl, print_sep(1, ncomps, ndata));
 
     % Print first part of header
-    fprintf('| Imp.   | Set.   |');
+    tbl = sprintf('%s| Imp.   | Set.   |', tbl);
     
     % Print remaining parts of header
-    for i=1:ndata
-        fprintf('   t(s)     |   std     |  std%%  |');
+    for i = 1:ndata
+        tbl = sprintf('%s   t(s)     |   std     |  std%%  |', tbl);
         for c = compare
-            fprintf(' x%7s  |', inames{c}(1:min(7, numel(inames{c}))));
+            tbl = sprintf('%s x%7s  |', tbl, ...
+                inames{c}(1:min(7, numel(inames{c}))));
         end;
     end;
-    fprintf('\n');
+    tbl = sprintf('%s\n', tbl);
 
     % Print post-header line
-    print_sep(1, ncomps, ndata);
+    tbl = sprintf('%s%s', tbl, print_sep(1, ncomps, ndata));
 
     % Cycle through implementations
     for i = 1:nimpl
 
         % Print implementation name
-        fprintf('| %6s ', inames{i}(1:min(6, numel(inames{i}))));
+        tbl = sprintf('%s| %6s ', tbl, ...
+            inames{i}(1:min(6, numel(inames{i}))));
 
         % Cycle through setups
         for s = 1:nset
 
             % Print blank spaces if this is not the first setup
             if s > 1
-                fprintf('|        ');
+                tbl = sprintf('%s|        ', tbl);
             end;
             
             % Print setup name
-            fprintf('| %6s |', snames{s});
+            tbl = sprintf('%s| %6s |', tbl, snames{s});
 
             % Determine row of t matrix to print
             row = (i - 1) * nset + s;
@@ -103,22 +111,22 @@ if type == 0 % Plain text table
                 t = data{1}.t;
 
                 % Print time, std. and std%
-                fprintf(' % 10.3g | % 9.3g | % 6.2f |', ...
-                   t(row, 1), t(row, 2), t(row, 3));
+                tbl = sprintf('%s % 10.3g | % 9.3g | % 6.2f |', ...
+                   tbl, t(row, 1), t(row, 2), t(row, 3));
 
                 % Cycle through speedups
                 for c = 1:numel(compare)
-                    fprintf(' % 9.3g |', t(row,3+c));
+                    tbl = sprintf('%s % 9.3g |', tbl, t(row,3+c));
                 end;
 
             end;            
 
-            fprintf('\n');
+            tbl = sprintf('%s\n', tbl);
 
         end;
 
         % Print implementation separator line
-        print_sep(1, ncomps, ndata);
+        tbl = sprintf('%s%s', tbl, print_sep(1, ncomps, ndata));
 
     end;
     
@@ -134,45 +142,48 @@ elseif type == 1 % Print a Latex table
     end;
 
     % Print initial table stuff
-    fprintf('\\begin{tabular}{cc%s}\n', rs);
-    fprintf('\\toprule\n');
-    fprintf('\\multirow{2}{*}{Version} & \\multirow{2}{*}{Size}');
+    tbl = sprintf('%s\\begin{tabular}{cc%s}\n', tbl, rs);
+    tbl = sprintf('%s\\toprule\n', tbl);
+    tbl = sprintf('%s\\multirow{2}{*}{Version} & \\multirow{2}{*}{Size}', ...
+        tbl);
 
     % Print repeatable header for each data name
     for i = 1:ndata
-        fprintf(' & \\multicolumn{%d}{c}{%s}', ncols, all_names{i}); 
+        tbl = sprintf('%s & \\multicolumn{%d}{c}{%s}', ...
+            tbl, ncols, all_names{i}); 
     end;
-    fprintf(' \\\\\n');
+    tbl = sprintf('%s \\\\\n', tbl);
 
     % Print cmidrules
     for i = 1:ndata
         basecol = 3 + (i - 1) * ncols;
-        fprintf('\\cmidrule(r){%d-%d} ', basecol, basecol + ncols - 1); 
+        tbl = sprintf('%s\\cmidrule(r){%d-%d} ', ...
+            tbl, basecol, basecol + ncols - 1); 
     end;
-    fprintf('\n');
+    tbl = sprintf('%s\n', tbl);
     
     % Print headers
-    fprintf(' & ');
+    tbl = sprintf('%s & ', tbl);
     for i = 1:ndata
-        fprintf('& $\\bar{t}(\\text{s})$ & $s(\\%%)$ ');
+        tbl = sprintf('%s& $\\bar{t}(\\text{s})$ & $s(\\%%)$ ', tbl);
         for c = compare
-            fprintf('& $S_p^{\\text{%s}}$ ', inames{c});
+            tbl = sprintf('%s& $S_p^{\\text{%s}}$ ', tbl, inames{c});
         end;
     end;
-    fprintf(' \\\\\n');
+    tbl = sprintf('%s \\\\\n', tbl);
 
     % Cycle through implementations
     for i = 1:nimpl
 
         % Print midrule and implementation name
-        fprintf('\\midrule\n');
-        fprintf('\\multirow{%d}{*}{%s}\n', nset, inames{i});
+        tbl = sprintf('%s\\midrule\n', tbl);
+        tbl = sprintf('%s\\multirow{%d}{*}{%s}\n', tbl, nset, inames{i});
 
         % Cycle through setups
         for s = 1:nset
 
             % Print setup name
-            fprintf(' & %s ', snames{s});
+            tbl = sprintf('%s & %s ', tbl, snames{s});
 
             % Determine row of t matrix to print
             row = (i - 1) * nset + s;
@@ -184,25 +195,26 @@ elseif type == 1 % Print a Latex table
                 t = data{1}.t;
 
                 % Print time and std%
-                fprintf('& \\num{% 9.2f} & \\num{% 6.2f}', ...
-                    t(row, 1), t(row, 3));
+                tbl = sprintf('%s& \\num{% 9.2f} & \\num{% 6.2f}', ...
+                    tbl, t(row, 1), t(row, 3));
 
                 % Cycle through speedups
                 for c = 1:numel(compare)
-                    fprintf('& \\num{% 7.2f} ', t(row, 3 + c));
+                    tbl = sprintf('%s& \\num{% 7.2f} ', ...
+                        tbl, t(row, 3 + c));
                 end;
 
             end;            
 
-            fprintf(' \\\\\n');
+            tbl = sprintf('%s \\\\\n', tbl);
 
         end;
 
     end;    
     
     % Print bottomrule and table finish
-    fprintf('\\bottomrule\n');
-    fprintf('\\end{tabular}\n');
+    tbl = sprintf('%s\\bottomrule\n', tbl);
+    tbl = sprintf('%s\\end{tabular}\n', tbl);
     
 else % Unknown table type, throw error
     
@@ -211,17 +223,19 @@ else % Unknown table type, throw error
 end;
 
 % Helper function for printing plain text tables
-function print_sep(beg, ncomps, ndata)
+function sep = print_sep(beg, ncomps, ndata)
+
+sep = '';
 
 if beg == 1
-    fprintf('-------------------');
+    sep = sprintf('%s-------------------', sep);
 else
-    fprintf('                  -');
+    sep = sprintf('%s                  -', sep);
 end;
 for i = 1:ndata
-    fprintf('----------------------------------');
+    sep = sprintf('%s----------------------------------', sep);
     for j = 1:ncomps
-        fprintf('------------');
+        sep = sprintf('%s------------', sep);
     end;
 end;
-fprintf('\n');
+sep = sprintf('%s\n', sep);
