@@ -107,7 +107,13 @@ for cidx = 1:numel(compare)
         speedup_matrix = speedups{cidx}(allimpl, :);
         
         % Plot speedups versus the ith implementation
-        bar(speedup_matrix);
+        if do_plot == 1
+            % Y linear scale
+            bar(speedup_matrix);
+        else
+            % Y log scale requires this in Octave
+            bar(speedup_matrix, 'basevalue', 1);
+        end;
      
         % Get implementation names without the reference implementation
         loc_leg = impl_legends;
