@@ -993,6 +993,62 @@ perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '16
 
 ![ex11](https://cloud.githubusercontent.com/assets/3018963/11914716/b543721a-a67e-11e5-9a34-cfd1eac7a3ba.png)
 
+#### Custom performance plot
+
+As previously discussed, it is possible to generate custom plots using the data
+returned by [perfstats] and [speedup]. The following sequence of commands
+produces a customized version of the plot generated in the previous example, as
+performed for figure 7b of reference [\[1\]](#ref1):
+
+```matlab
+% Values of the b parameter
+bvals = [20 50 100 200 500 1000 2000 5000];
+
+% Generate basic plot with black lines
+h = loglog(bvals, p', 'k');
+set(gca, 'XTick', bvals);
+
+% Set marker styles
+set(h(1), 'Marker', 'o', 'MarkerFaceColor', [0.7 0.7 0.7]);
+set(h(2), 'Marker', 's', 'MarkerFaceColor', [0.7 0.7 0.7]);
+set(h(3), 'Marker', 'o', 'MarkerFaceColor', 'w');
+set(h(4), 'Marker', '^', 'MarkerFaceColor', 'k');
+set(h(5), 'Marker', 'd', 'MarkerFaceColor', [0.7 0.7 0.7]);
+
+% Draw bold circles indicating best times for each size/b combination
+grid on;
+hold on;
+[my, mi] = min(p, [], 2);
+plot(bvals(mi), my, 'ok', 'MarkerSize', 10, 'LineWidth', 2);
+
+% Set limits and add labels
+xlim([min(bsizes) max(bsizes)]);
+xlabel('Block size, {\itb}');
+ylabel('Time ({\its})');
+
+% Set legend
+legend({'100', '200', '400', '800', '1600'}, 'Location', 'NorthOutside', 'Orientation', 'horizontal');
+```
+
+![ex12_1](https://cloud.githubusercontent.com/assets/3018963/12236741/606e979a-b873-11e5-882c-1a110b028c01.png)
+
+Although the figure seems nice for publication purposes, it can be converted to
+native LaTeX via the [matlab2tikz] script:
+
+```matlab
+% Small adjustments so that figure looks better when converted
+grid minor;
+set(gca, 'XTickLabel', bvals);
+
+% Convert figure to LaTeX
+cleanfigure();
+matlab2tikz('standalone', true, 'filename', 'image.tex');
+```
+
+Compiling the `image.tex` file with a LaTeX engine yields the following figure:
+
+![ex12_2](https://cloud.githubusercontent.com/assets/3018963/12236740/606d711c-b873-11e5-8142-e2df6ad713d2.png)
+
 #### Same as example 6, but show a table instead of a plot
 
 The [times_table] and [times_table_f] functions can be used to create
