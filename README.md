@@ -795,7 +795,7 @@ Besides comparing multiple setups within the same implementation, the
 implementations. The requirement is that, from implementation to implementation,
 the multiple setups are directly comparable, i.e., corresponding implementation
 specs should have the same `sname` and `csize` parameters, as shown in the
-following commands, where the NetLogo (NL) and Java single-thread (ST) [PPHPC]
+following commands, where the [NetLogo] (NL) and Java single-thread (ST) [PPHPC]
 implementations are compared for sizes 100 to 1600, parameter set 1:
 
 ```matlab
@@ -827,8 +827,8 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 
 The [speedup] function is used to obtain relative speedups between different
 implementations. Using the variables defined in the previous example, lets
-obtain the speedup of the Java ST version versus the NetLogo implementation for
-different model sizes:
+obtain the speedup of the Java ST version versus the [NetLogo] implementation
+for different model sizes:
 
 ```matlab
 s = speedup(0, 1, 'NL', nlv1, 'ST', stv1);
@@ -846,9 +846,9 @@ ans =
 
 The second parameter indicates the reference implementation from which to 
 calculate speedups. In this case, specifying 1 will return speedups against the
-NetLogo implementation. The first row of the previous matrix shows the speedup
-of the NetLogo implementation against itself, thus it is composed of ones. The
-second row shows the speedup of the Java ST implementation versus the NetLogo
+[NetLogo] implementation. The first row of the previous matrix shows the speedup
+of the [NetLogo] implementation against itself, thus it is composed of ones. The
+second row shows the speedup of the Java ST implementation versus the [NetLogo]
 implementation. If the second parameter is a vector, speedups against more than
 one implementation are returned.
 
@@ -868,9 +868,9 @@ speedup(1, 1, 'NL', nlv1, 'ST', stv1);
 The [speedup] function is also able to determine relative speedups between
 different implementations for multiple computational sizes. In this example we
 plot the speedup of several [PPHPC] parallel Java implementations against the
-NetLogo and Java single-thread implementations for multiple sizes. This example
-uses the variables defined in example 6, and the plotted results are equivalent
-to figures 4a and 4b of reference [\[1\]](#ref1):
+[NetLogo] and Java single-thread implementations for multiple sizes. This
+example uses the variables defined in example 6, and the plotted results are
+equivalent to figures 4a and 4b of reference [\[1\]](#ref1):
 
 ```matlab
 % Specify Java EQ implementation specs (runs with 12 threads)
@@ -1152,7 +1152,7 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 The [times_table] and [times_table_f] functions can be used to create
 performance tables formatted in plain text or LaTeX. Using the data defined in
 example 6, the following commands produces a plain text table comparing the
-NetLogo (NL) and Java single-thread (ST) [PPHPC] implementations for sizes 100
+[NetLogo] (NL) and Java single-thread (ST) [PPHPC] implementations for sizes 100
 to 1600, parameter set 1:
 
 ```matlab
@@ -1201,7 +1201,7 @@ The [times_table] and [times_table_f] functions are capable of producing more
 complex tables. In this example, we show how to reproduce table 7 of reference
 [\[1\]](#ref1), containing times and speedups for different model
 implementations, different sizes and different parameter sets, showing speedups
-of all implementations versus the NetLogo and Java ST versions.
+of all implementations versus the [NetLogo] and Java ST versions.
 
 The first step consists of specifying the implementation specs:
 
@@ -1408,6 +1408,7 @@ at http://arxiv.org/abs/1507.04047)
 
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
+[NetLogo]: https://ccl.northwestern.edu/netlogo/
 [sorttest.c]: https://github.com/fakenmc/sorttest_c
 [alternative]: http://stackoverflow.com/questions/673523/how-to-measure-execution-time-of-command-in-windows-command-line
 [sort_data]: https://github.com/fakenmc/perfandpubtools/files/83822/sorttest_c.zip
