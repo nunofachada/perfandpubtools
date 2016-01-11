@@ -183,7 +183,7 @@ for i=1:2:numel(args)
     end;
         
     % Check if each element of the cell is a properly formed struct.
-    for j=1:numel(arg_spec)
+    for j = 1:numel(arg_spec)
 
         % Does struct has the required fields?
         if ~isfield(arg_spec{j}, 'sname') || ...

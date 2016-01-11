@@ -34,7 +34,7 @@ tinfo{4} = str2double(tinfo{4}{1}(1:(numel(tinfo{4}{1}) - numel('%CPU'))));
 seconds = 0;
 splited = strsplit(tinfo{3}{1}, ':');
 mult = 1;
-for i=numel(splited):-1:1
+for i = numel(splited):-1:1
     seconds = seconds + str2double(splited(i)) * mult;
     mult = mult * 60;
 end;

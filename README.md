@@ -71,14 +71,14 @@ programming approach, as shown in the following figure:
 Performance analysis in _PerfAndPubTools_ takes place at two levels:
 *implementation* and *setup*. The *implementation* level is meant to be
 associated with specific software implementations for performing a given task,
-for example a particular sorting algorithm or a simulation model implemented in
+for example a particular sorting algorithm or a simulation model realized in
 a certain programming language. Within the context of each implementation, the
 software can be executed under different *setups*. These can be different
-computational sizes (e.g. vector lengths in a sorting algorithm context) or
-distinct execution parameters (e.g. number of threads used).
+computational sizes (e.g. vector lengths in a sorting algorithm) or distinct
+execution parameters (e.g. number of threads used).
 
-The following is a list of available functions, from lowest to highest-level of
-functionality:
+_PerfAndPubTools_ is bundled with the following functions, from lowest to
+highest-level of functionality:
 
 * [get_gtime] - Given a file containing the default output of the [GNU time]
 command, this function extracts the user, system and elapsed time in seconds, as
@@ -124,8 +124,7 @@ Examples are organized into two sections:
 Examples in the first section demonstrate the complete process of benchmarking a
 number of sorting algorithms with the [GNU time] command and then analyzing
 results with _PerfAndPubTools_. Since the [GNU time] command is not available on
-Windows, the data produced by the algorithm testing is also
-[provided][sort_data].
+Windows, the data produced by the benchmarks is also [provided][sort_data].
 
 Examples in the second section focus on showing how _PerfAndPubTools_ was used
 to analyze performance data of multiple implementations of a
@@ -216,8 +215,8 @@ $ for RUN in {1..10}; do /usr/bin/time ./sorttest quick 1000000 $RUN 2> time_qui
 ```
 
 Note that each run is performed with a different seed, so that different vectors
-are sorted by [Quicksort] each turn. In [MATLAB], use the [gather_times]
-function to extract execution times:
+are sorted by [Quicksort] each turn. In [MATLAB] or [Octave], use the
+[gather_times] function to extract execution times:
 
 ```matlab
 exec_time = gather_times('Quicksort', sortfolder, 'time_quick_1000000_*.txt');
@@ -271,8 +270,8 @@ The [perfstats] function uses [gather_times] internally.
 
 A more advanced use case for [perfstats] consists of comparing multiple setups
 associated with different computational sizes within the same implementation
-(e.g., sorting algorithm). In this example we analyze how the performance of the
-[Bubble sort] algorithm varies for increasing vector sizes.
+(e.g., the same sorting algorithm). In this example we analyze how the
+performance of the [Bubble sort] algorithm varies for increasing vector sizes.
 
 First, perform a number of runs with [sorttest.c] using [Bubble sort] for
 vectors of size 10,000, 20,000 and 30,000:
@@ -331,7 +330,7 @@ perfstats(1, 'bubble', bs);
 #### 4.1.6\. Compare different implementations
 
 Besides comparing multiple setups within the same implementation, the
-[perfstats] function is also able to compare multiple setups within multiple
+[perfstats] function is also able to compare multiple setups from multiple
 implementations. The requirement is that, from implementation to implementation,
 the multiple setups are directly comparable, i.e., corresponding implementation
 specs should have the same `sname` and `csize` parameters.
@@ -371,9 +370,9 @@ perfstats(4, 'Merge sort', ms, 'Quicksort', qs);
 #### 4.1.7\. Speedup
 
 The [speedup] function is used to obtain relative speedups between different
-implementations. Using the variables defined in the previous example, lets
-obtain the speedup of [Quicksort] versus [Merge sort] for different vector
-sizes:
+implementations. Using the variables defined in the previous example, the
+following instruction obtains the speedup of [Quicksort] versus [Merge sort] for
+different vector sizes:
 
 ```matlab
 s = speedup(0, 1, 'Merge sort', ms, 'Quicksort', qs);
@@ -421,8 +420,9 @@ by [sorttest.c] for the specified vector sizes:
 $ for RUN in {1..10}; do for IMPL in bubble selection merge quick; do for SIZE in 100000 200000 300000 400000; do /usr/bin/time ./sorttest $IMPL $SIZE $RUN 2> time_${IMPL}_${SIZE}_${RUN}.txt; done; done; done
 ```
 
-Then, in [MATLAB], use the [speedup] function to specify implementation specs
-and plot the respective speedup graph:
+Then, in [MATLAB] or [Octave], specify the implementation specs for each sorting
+algorithm and setup combination, and use the [speedup] function to  plot the
+respective speedup plot:
 
 ```matlab
 % Specify Bubble sort implementation specs
