@@ -346,7 +346,7 @@ speedups:
 s = speedup(1, 1, 'Merge sort', ms, 'Quicksort', qs);
 ```
 
-![ex07s](https://cloud.githubusercontent.com/assets/3018963/12180905/0c18a928-b577-11e5-8e93-912b534cbd61.png)
+![ex07s](https://cloud.githubusercontent.com/assets/3018963/12224522/02ec5c48-b7eb-11e5-9d6a-396c519d6530.png)
 
 #### Speedup for multiple algorithms and vector sizes
 
@@ -429,7 +429,6 @@ set(h(2), 'FaceColor', [0.33 0.33 0.33])
 set(h(3), 'FaceColor', [0.66 0.66 0.66])
 set(h(4), 'FaceColor', [1 1 1])
 set(gca, 'YScale', 'log')
-legend({'$1 \times 10^5$', '$2 \times 10^5$', '$3 \times 10^5$', '$4 \times 10^5$'}, 'Location', 'NorthWest')
 grid on
 grid minor
 legend({'1 \times 10^5', '2 \times 10^5', '3 \times 10^5', '4 \times 10^5'}, 'Location', 'NorthWest')
@@ -444,13 +443,12 @@ native LaTeX via the [matlab2tikz] script:
 
 ```matlab
 cleanfigure();
-matlab2tikz('standalone', 1, 'filename', 'image.tex');
+matlab2tikz('standalone', true, 'filename', 'image.tex');
 ```
 
 Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
-![ex08s_4](https://cloud.githubusercontent.com/assets/3018963/12224865/c08910a0-b7f2-11e5-869a-df4d1a23cc64.png)
-
+![ex08s_4](https://cloud.githubusercontent.com/assets/3018963/12231929/e957106c-b852-11e5-8da9-05c6068639eb.png)
 
 #### Scalability of the different sorting algorithms for increasing vector sizes
 
