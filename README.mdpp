@@ -421,7 +421,7 @@ s = speedup(0, 1, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 
 % Generate basic speedup bar plot (first element of s cell array and rows 2 to 4,
 % to avoid displaying the speedup of Bubble sort against itself)
-h = bar(s{1}(2:4,:));
+h = bar(s{1}(2:4, :));
 
 % Customize plot
 set(h(1), 'FaceColor', [0 0 0])
@@ -457,10 +457,10 @@ plot the scalability of the different sorting algorithms for increasing vector
 sizes:
 
 ```matlab
-p = perfstats(4, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+p = perfstats(3, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 ```
 
-![ex09s](https://cloud.githubusercontent.com/assets/3018963/12200186/6be79b18-b615-11e5-845a-f27c6c2b7ef8.png)
+![ex09s](https://cloud.githubusercontent.com/assets/3018963/12232823/d6524f84-b859-11e5-9906-b00ef0952434.png)
 
 The values plotted are returned in variable `p`:
 
@@ -475,7 +475,56 @@ p =
 
 #### Custom scalability plots
 
-TO DO
+In a similar fashion to the speedup plots, finer control over the scalability
+plots is possible by using the data provided by [perfstats]. The following
+sequence of instructions customizes the figure in the previous example:
+
+```matlab
+% Plot data from perfstats in y-axis in log-scale
+h = semilogy(p', 'Color', 'k');
+
+% Set different markers for the various lines
+set(h(1), 'Marker', 'd', 'MarkerFaceColor', 'w');
+set(h(2), 'Marker', 'o', 'MarkerFaceColor', 'k');
+set(h(3), 'Marker', '*');
+set(h(4), 'Marker', 's', 'MarkerFaceColor', [0.8 0.8 0.8]);
+
+% Add space for legend and put legend
+ylim([1e-2 3e3]);
+legend({'Bubble', 'Selection', 'Merge', 'Quick'}, 'Location', 'NorthWest');
+
+% Set horizontal ticks
+set(gca, 'XTick', 1:4);
+set(gca, 'XTickLabel', {'1e5', '2e5', '3e5', '4e5'});
+
+% Add a grid
+grid on;
+
+% Add x and y labels
+xlabel('Vector size');
+ylabel('Time (s)');
+```
+
+![ex09s_1](https://cloud.githubusercontent.com/assets/3018963/12232825/d6562474-b859-11e5-88e8-0febf822be6b.png)
+
+We can further improve the figure, and convert it to LaTeX with [matlab2tikz]:
+
+```matlab
+% Minor grids in LaTeX image are not great, so remove them
+grid minor;
+
+% Set horizontal ticks, LaTeX-style
+set(gca, 'XTickLabel', {'$1 \times 10^5$', '$2 \times 10^5$', '$3 \times 10^5$', '$4 \times 10^5$'});
+
+% Export figure to LaTeX
+cleanfigure();
+matlab2tikz('standalone', true, 'filename', 'image.tex');
+```
+
+Compiling the `image.tex` file with a LaTeX engine yields the following figure:
+
+![ex09s_2](https://cloud.githubusercontent.com/assets/3018963/12232824/d652ec50-b859-11e5-96d0-8b7a02b88fc5.png)
+
 
 #### Produce a table instead of a plot
 
