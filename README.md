@@ -31,7 +31,7 @@ PerfAndPubTools
 4.2.10\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
 4.2.11\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
 4.2.12\.  [Custom performance plot](#customperformanceplot)  
-4.2.13\.  [Same as example 6, but show a table instead of a plot](#sameasexample6butshowatableinsteadofaplot)  
+4.2.13\.  [Show a table instead of a plot](#showatableinsteadofaplot)  
 4.2.14\.  [Complex tables](#complextables)  
 5\.  [License](#license)  
 6\.  [References](#references)  
@@ -133,7 +133,7 @@ article [\[1\]](#ref1). The initial benchmarking steps are skipped in these
 examples, but the produced data and the scripts used to generate it are also
 made [available][pphpc_data].
 
-<a name="exsortalgs">
+<a name="exsortalgs"></a>
 
 <a name="performanceanalysisofsortingalgorithms"></a>
 
@@ -647,7 +647,7 @@ times_table_f(1, 'vs Bubble', tdata)
 
 ![ex10s](https://cloud.githubusercontent.com/assets/3018963/12204259/f166cd94-b62a-11e5-88ee-ec8ac6bb24c0.png)
 
-<a name="exsimmods">
+<a name="exsimmods"></a>
 
 <a name="performanceanalysisofasimulationmodel"></a>
 
@@ -779,8 +779,9 @@ avg_time =
 
 The [perfstats] function can also be used to generate scalability plots. For
 this purpose, the computational size, `csize`, must be specified in each
-implementation spec, and the first parameter should be a value between 1 (linear
-plot) and 4 (log-log plot), as shown in the following commands:
+implementation spec, and the first parameter of [perfstats] should be a value
+between 1 (linear plot) and 4 (log-log plot), as shown in the following code
+snippet:
 
 ```matlab
 % Specify implementations specs for each model size, indicating the csize key
@@ -796,17 +797,19 @@ perfstats(4, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2});
 
 ![ex05](https://cloud.githubusercontent.com/assets/3018963/11914709/b521c1c4-a67e-11e5-9e20-f05bfbe6921d.png)
 
+<a name="pphpccompdiffimpl"></a>
+
 <a name="comparedifferentimplementations-1"></a>
 
 #### 4.2.6\. Compare different implementations
 
 Besides comparing multiple setups within the same implementation, the
-[perfstats] function is also able to compare multiple setups within multiple
+[perfstats] function is also able to compare multiple setups from a number
 implementations. The requirement is that, from implementation to implementation,
 the multiple setups are directly comparable, i.e., corresponding implementation
 specs should have the same `sname` and `csize` parameters, as shown in the
-following commands, where the [NetLogo] (NL) and Java single-thread (ST) [PPHPC]
-implementations are compared for sizes 100 to 1600, parameter set 1:
+following commands, where the [NetLogo] \(NL\) and Java single-thread (ST)
+[PPHPC] implementations are compared for sizes 100 to 1600, parameter set 1:
 
 ```matlab
 % Specify NetLogo implementation specs
@@ -836,16 +839,15 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 #### 4.2.7\. Speedup
 
 The [speedup] function is used to obtain relative speedups between different
-implementations. Using the variables defined in the previous example, lets
-obtain the speedup of the Java ST version versus the [NetLogo] implementation
-for different model sizes:
+implementations. Using the variables defined in the previous example, the
+speedup of the Java ST version over the [NetLogo] implementation for different
+model sizes can be obtained with the following instruction:
 
 ```matlab
 s = speedup(0, 1, 'NL', nlv1, 'ST', stv1);
 ```
 
-Speedups can be obtained by getting the first element of the returned cell, i.e.
-by invoking `s{1}`:
+The first element of the returned cell, i.e. `s{1}`, contains the speedups:
 
 ```
 ans =
@@ -854,16 +856,17 @@ ans =
     5.8513    8.2370    5.7070    5.4285    5.4331
 ```
 
-The second parameter indicates the reference implementation from which to 
-calculate speedups. In this case, specifying 1 will return speedups against the
-[NetLogo] implementation. The first row of the previous matrix shows the speedup
-of the [NetLogo] implementation against itself, thus it is composed of ones. The
-second row shows the speedup of the Java ST implementation versus the [NetLogo]
-implementation. If the second parameter is a vector, speedups against more than
-one implementation are returned.
+The 2nd parameter of the [speedup] function indicates the reference
+implementation from which to calculate speedups. In this case, specifying 1 will
+return speedups against the [NetLogo] implementation. The first row of the
+matrix in `s{1}` shows the speedup of the [NetLogo] implementation against
+itself, thus it is composed of ones. The second row shows the speedup of the
+Java ST implementation versus the [NetLogo] implementation. If the 2nd
+parameter of the [speedup] function is a vector, speedups against more than one
+implementation are returned in `s`.
 
-Setting the 1st parameter to 1 will yield a bar plot displaying the relative
-speedups:
+Setting the 1st parameter of [speedup] to 1 will yield a bar plot displaying the
+relative speedups:
 
 ```matlab
 speedup(1, 1, 'NL', nlv1, 'ST', stv1);
@@ -879,8 +882,9 @@ The [speedup] function is also able to determine relative speedups between
 different implementations for multiple computational sizes. In this example we
 plot the speedup of several [PPHPC] parallel Java implementations against the
 [NetLogo] and Java single-thread implementations for multiple sizes. This
-example uses the variables defined in example 6, and the plotted results are
-equivalent to figures 4a and 4b of reference [\[1\]](#ref1):
+example uses the  `nlv1` and `stv1` variables defined in a
+[previous example](#pphpccompdiffimpl), and the plotted results are equivalent
+to figures 4a and 4b of reference [\[1\]](#ref1):
 
 ```matlab
 % Specify Java EQ implementation specs (runs with 12 threads)
@@ -916,7 +920,7 @@ od1600v1t12 = struct('sname', '1600v1', 'csize', 1600, 'folder', [datafolder '/t
 odv1t12 = {od100v1t12, od200v1t12, od400v1t12, od800v1t12, od1600v1t12};
 
 % Plot speedup of multiple parallel implementations against NetLogo implementation
-% This plot is figure 4a of the specified manuscript
+% This plot is figure 4a of reference [1]
 speedup(1, 1, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 ```
 
@@ -924,7 +928,7 @@ speedup(1, 1, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t1
 
 ```matlab
 % Plot speedup of multiple parallel implementations against Java ST implementation
-% This plot is figure 4b of the specified manuscript
+% This plot is figure 4b of reference [1]
 speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 ```
 
@@ -934,11 +938,11 @@ speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv
 
 #### 4.2.9\. Scalability of the different implementations for increasing model sizes
 
-In a slightly more complex scenario than the one described in example 6, here
-we use the [perfstats] function to plot the scalability of the different [PPHPC]
-implementations for increasing model sizes. Using the variables defined in the
-previous examples, the following command plot the equivalent to figure 5a of
-reference [\[1\]](#ref1):
+In a slightly more complex scenario than the one described in a
+[previous example](#pphpccompdiffimpl), here we use the [perfstats] function to
+plot the scalability of the different [PPHPC] implementations for increasing
+model sizes. Using the variables defined in the previous examples, the following
+command generates the equivalent to figure 5a of reference [\[1\]](#ref1):
 
 ```matlab
 perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
@@ -953,8 +957,8 @@ perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12
 The 'computational size', i.e. the `csize` field, defined in the implementation
 specs passed to the [perfstats] function can be used in alternative contexts. In
 this example, we use the `csize` field to specify the number of threads used to
-perform a set of simulation runs, i.e., replications. The following commands
-will plot the scalability of the several [PPHPC] parallel implementations for
+perform a set of simulation runs or replications. The following commands
+will plot the scalability of the several [PPHPC] parallel implementations for an
 increasing number of threads. The plotted results are equivalent to figure 6d of
 reference [\[1\]](#ref1):
 
@@ -1026,9 +1030,9 @@ perfstats(1, 'ST', stv2, 'EQ', eqv2, 'EX', exv2, 'ER', erv2, 'OD', odv2);
 
 #### 4.2.11\. Performance of OD strategy for different values of _b_
 
-In yet another possible use of the [perfstats] function, in this example we use
-the `csize` field to specify the value of the _b_ parameter of the [PPHPC] model
-Java OD variant. This allows us to analyze the performance of the OD
+For this example, in yet another possible use of the [perfstats] function,  we
+use the `csize` field to specify the value of the _b_ parameter of the [PPHPC]
+model Java OD variant. This allows us to analyze the performance of the OD
 parallelization strategy for different values of _b_. The plot created by the
 following commands is equivalent to figure 7b of reference [\[1\]](#ref1):
 
@@ -1099,9 +1103,10 @@ perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '16
 #### 4.2.12\. Custom performance plot
 
 As previously discussed, it is possible to generate custom plots using the data
-returned by [perfstats] and [speedup]. The following sequence of commands
-produces a customized version of the plot generated in the previous example, as
-performed for figure 7b of reference [\[1\]](#ref1):
+returned by [perfstats] and [speedup]. The following code snippet produces a
+customized version of the plot generated in the previous example. The resulting
+image is a publication quality equivalent of figure 7b in reference
+[\[1\]](#ref1):
 
 ```matlab
 % Get data from perfstats function
@@ -1138,8 +1143,8 @@ legend({'100', '200', '400', '800', '1600'}, 'Location', 'NorthOutside', 'Orient
 
 ![ex12_1](https://cloud.githubusercontent.com/assets/3018963/12236741/606e979a-b873-11e5-882c-1a110b028c01.png)
 
-Although the figure seems nice for publication purposes, it can be converted to
-native LaTeX via the [matlab2tikz] script:
+Although the figure looks appropriate for publication purposes, it can still be
+improved by converting it to native LaTeX via the [matlab2tikz] script:
 
 ```matlab
 % Small adjustments so that figure looks better when converted
@@ -1155,15 +1160,15 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 ![ex12_2](https://cloud.githubusercontent.com/assets/3018963/12236740/606d711c-b873-11e5-8142-e2df6ad713d2.png)
 
-<a name="sameasexample6butshowatableinsteadofaplot"></a>
+<a name="showatableinsteadofaplot"></a>
 
-#### 4.2.13\. Same as example 6, but show a table instead of a plot
+#### 4.2.13\. Show a table instead of a plot
 
 The [times_table] and [times_table_f] functions can be used to create
-performance tables formatted in plain text or LaTeX. Using the data defined in
-example 6, the following commands produces a plain text table comparing the
-[NetLogo] (NL) and Java single-thread (ST) [PPHPC] implementations for sizes 100
-to 1600, parameter set 1:
+performance tables formatted in plain text or LaTeX. Using the data defined in a
+[previous example](#pphpccompdiffimpl), the following commands produce a plain
+text table comparing the [NetLogo] \(NL\) and Java single-thread (ST) [PPHPC]
+implementations for sizes 100 to 1600, parameter set 1:
 
 ```matlab
 % Put data in table format
@@ -1209,18 +1214,18 @@ times_table_f(1, 'NL vs ST', tdata)
 
 The [times_table] and [times_table_f] functions are capable of producing more
 complex tables. In this example, we show how to reproduce table 7 of reference
-[\[1\]](#ref1), containing times and speedups for different model
-implementations, different sizes and different parameter sets, showing speedups
-of all implementations versus the [NetLogo] and Java ST versions.
+[\[1\]](#ref1), containing times and speedups for multiple model
+implementations, different sizes and both parameter sets, showing speedups of
+all implementations versus the [NetLogo] and Java ST versions.
 
-The first step consists of specifying the implementation specs:
+The first step consists of defining the implementation specs:
 
 ```matlab
 % %%%%%%%%%%%%%%%%%%%%%%%%% %
 % Specs for parameter set 1 %
 % %%%%%%%%%%%%%%%%%%%%%%%%% %
 
-% Specify NetLogo implementation specs, parameter set 1
+% Define NetLogo implementation specs, parameter set 1
 nl100v1 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/NL'], 'files', 't*100v1*.txt');
 nl200v1 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/NL'], 'files', 't*200v1*.txt');
 nl400v1 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/NL'], 'files', 't*400v1*.txt');
@@ -1228,7 +1233,7 @@ nl800v1 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/NL'
 nl1600v1 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/NL'], 'files', 't*1600v1*.txt');
 nlv1 = {nl100v1, nl200v1, nl400v1, nl800v1, nl1600v1};
 
-% Specify Java ST implementation specs, parameter set 1
+% Define Java ST implementation specs, parameter set 1
 st100v1 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/ST'], 'files', 't*100v1*.txt');
 st200v1 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/ST'], 'files', 't*200v1*.txt');
 st400v1 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/ST'], 'files', 't*400v1*.txt');
@@ -1236,7 +1241,7 @@ st800v1 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/ST'
 st1600v1 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/ST'], 'files', 't*1600v1*.txt');
 stv1 = {st100v1, st200v1, st400v1, st800v1, st1600v1};
 
-% Specify Java EQ implementation specs (runs with 12 threads), parameter set 1
+% Define Java EQ implementation specs (runs with 12 threads), parameter set 1
 eq100v1t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/EQ'], 'files', 't*100v1*t12r*.txt');
 eq200v1t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/EQ'], 'files', 't*200v1*t12r*.txt');
 eq400v1t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/EQ'], 'files', 't*400v1*t12r*.txt');
@@ -1244,7 +1249,7 @@ eq800v1t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/
 eq1600v1t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/EQ'], 'files', 't*1600v1*t12r*.txt');
 eqv1t12 = {eq100v1t12, eq200v1t12, eq400v1t12, eq800v1t12, eq1600v1t12};
 
-% Specify Java EX implementation specs (runs with 12 threads), parameter set 1
+% Define Java EX implementation specs (runs with 12 threads), parameter set 1
 ex100v1t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/EX'], 'files', 't*100v1*t12r*.txt');
 ex200v1t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/EX'], 'files', 't*200v1*t12r*.txt');
 ex400v1t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/EX'], 'files', 't*400v1*t12r*.txt');
@@ -1252,7 +1257,7 @@ ex800v1t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/
 ex1600v1t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/EX'], 'files', 't*1600v1*t12r*.txt');
 exv1t12 = {ex100v1t12, ex200v1t12, ex400v1t12, ex800v1t12, ex1600v1t12};
 
-% Specify Java ER implementation specs (runs with 12 threads), parameter set 1
+% Define Java ER implementation specs (runs with 12 threads), parameter set 1
 er100v1t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/ER'], 'files', 't*100v1*t12r*.txt');
 er200v1t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/ER'], 'files', 't*200v1*t12r*.txt');
 er400v1t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/ER'], 'files', 't*400v1*t12r*.txt');
@@ -1260,7 +1265,7 @@ er800v1t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/
 er1600v1t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/ER'], 'files', 't*1600v1*t12r*.txt');
 erv1t12 = {er100v1t12, er200v1t12, er400v1t12, er800v1t12, er1600v1t12};
 
-% Specify Java OD implementation specs (runs with 12 threads, b = 500), parameter set 1
+% Define Java OD implementation specs (runs with 12 threads, b = 500), parameter set 1
 od100v1t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/OD'], 'files', 't*100v1*b500t12r*.txt');
 od200v1t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/OD'], 'files', 't*200v1*b500t12r*.txt');
 od400v1t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/OD'], 'files', 't*400v1*b500t12r*.txt');
@@ -1272,7 +1277,7 @@ odv1t12 = {od100v1t12, od200v1t12, od400v1t12, od800v1t12, od1600v1t12};
 % Specs for parameter set 2 %
 % %%%%%%%%%%%%%%%%%%%%%%%%% %
 
-% Specify NetLogo implementation specs, parameter set 2
+% Define NetLogo implementation specs, parameter set 2
 nl100v2 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/NL'], 'files', 't*100v2*.txt');
 nl200v2 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/NL'], 'files', 't*200v2*.txt');
 nl400v2 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/NL'], 'files', 't*400v2*.txt');
@@ -1280,7 +1285,7 @@ nl800v2 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/NL'
 nl1600v2 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/NL'], 'files', 't*1600v2*.txt');
 nlv2 = {nl100v2, nl200v2, nl400v2, nl800v2, nl1600v2};
 
-% Specify Java ST implementation specs, parameter set 2
+% Define Java ST implementation specs, parameter set 2
 st100v2 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/ST'], 'files', 't*100v2*.txt');
 st200v2 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/ST'], 'files', 't*200v2*.txt');
 st400v2 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/ST'], 'files', 't*400v2*.txt');
@@ -1288,7 +1293,7 @@ st800v2 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/ST'
 st1600v2 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/ST'], 'files', 't*1600v2*.txt');
 stv2 = {st100v2, st200v2, st400v2, st800v2, st1600v2};
 
-% Specify Java EQ implementation specs (runs with 12 threads), parameter set 2
+% Define Java EQ implementation specs (runs with 12 threads), parameter set 2
 eq100v2t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/EQ'], 'files', 't*100v2*t12r*.txt');
 eq200v2t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/EQ'], 'files', 't*200v2*t12r*.txt');
 eq400v2t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/EQ'], 'files', 't*400v2*t12r*.txt');
@@ -1296,7 +1301,7 @@ eq800v2t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/
 eq1600v2t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/EQ'], 'files', 't*1600v2*t12r*.txt');
 eqv2t12 = {eq100v2t12, eq200v2t12, eq400v2t12, eq800v2t12, eq1600v2t12};
 
-% Specify Java EX implementation specs (runs with 12 threads), parameter set 2
+% Define Java EX implementation specs (runs with 12 threads), parameter set 2
 ex100v2t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/EX'], 'files', 't*100v2*t12r*.txt');
 ex200v2t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/EX'], 'files', 't*200v2*t12r*.txt');
 ex400v2t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/EX'], 'files', 't*400v2*t12r*.txt');
@@ -1304,7 +1309,7 @@ ex800v2t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/
 ex1600v2t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/EX'], 'files', 't*1600v2*t12r*.txt');
 exv2t12 = {ex100v2t12, ex200v2t12, ex400v2t12, ex800v2t12, ex1600v2t12};
 
-% Specify Java ER implementation specs (runs with 12 threads), parameter set 2
+% Define Java ER implementation specs (runs with 12 threads), parameter set 2
 er100v2t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/ER'], 'files', 't*100v2*t12r*.txt');
 er200v2t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/ER'], 'files', 't*200v2*t12r*.txt');
 er400v2t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/ER'], 'files', 't*400v2*t12r*.txt');
@@ -1312,7 +1317,7 @@ er800v2t12 = struct('sname', '800', 'csize', 800, 'folder', [datafolder '/times/
 er1600v2t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/times/ER'], 'files', 't*1600v2*t12r*.txt');
 erv2t12 = {er100v2t12, er200v2t12, er400v2t12, er800v2t12, er1600v2t12};
 
-% Specify Java OD implementation specs (runs with 12 threads, b = 500), parameter set 2
+% Define Java OD implementation specs (runs with 12 threads, b = 500), parameter set 2
 od100v2t12 = struct('sname', '100', 'csize', 100, 'folder', [datafolder '/times/OD'], 'files', 't*100v2*b500t12r*.txt');
 od200v2t12 = struct('sname', '200', 'csize', 200, 'folder', [datafolder '/times/OD'], 'files', 't*200v2*b500t12r*.txt');
 od400v2t12 = struct('sname', '400', 'csize', 400, 'folder', [datafolder '/times/OD'], 'files', 't*400v2*b500t12r*.txt');
@@ -1321,7 +1326,7 @@ od1600v2t12 = struct('sname', '1600', 'csize', 1600, 'folder', [datafolder '/tim
 odv2t12 = {od100v2t12, od200v2t12, od400v2t12, od800v2t12, od1600v2t12};
 ```
 
-After the implementation specs are specified, we create two intermediate table:
+After the implementation specs are defined, we create two intermediate tables:
 
 ```matlab
 % %%%%%%%%%%%%%%%%%%% %
@@ -1390,10 +1395,10 @@ times_table_f(0, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 ---------------------------------------------------------------------------------------------------------------------------------------
 ```
 
-Finally, we produce the LaTeX table, as shown in reference [\[1\]](#ref1):
+Finally, we produce a LaTeX table, as shown in reference [\[1\]](#ref1):
 
 ```matlab
-% Latex table
+% LaTex table
 times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 ```
 
