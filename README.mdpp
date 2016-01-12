@@ -584,21 +584,54 @@ times_table_f(1, 'vs Bubble', tdata)
 
 ### Performance analysis of a simulation model
 
-The examples in this section use the following dataset:
+The examples in this section use the following [dataset][pphpc_data]:
 
-* [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
+* [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049)
 
-Unpack the dataset to any folder and specify the complete path to this folder in 
-variable `datafolder`, e.g.:
+Unpack the [dataset][pphpc_data] to any folder and specify the complete path to
+this folder in variable `datafolder`, e.g.:
 
 ```matlab
 datafolder = 'path/to/dataset';
 ```
 
-This dataset corresponds to the results presented in reference [\[1\]](#ref1),
-which compares the performance of several implementations of the [PPHPC]
-agent-based model. Among several aspects of _PerfAndPubTools_, the following 
-examples show how to replicate these results.
+This [dataset][pphpc_data] corresponds to the results presented in reference
+[\[1\]](#ref1), which compares the performance of several implementations of the
+[PPHPC] agent-based model. Among several aspects of _PerfAndPubTools_, the
+following examples show how to replicate these results.
+
+#### Implementations and setups of the PPHPC agent-based model
+
+While most details about [PPHPC] and its various implementations are not
+important for this discussion, is convenient to know which implementations and
+setups were experimented with in reference [\[1\]](#ref1). A total of six
+implementations of the [PPHPC] model were compared:
+
+Implementation | Description
+---------------|------------
+NL             | [NetLogo] implementation (no parallelization).
+ST             | Java single-thread implementation (no parallelization).
+EQ             | Java parallel implementation (equal work).
+EX             | Java parallel implementation (equal work, reproducible).
+ER             | Java parallel implementation (row-wise synchronization).
+OD             | Java parallel implementation (on-demand work).
+
+A number of setups are directly related with the model itself, namely **model
+size** and **parameter set**. Concerning model size, [PPHPC] was benchmarked
+with sizes 100, 200, 400, 800 and 1600. Each size corresponds to the size of the
+*environment* in which the agents act, e.g. size 200 corresponds to a 200 x 200
+environment. Besides model size, [PPHPC] was also benchmarked with two parameter
+sets, simply designated as *parameter set 1* and *parameter set 2*. The latter
+typically yields simulations with more agents.
+
+Other setups are associated with computational aspects of model execution, more
+specifically **number of threads** (for parallel implementations) and 
+**value of the _b_ parameter** (for OD implementation only).
+
+The [dataset][pphpc_data] contains performance data (in the form of [GNU time]
+default output) for 10 runs of all setup combinations (i.e. model size,
+parameter set, number of threads and value of the _b_ parameter, where
+applicable).
 
 #### Extract performance data from a file
 

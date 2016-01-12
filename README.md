@@ -19,20 +19,21 @@ PerfAndPubTools
 4.1.11\.  [Custom scalability plots](#customscalabilityplots)  
 4.1.12\.  [Produce a table instead of a plot](#produceatableinsteadofaplot)  
 4.2\.  [Performance analysis of a simulation model](#performanceanalysisofasimulationmodel)  
-4.2.1\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
-4.2.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
-4.2.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations-1)  
-4.2.4\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation-1)  
-4.2.5\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
-4.2.6\.  [Compare different implementations](#comparedifferentimplementations-1)  
-4.2.7\.  [Speedup](#speedup-1)  
-4.2.8\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
-4.2.9\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
-4.2.10\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
-4.2.11\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
-4.2.12\.  [Custom performance plot](#customperformanceplot)  
-4.2.13\.  [Show a table instead of a plot](#showatableinsteadofaplot)  
-4.2.14\.  [Complex tables](#complextables)  
+4.2.1\.  [Implementations and setups of the PPHPC agent-based model](#implementationsandsetupsofthepphpcagent-basedmodel)  
+4.2.2\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
+4.2.3\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
+4.2.4\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations-1)  
+4.2.5\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation-1)  
+4.2.6\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
+4.2.7\.  [Compare different implementations](#comparedifferentimplementations-1)  
+4.2.8\.  [Speedup](#speedup-1)  
+4.2.9\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
+4.2.10\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
+4.2.11\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
+4.2.12\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
+4.2.13\.  [Custom performance plot](#customperformanceplot)  
+4.2.14\.  [Show a table instead of a plot](#showatableinsteadofaplot)  
+4.2.15\.  [Complex tables](#complextables)  
 5\.  [License](#license)  
 6\.  [References](#references)  
 
@@ -653,25 +654,60 @@ times_table_f(1, 'vs Bubble', tdata)
 
 ### 4.2\. Performance analysis of a simulation model
 
-The examples in this section use the following dataset:
+The examples in this section use the following [dataset][pphpc_data]:
 
-* [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
+* [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049)
 
-Unpack the dataset to any folder and specify the complete path to this folder in 
-variable `datafolder`, e.g.:
+Unpack the [dataset][pphpc_data] to any folder and specify the complete path to
+this folder in variable `datafolder`, e.g.:
 
 ```matlab
 datafolder = 'path/to/dataset';
 ```
 
-This dataset corresponds to the results presented in reference [\[1\]](#ref1),
-which compares the performance of several implementations of the [PPHPC]
-agent-based model. Among several aspects of _PerfAndPubTools_, the following 
-examples show how to replicate these results.
+This [dataset][pphpc_data] corresponds to the results presented in reference
+[\[1\]](#ref1), which compares the performance of several implementations of the
+[PPHPC] agent-based model. Among several aspects of _PerfAndPubTools_, the
+following examples show how to replicate these results.
+
+<a name="implementationsandsetupsofthepphpcagent-basedmodel"></a>
+
+#### 4.2.1\. Implementations and setups of the PPHPC agent-based model
+
+While most details about [PPHPC] and its various implementations are not
+important for this discussion, is convenient to know which implementations and
+setups were experimented with in reference [\[1\]](#ref1). A total of six
+implementations of the [PPHPC] model were compared:
+
+Implementation | Description
+---------------|------------
+NL             | [NetLogo] implementation (no parallelization).
+ST             | Java single-thread implementation (no parallelization).
+EQ             | Java parallel implementation (equal work).
+EX             | Java parallel implementation (equal work, reproducible).
+ER             | Java parallel implementation (row-wise synchronization).
+OD             | Java parallel implementation (on-demand work).
+
+A number of setups are directly related with the model itself, namely **model
+size** and **parameter set**. Concerning model size, [PPHPC] was benchmarked
+with sizes 100, 200, 400, 800 and 1600. Each size corresponds to the size of the
+*environment* in which the agents act, e.g. size 200 corresponds to a 200 x 200
+environment. Besides model size, [PPHPC] was also benchmarked with two parameter
+sets, simply designated as *parameter set 1* and *parameter set 2*. The latter
+typically yields simulations with more agents.
+
+Other setups are associated with computational aspects of model execution, more
+specifically **number of threads** (for parallel implementations) and 
+**value of the _b_ parameter** (for OD implementation only).
+
+The [dataset][pphpc_data] contains performance data (in the form of [GNU time]
+default output) for 10 runs of all setup combinations (i.e. model size,
+parameter set, number of threads and value of the _b_ parameter, where
+applicable).
 
 <a name="extractperformancedatafromafile-1"></a>
 
-#### 4.2.1\. Extract performance data from a file
+#### 4.2.2\. Extract performance data from a file
 
 The [get_gtime] function extracts performance data from one file containing the
 default output of [GNU time] command. For example:
@@ -693,7 +729,7 @@ p =
 
 <a name="extractexecutiontimesfromfilesinafolder-1"></a>
 
-#### 4.2.2\. Extract execution times from files in a folder
+#### 4.2.3\. Extract execution times from files in a folder
 
 The [gather_times] function extracts execution times from multiple files in a
 folder, as shown in the following command:
@@ -718,7 +754,7 @@ of a program execution.
 
 <a name="averageexecutiontimesandstandarddeviations-1"></a>
 
-#### 4.2.3\. Average execution times and standard deviations
+#### 4.2.4\. Average execution times and standard deviations
 
 In its most basic usage, the [perfstats] function obtains performance
 statistics. In this example, average execution times and standard deviations are
@@ -745,7 +781,7 @@ The [perfstats] function uses [gather_times] internally.
 
 <a name="comparemultiplesetupswithinthesameimplementation-1"></a>
 
-#### 4.2.4\. Compare multiple setups within the same implementation
+#### 4.2.5\. Compare multiple setups within the same implementation
 
 A more advanced use case for [perfstats] consists of comparing multiple setups,
 associated with different computational sizes, within the same implementation.
@@ -775,7 +811,7 @@ avg_time =
 
 <a name="sameaspreviouswithalog-logplot"></a>
 
-#### 4.2.5\. Same as previous, with a log-log plot
+#### 4.2.6\. Same as previous, with a log-log plot
 
 The [perfstats] function can also be used to generate scalability plots. For
 this purpose, the computational size, `csize`, must be specified in each
@@ -801,7 +837,7 @@ perfstats(4, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2});
 
 <a name="comparedifferentimplementations-1"></a>
 
-#### 4.2.6\. Compare different implementations
+#### 4.2.7\. Compare different implementations
 
 Besides comparing multiple setups within the same implementation, the
 [perfstats] function is also able to compare multiple setups from a number
@@ -836,7 +872,7 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 
 <a name="speedup-1"></a>
 
-#### 4.2.7\. Speedup
+#### 4.2.8\. Speedup
 
 The [speedup] function is used to obtain relative speedups between different
 implementations. Using the variables defined in the previous example, the
@@ -876,7 +912,7 @@ speedup(1, 1, 'NL', nlv1, 'ST', stv1);
 
 <a name="speedupformultipleparallelimplementationsandsizes"></a>
 
-#### 4.2.8\. Speedup for multiple parallel implementations and sizes
+#### 4.2.9\. Speedup for multiple parallel implementations and sizes
 
 The [speedup] function is also able to determine relative speedups between
 different implementations for multiple computational sizes. In this example we
@@ -936,7 +972,7 @@ speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv
 
 <a name="scalabilityofthedifferentimplementationsforincreasingmodelsizes"></a>
 
-#### 4.2.9\. Scalability of the different implementations for increasing model sizes
+#### 4.2.10\. Scalability of the different implementations for increasing model sizes
 
 In a slightly more complex scenario than the one described in a
 [previous example](#pphpccompdiffimpl), here we use the [perfstats] function to
@@ -952,7 +988,7 @@ perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12
 
 <a name="scalabilityofparallelimplementationsforincreasingnumberofthreads"></a>
 
-#### 4.2.10\. Scalability of parallel implementations for increasing number of threads
+#### 4.2.11\. Scalability of parallel implementations for increasing number of threads
 
 The 'computational size', i.e. the `csize` field, defined in the implementation
 specs passed to the [perfstats] function can be used in alternative contexts. In
@@ -1028,7 +1064,7 @@ perfstats(1, 'ST', stv2, 'EQ', eqv2, 'EX', exv2, 'ER', erv2, 'OD', odv2);
 
 <a name="performanceofodstrategyfordifferentvaluesof_b_"></a>
 
-#### 4.2.11\. Performance of OD strategy for different values of _b_
+#### 4.2.12\. Performance of OD strategy for different values of _b_
 
 For this example, in yet another possible use of the [perfstats] function,  we
 use the `csize` field to specify the value of the _b_ parameter of the [PPHPC]
@@ -1100,7 +1136,7 @@ perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '16
 
 <a name="customperformanceplot"></a>
 
-#### 4.2.12\. Custom performance plot
+#### 4.2.13\. Custom performance plot
 
 As previously discussed, it is possible to generate custom plots using the data
 returned by [perfstats] and [speedup]. The following code snippet produces a
@@ -1162,7 +1198,7 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 <a name="showatableinsteadofaplot"></a>
 
-#### 4.2.13\. Show a table instead of a plot
+#### 4.2.14\. Show a table instead of a plot
 
 The [times_table] and [times_table_f] functions can be used to create
 performance tables formatted in plain text or LaTeX. Using the data defined in a
@@ -1210,7 +1246,7 @@ times_table_f(1, 'NL vs ST', tdata)
 
 <a name="complextables"></a>
 
-#### 4.2.14\. Complex tables
+#### 4.2.15\. Complex tables
 
 The [times_table] and [times_table_f] functions are capable of producing more
 complex tables. In this example, we show how to reproduce table 7 of reference
