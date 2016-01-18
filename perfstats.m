@@ -1,6 +1,6 @@
 function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
     = perfstats(do_plot, varargin)
-% PERFSTATS Determine mean times and respective standard deviations of a
+% PERFSTATS Determines mean times and respective standard deviations of a
 % computational experiment using folders of files containing benchmarking
 % results, optionally plotting a scalability graph if different setups
 % correspond to different computational work sizes.

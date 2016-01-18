@@ -1,7 +1,7 @@
 function [speedups, times, std_times, times_raw, fids, impl_legends, ...
     set_legends] = speedup(do_plot, compare, varargin)
-% SPEEDUP Determine speedups using folders of files containing benchmarking
-% results, and optionally display speedups in a bar plot.
+% SPEEDUP Determines speedups using folders of files containing
+% benchmarking results, and optionally displays speedups in a bar plot.
 %
 % [speedups, times, std_times, times_raw, fids, impl_legends, set_legends] 
 %   = SPEEDUP(do_plot, compare, varargin)

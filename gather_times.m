@@ -1,5 +1,5 @@
 function timings = gather_times(name, folder, files)
-% GATHER_TIMES Load execution times from all files in a given folder.
+% GATHER_TIMES Loads execution times from files in a given folder.
 %
 %   timings = GATHER_TIMES(name, folder, files)
 %

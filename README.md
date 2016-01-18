@@ -82,20 +82,20 @@ _PerfAndPubTools_ is bundled with the following functions, from lowest to
 highest-level of functionality:
 
 * [get_gtime] - Given a file containing the default output of the [GNU time]
-command, this function extracts the user, system and elapsed time in seconds, as
-well as the percentage of CPU usage.
+command, this function extracts the user, system and elapsed times in seconds,
+as well as the percentage of CPU usage.
 
-* [gather_times] - Load execution times from all files in a given folder. This
+* [gather_times] - Loads execution times from files in a given folder. This
 function uses [get_gtime] by default, but can be configured to use another
 function to load individual benchmark files with a different format.
 
-* [perfstats] - Determine mean times and respective standard deviations of a
+* [perfstats] - Determines mean times and respective standard deviations of a
 computational experiment using folders of files containing benchmarking results,
 optionally plotting a scalability graph if different setups correspond to
 different computational work sizes.
 
-* [speedup] - Determine speedups using folders of files containing benchmarking
-results, and optionally display speedups in a bar plot.
+* [speedup] - Determines speedups using folders of files containing benchmarking
+results, and optionally displays speedups in a bar plot.
 
 * [times_table] - Returns a matrix with useful contents for using in tables for
 publication, namely times (in seconds), absolute standard deviations (seconds),
