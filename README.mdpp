@@ -199,7 +199,7 @@ obtained from the runs performed in the previous example:
 
 ```matlab
 qs1M = struct('sname', 'Quicksort', 'folder', sortfolder, 'files', 'time_quick_1000000_*.txt');
-[avg_time, std_time] = perfstats(0, sortfolder, {qs1M})
+[avg_time, std_time] = perfstats(0, 'QuickSort', {qs1M})
 ```
 
 ```
