@@ -29,7 +29,7 @@ function timings = gather_times(name, folder, files)
 tfun = @get_gtime;
 
 % Get file list
-listing = dir([folder '/' files]);
+listing = dir([folder filesep files]);
 
 % How many files?
 numFiles = size(listing, 1);
@@ -38,13 +38,13 @@ numFiles = size(listing, 1);
 elapsed = zeros(numFiles, 1);
 
 if numFiles == 0
-    error(['No files found: ' folder '/' files]);
+    error(['No files found: ' folder filesep files]);
 end;
 
 for i = 1:numFiles
     
     % Get timing information from current file
-    timing = tfun([folder '/' listing(i).name]);
+    timing = tfun([folder filesep listing(i).name]);
     
     % Gather timing
     elapsed(i, 1) = timing.elapsed;
