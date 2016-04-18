@@ -105,7 +105,8 @@ the linked page).
 2. Confirm that the [GNU time] program is installed (instructions also available
 in [sorttest.c]).
 3. In [MATLAB]/[Octave] create a `sortfolder` variable containing the full path
-of the [sorttest.c] program, for example `sortfolder = /home/user/sortdata`.
+of the [sorttest.c] program, for example `sortfolder = /home/user/sort`
+(Unix/Linux) or `sortfolder = C:\Users\UserName\Documents\sort` (Windows).
 
 [GNU time] is usually invoked as `/usr/bin/time`, but this can vary for
 different Linux distributions. On OSX it is invoked as `gtime`. The usual Linux
