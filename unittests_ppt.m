@@ -144,7 +144,7 @@ function test_perfstats
 % Test function speedup
 function test_speedup
 
-    % Folder and files
+    % Data folder
     folder = 'data';
     
     % Specify merge sort implementation specs
@@ -184,4 +184,68 @@ function test_speedup
         end;
     end;
     
+% Test function times_table
+function test_times_table
+
+    % Data folder
+    folder = 'data';
+
+    % Specify Bubble sort implementation specs
+    bs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', folder, ...
+        'files', 'time_bubble_100000_*.txt');
+    bs2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', folder, ...
+        'files', 'time_bubble_200000_*.txt');
+    bs3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', folder, ...
+        'files', 'time_bubble_300000_*.txt');
+    bs4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', folder, ...
+        'files', 'time_bubble_400000_*.txt');
+    bs = {bs1e5, bs2e5, bs3e5, bs4e5};
+
+    % Specify Selection sort implementation specs
+    ss1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', folder, ...
+        'files', 'time_selection_100000_*.txt');
+    ss2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', folder, ...
+        'files', 'time_selection_200000_*.txt');
+    ss3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', folder, ...
+        'files', 'time_selection_300000_*.txt');
+    ss4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', folder, ...
+        'files', 'time_selection_400000_*.txt');
+    ss = {ss1e5, ss2e5, ss3e5, ss4e5};
+
+    % Specify Merge sort implementation specs
+    ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', folder, ...
+        'files', 'time_merge_100000_*.txt');
+    ms2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', folder, ...
+        'files', 'time_merge_200000_*.txt');
+    ms3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', folder, ...
+        'files', 'time_merge_300000_*.txt');
+    ms4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', folder, ...
+        'files', 'time_merge_400000_*.txt');
+    ms = {ms1e5, ms2e5, ms3e5, ms4e5};
+
+    % Specify Quicksort implementation specs
+    qs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', folder, ...
+        'files', 'time_quick_100000_*.txt');
+    qs2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', folder, ...
+        'files', 'time_quick_200000_*.txt');
+    qs3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', folder, ...
+        'files', 'time_quick_300000_*.txt');
+    qs4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', folder, ...
+        'files', 'time_quick_400000_*.txt');
+    qs = {qs1e5, qs2e5, qs3e5, qs4e5};
+
+    % Put data in table format
+    tdata = times_table(1, ...
+        'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+    
+    % Check if outputs are as expected    
+    assertEqual(tdata.snames, {'1e5','2e5','3e5','4e5'}');
+    assertEqual(tdata.inames, {'Bubble', 'Selection', 'Merge', 'Quick'}');
+    assertEqual(size(tdata.t), [16 4]);
+
+    % Simple tests for times_table_f
+    t1 = times_table_f(0, 'vs Bubble', tdata);
+    t2 = times_table_f(1, 'vs Bubble', tdata);
+    assertEqual(class(t1), 'char');
+    assertEqual(class(t2), 'char');
     
