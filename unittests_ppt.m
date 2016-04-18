@@ -74,7 +74,6 @@ function test_perfstats
     % Case 2: one implementation, three setups
     % %%%%
     
-    folder = 'data';
     name1 = 'bs10k';
     name2 = 'bs20k';
     name3 = 'bs30k';
@@ -100,3 +99,89 @@ function test_perfstats
     % %%%%
     % Case 3: multiple implementations
     % %%%%
+    
+    % Specify merge sort implementation specs
+    ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_merge_100000_*.txt');
+    ms1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_merge_1000000_*.txt');
+    ms1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_merge_10000000_*.txt');
+    ms1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_merge_100000000_*.txt');
+    ms = {ms1e5, ms1e6, ms1e7, ms1e8};
+
+    % Specify Quicksort implementation specs
+    qs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_quick_100000_*.txt');
+    qs1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_quick_1000000_*.txt');
+    qs1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_quick_10000000_*.txt');
+    qs1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_quick_100000000_*.txt');
+    qs = {qs1e5, qs1e6, qs1e7, qs1e8};
+
+    % Obtain perfstats outputs
+    [avt, sdt, rt, fid]  = perfstats(0, 'Merge sort', ms, 'Quicksort', qs);
+    
+    % Check if outputs are as expected
+    assertElementsAlmostEqual(size(avt), [2 4]);
+    assertElementsAlmostEqual(size(sdt), [2 4]);
+    assertEqual(size(rt), [2 4]);
+    for i = 1:2
+        for j = 1:4
+            assertElementsAlmostEqual(...
+                avt(i, j), ...
+                mean(rt{i, j}.elapsed));
+            assertElementsAlmostEqual(...
+                sdt(i, j), ...
+                std(rt{i, j}.elapsed));
+        end;
+    end;
+    assertEqual(fid, 0);
+
+% Test function speedup
+function test_speedup
+
+    % Folder and files
+    folder = 'data';
+    
+    % Specify merge sort implementation specs
+    ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_merge_100000_*.txt');
+    ms1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_merge_1000000_*.txt');
+    ms1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_merge_10000000_*.txt');
+    ms1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_merge_100000000_*.txt');
+    ms = {ms1e5, ms1e6, ms1e7, ms1e8};
+
+    % Specify Quicksort implementation specs
+    qs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_quick_100000_*.txt');
+    qs1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_quick_1000000_*.txt');
+    qs1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_quick_10000000_*.txt');
+    qs1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_quick_100000000_*.txt');
+    qs = {qs1e5, qs1e6, qs1e7, qs1e8};
+
+    % Obtain speedup outputs
+    [s, t, sdt] = speedup(0, [1 2], 'Merge sort', ms, 'Quicksort', qs);
+    
+    % Check if outputs are as expected
+    assertEqual(numel(s), 2);
+    assertEqual(size(t), [2 4]);
+    assertEqual(size(sdt), [2 4]);
+    for b = 1:2
+        for i = 1:2
+            for j = 1:4
+                assertElementsAlmostEqual(s{b}(i, j), t(b, j) / t(i, j));
+            end;
+        end;
+    end;
+    
+    
