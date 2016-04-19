@@ -120,16 +120,18 @@ for cidx = 1:numel(compare)
         % Create a new figure
         fids(c) = figure();
         
-        % Get the speedups matrix
-        speedup_matrix = avg_speedups{cidx}(allimpl, :);
+        % Get the speedups matrices
+        avg_speedup_mat = avg_speedups{cidx}(allimpl, :);
+        max_speedup_mat = max_speedups{cidx}(allimpl, :);
+        min_speedup_mat = min_speedups{cidx}(allimpl, :);
         
         % Plot speedups versus the ith implementation
-        if do_plot == 1
+        if abs(do_plot) == 1
             % Y linear scale
-            bar(speedup_matrix);
+            h = bar(avg_speedup_mat);
         else
             % Y log scale requires this in Octave
-            bar(speedup_matrix, 'basevalue', 1);
+            h = bar(avg_speedup_mat, 'basevalue', 1);
         end;
      
         % Get implementation names without the reference implementation
@@ -139,7 +141,7 @@ for cidx = 1:numel(compare)
         % Legends and x-ticks will be different if there is only one 
         % implementation to plot, or more than one implementation to plot
         
-        if size(speedup_matrix, 1) == 1 % Only one implementation
+        if size(avg_speedup_mat, 1) == 1 % Only one implementation
             
             % x tick labels will correspond to setup names
             set(gca, 'XTickLabel', set_legends);
@@ -167,8 +169,28 @@ for cidx = 1:numel(compare)
         grid on;
         
         % Log scale?
-        if do_plot > 1
-            set(gca,'YScale','log');
+        if abs(do_plot) == 2
+            set(gca, 'YScale', 'log');
+        end;
+        
+        % Draw error bars?
+        hold on;
+        if do_plot < 1
+            
+            for i = 1:nimpl
+                
+                % Determine bar centers
+                xdata = get(get(h(i), 'Children'), 'XData');
+                xcenters = mean(xdata, 1);
+                
+                % Draw error bars
+                errorbar(xcenters, avg_speedup_mat(:, i), ...
+                    avg_speedup_mat(:, i) - min_speedup_mat(:, i), ...
+                    max_speedup_mat(:, i) - avg_speedup_mat(:, i), ...
+                    '+k');
+                
+            end;
+            
         end;
 
     end;    
