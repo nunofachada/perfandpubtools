@@ -150,6 +150,23 @@ for cidx = 1:numel(compare)
             xlabel('Setups');
             ylabel(['Speedup ' loc_leg{1} ' vs ' impl_legends{c}]);
             
+
+            % Draw error bars?
+            hold on;
+            if do_plot < 1
+
+                % Determine bar centers
+                xdata = get(get(h, 'Children'), 'XData');
+                xcenters = mean(xdata, 1);
+
+                % Draw error bars
+                errorbar(xcenters, avg_speedup_mat, ...
+                    avg_speedup_mat - min_speedup_mat, ...
+                    max_speedup_mat - avg_speedup_mat, ...
+                    '+k');
+
+            end;
+            
         else % More than one implementation
         
             % x tick label with correspond to implementation names (except
@@ -163,6 +180,24 @@ for cidx = 1:numel(compare)
             xlabel('Implementations');
             ylabel(['Speedup vs ' impl_legends{c}]);
             
+            % Draw error bars?
+            hold on;
+            if do_plot < 1
+
+                for i = 1:nset
+
+                    % Determine bar centers
+                    xdata = get(get(h(i), 'Children'), 'XData');
+                    xcenters = mean(xdata, 1);
+
+                    % Draw error bars
+                    errorbar(xcenters, avg_speedup_mat(:, i), ...
+                        avg_speedup_mat(:, i) - min_speedup_mat(:, i), ...
+                        max_speedup_mat(:, i) - avg_speedup_mat(:, i), ...
+                        '+k');
+                end;
+
+            end;            
         end;
         
         % Set grid
@@ -173,33 +208,6 @@ for cidx = 1:numel(compare)
             set(gca, 'YScale', 'log');
         end;
         
-        % Draw error bars?
-        hold on;
-        if do_plot < 1
-            
-            for i = 1:numel(allimpl)
-                
-                % Determine bar centers
-                xdata = get(get(h(i), 'Children'), 'XData');
-                xcenters = mean(xdata, 1);
-                
-                % Draw error bars
-                if numel(allimpl) > 1
-                    errorbar(xcenters, avg_speedup_mat(:, i), ...
-                        avg_speedup_mat(:, i) - min_speedup_mat(:, i), ...
-                        max_speedup_mat(:, i) - avg_speedup_mat(:, i), ...
-                        '+k');
-                else
-                    errorbar(xcenters, avg_speedup_mat, ...
-                        avg_speedup_mat - min_speedup_mat, ...
-                        max_speedup_mat - avg_speedup_mat, ...
-                        '+k');
-                end;
-                
-            end;
-            
-        end;
-
     end;    
     
 end;
