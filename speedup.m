@@ -177,17 +177,24 @@ for cidx = 1:numel(compare)
         hold on;
         if do_plot < 1
             
-            for i = 1:nimpl
+            for i = 1:numel(allimpl)
                 
                 % Determine bar centers
                 xdata = get(get(h(i), 'Children'), 'XData');
                 xcenters = mean(xdata, 1);
                 
                 % Draw error bars
-                errorbar(xcenters, avg_speedup_mat(:, i), ...
-                    avg_speedup_mat(:, i) - min_speedup_mat(:, i), ...
-                    max_speedup_mat(:, i) - avg_speedup_mat(:, i), ...
-                    '+k');
+                if numel(allimpl) > 1
+                    errorbar(xcenters, avg_speedup_mat(:, i), ...
+                        avg_speedup_mat(:, i) - min_speedup_mat(:, i), ...
+                        max_speedup_mat(:, i) - avg_speedup_mat(:, i), ...
+                        '+k');
+                else
+                    errorbar(xcenters, avg_speedup_mat, ...
+                        avg_speedup_mat - min_speedup_mat, ...
+                        max_speedup_mat - avg_speedup_mat, ...
+                        '+k');
+                end;
                 
             end;
             
