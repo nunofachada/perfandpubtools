@@ -1,13 +1,16 @@
-function [speedups, times, std_times, times_raw, fids, impl_legends, ...
-    set_legends] = speedup(do_plot, compare, varargin)
+function [avg_speedups, max_speedups, min_speedups, times, std_times, ...
+    times_raw, fids, impl_legends, set_legends] = ...
+    speedup(do_plot, compare, varargin)
 % SPEEDUP Determines speedups using folders of files containing
 % benchmarking results, and optionally displays speedups in a bar plot.
 %
-% [speedups, times, std_times, times_raw, fids, impl_legends, set_legends] 
-%   = SPEEDUP(do_plot, compare, varargin)
+% [s, smax, smin, t_avg, t_std, t_raw, fids, il, sl] = ...
+%     SPEEDUP(do_plot, compare, varargin)
 %
 % Parameters:
 %     do_plot - Draw speedup plot?
+%                    -2 - Log plot (bars only) with error bars
+%                    -1 - Regular plot with error bars
 %                     0 - No plot
 %                     1 - Regular plot
 %                     2 - Log plot (bars only)
@@ -28,9 +31,15 @@ function [speedups, times, std_times, times_raw, fids, impl_legends, ...
 %                         ignored if a plot was not requested).
 %
 % Output:
-%     speedups - Cell array where each cell contains a matrix of speedups 
-%                for a given implementation. Number of cells depends on the 
-%                number of elements in parameter "compare".
+% avg_speedups - Cell array where each cell contains a matrix of average
+%                speedups for a given implementation. Number of cells
+%                depends on the number of elements in parameter "compare".
+% max_speedups - Cell array where each cell contains a matrix of maximum
+%                speedups for a given implementation. Number of cells
+%                depends on the number of elements in parameter "compare".
+% min_speedups - Cell array where each cell contains a matrix of minimum
+%                speedups for a given implementation. Number of cells
+%                depends on the number of elements in parameter "compare".
 %        times - Matrix of average computational times where each row 
 %                corresponds to an implementation and each column to a 
 %                setup.
@@ -65,11 +74,15 @@ end;
 [nimpl, nset] = size(times);
 
 % Setup output variables
-speedups = cell(numel(compare), 1);
+avg_speedups = cell(numel(compare), 1);
+max_speedups = cell(numel(compare), 1);
+min_speedups = cell(numel(compare), 1);
 fids = zeros(numel(compare), 1);
 
 for cidx = 1:numel(compare)
-    speedups{cidx} = zeros(nimpl, nset);
+    avg_speedups{cidx} = zeros(nimpl, nset);
+    max_speedups{cidx} = zeros(nimpl, nset);
+    min_speedups{cidx} = zeros(nimpl, nset);
 end;
 
 % Determine speedup of all implementations versus the c^th implementation
@@ -85,11 +98,15 @@ for cidx = 1:numel(compare)
     % For each setup...
     for s = 1:nset
 
-        % ...determine speedup of the i^th implementation vs the c^th 
+        % ...determine speedups of the i^th implementation vs the c^th 
         % implementation
         for i = allimpl
         
-            speedups{cidx}(i, s) = times(c, s) / times(i, s);
+            avg_speedups{cidx}(i, s) = times(c, s) / times(i, s);
+            max_speedups{cidx}(i, s) = max(times_raw{c, s}.elapsed) / ...
+                min(times_raw{i, s}.elapsed);
+            min_speedups{cidx}(i, s) = min(times_raw{c, s}.elapsed) / ...
+                max(times_raw{i, s}.elapsed);
 
         end;        
     end;
@@ -104,7 +121,7 @@ for cidx = 1:numel(compare)
         fids(c) = figure();
         
         % Get the speedups matrix
-        speedup_matrix = speedups{cidx}(allimpl, :);
+        speedup_matrix = avg_speedups{cidx}(allimpl, :);
         
         % Plot speedups versus the ith implementation
         if do_plot == 1

@@ -170,16 +170,23 @@ function test_speedup
     qs = {qs1e5, qs1e6, qs1e7, qs1e8};
 
     % Obtain speedup outputs
-    [s, t, sdt] = speedup(0, [1 2], 'Merge sort', ms, 'Quicksort', qs);
+    [s, smax, smin, t, sdt, t_raw] = ...
+        speedup(0, [1 2], 'Merge sort', ms, 'Quicksort', qs);
     
     % Check if outputs are as expected
     assertEqual(numel(s), 2);
+    assertEqual(numel(smax), 2);
+    assertEqual(numel(smin), 2);
     assertEqual(size(t), [2 4]);
     assertEqual(size(sdt), [2 4]);
     for b = 1:2
         for i = 1:2
             for j = 1:4
                 assertElementsAlmostEqual(s{b}(i, j), t(b, j) / t(i, j));
+                assertElementsAlmostEqual(smax{b}(i, j), ...
+                    max(t_raw{b, j}.elapsed) / min(t_raw{i, j}.elapsed));
+                assertElementsAlmostEqual(smin{b}(i, j), ...
+                    min(t_raw{b, j}.elapsed) / max(t_raw{i, j}.elapsed));
             end;
         end;
     end;

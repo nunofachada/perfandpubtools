@@ -15,9 +15,9 @@ function data = times_table(compare, varargin)
 %   data - Structure containing the following fields:
 %                t - Matrix with the following columns: times (in seconds), 
 %                    absolute standard deviations (seconds), relative 
-%                    standard deviations, speedups (the number of speedup 
-%                    columns is the same as the number of implementations 
-%                    in the compare input variable).
+%                    standard deviations, average speedups (the number of
+%                    speedup columns is the same as the number of
+%                    implementations in the compare input variable).
 %          compare - Vector indicating what implementations are compared.
 %           inames - Implementation names.
 %           snames - Setup names.
@@ -28,7 +28,7 @@ function data = times_table(compare, varargin)
 % at http://opensource.org/licenses/MIT)
 %
 
-[speedups, times, std_times, ~, ~, impl_legends, set_legends] = ...
+[speedups, ~, ~, times, std_times, ~, ~, impl_legends, set_legends] = ...
     speedup(0, compare, varargin{:});
 
 [nimpl, nset] = size(times);
