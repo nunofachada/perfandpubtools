@@ -9,6 +9,10 @@ function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
 %
 % Parameters:
 %    do_plot - Draw scalability graph?
+%                    -4 - Log-Log plot, w/ error bars (std. devs)
+%                    -3 - Semi-log y plot, w/ error bars (std. devs)
+%                    -2 - Semi-log x plot w/ error bars (std. devs)
+%                    -1 - Regular plot, w/ error bars (std. devs)
 %                     0 - No plot
 %                     1 - Regular plot
 %                     2 - Semi-log x plot
@@ -90,7 +94,7 @@ for i = 1:nimpl
 end;
 
 % Draw scalability plot, if required
-if do_plot > 0
+if do_plot ~= 0
     
     if numel(unique(set_sizes)) ~= nset
         error(['Can''t plot if different setups within an ' ...
@@ -100,34 +104,54 @@ if do_plot > 0
     if nset == 1
         warning('Can''t plot with only one setup per implementation.');
     else
+                
+        % Create figure
+        fid = figure();
+        grid on;
+        hold on;
         
-        % Type of plot
-        switch do_plot
+        % Add a plot for each implementation using the default colors
+        defcolors = get(0, 'DefaultAxesColorOrder');
+        for i = 1:nimpl
+            
+            % Without error bars
+            if do_plot > 0
+                p = plot(set_sizes, times(i, :), '-o');
+            end;
+            
+            % With error bars
+            if do_plot < 0
+                p = errorbar(set_sizes, times(i, :), ...
+                    std_times(i, :), '-o');
+            end;
+            
+            % Determine and set line color
+            color_idx = mod(i, size(defcolors, 1));
+            if color_idx == 0
+                color_idx = size(defcolors, 1);
+            end;
+            set(p, 'Color', defcolors(color_idx, :));
+            
+        end;
+
+        % Set type of plot
+        ax = get(fid, 'CurrentAxes');
+        switch abs(do_plot)
             case 1
-                plotfunc = @plot;
+                set(ax, 'XScale', 'linear', 'YScale', 'linear');
             case 2
-                plotfunc = @semilogx;
+                set(ax, 'XScale', 'log', 'YScale', 'linear');
             case 3
-                plotfunc = @semilogy;
+                set(ax, 'XScale', 'linear', 'YScale', 'log');
+            case 4
+                set(ax, 'XScale', 'log', 'YScale', 'log');
             otherwise
-                plotfunc = @loglog;
+                error('Unknown plot type');
         end;
         
-        % Adjust for weird plotting behavior if number of implementations
-        % is the same as the number of setups within each implementation
-        if numel(set_sizes) == numel(impl_legend)
-            times_to_plot = times';
-        else
-            times_to_plot = times;
-        end;        
-
-        % Draw figure
-        fid = figure();
-        plotfunc(set_sizes, times_to_plot, '-o');
-        grid on;
+        % Other properties
         legend(impl_legend, 'Location', 'NorthWest');
         set(gca,'XTick', set_sizes);
-        xlim([min(set_sizes) max(set_sizes)]);
         xlabel('Size');
         ylabel('Time (s)');
         
@@ -153,7 +177,7 @@ nset = numel(args{2});
 set_legend = cell(nset, 1);
 
 % Initialize computational work sizes of setups for plotting, if necessary
-set_sizes = zeros(nset, 1);
+set_sizes = zeros(1, nset);
 
 % Check if implementation names and specs are valid
 for i=1:2:numel(args)
