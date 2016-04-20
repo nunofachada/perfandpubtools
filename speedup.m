@@ -155,12 +155,13 @@ for cidx = 1:numel(compare)
             hold on;
             if do_plot < 1
 
-                % Determine bar centers
+                % Determine left x coord. for all bars
                 xdata = get(get(h, 'Children'), 'XData');
-                xcenters = mean(xdata, 1);
+                xdata = unique(xdata);
+                xlefts = xdata(1:2:length(xdata));
 
                 % Draw error bars
-                errorbar(xcenters, avg_speedup_mat, ...
+                errorbar(xlefts, avg_speedup_mat, ...
                     avg_speedup_mat - min_speedup_mat, ...
                     max_speedup_mat - avg_speedup_mat, ...
                     '+k');
@@ -186,16 +187,18 @@ for cidx = 1:numel(compare)
 
                 for i = 1:nset
 
-                    % Determine bar centers
+                    % Determine left x coord. for all bars
                     xdata = get(get(h(i), 'Children'), 'XData');
-                    xcenters = mean(xdata, 1);
+                    xdata = unique(xdata);
+                    xlefts = xdata(1:2:length(xdata));
 
                     % Draw error bars
-                    errorbar(xcenters, avg_speedup_mat(:, i), ...
+                    errorbar(xlefts, avg_speedup_mat(:, i), ...
                         avg_speedup_mat(:, i) - min_speedup_mat(:, i), ...
                         max_speedup_mat(:, i) - avg_speedup_mat(:, i), ...
                         '+k');
-                end;
+                 
+               end;
 
             end;            
         end;
