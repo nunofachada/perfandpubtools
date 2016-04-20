@@ -1075,7 +1075,7 @@ command generates the equivalent to figure 5a of reference [\[1\]](#ref1):
 perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 ```
 
-![ex09](https://cloud.githubusercontent.com/assets/3018963/11914713/b52f195a-a67e-11e5-9a69-761526351f6d.png)
+![ex4 2 10](https://cloud.githubusercontent.com/assets/3018963/14692845/fdb21130-0751-11e6-9e75-428f92e3b59b.png)
 
 <a name="scalabilityofparallelimplementationsforincreasingnumberofthreads"></a>
 
@@ -1149,9 +1149,12 @@ odv2 = {od400v2t1, od400v2t2, od400v2t4, od400v2t6, od400v2t8, od400v2t12, od400
 
 % Use a linear plot (first parameter = 1)
 perfstats(1, 'ST', stv2, 'EQ', eqv2, 'EX', exv2, 'ER', erv2, 'OD', odv2);
+
+% Move legend to a better position
+legend(gca, 'Location', 'northeast');
 ```
 
-![ex10](https://cloud.githubusercontent.com/assets/3018963/11914715/b53d4b74-a67e-11e5-85e3-4cd1349152a1.png)
+![ex4 2 11](https://cloud.githubusercontent.com/assets/3018963/14692932/aba1f486-0752-11e6-8dd9-b5d673dc50ce.png)
 
 <a name="performanceofodstrategyfordifferentvaluesof_b_"></a>
 
@@ -1221,9 +1224,12 @@ od1600v2 = {od1600v2b20, od1600v2b50, od1600v2b100, od1600v2b200, od1600v2b500, 
 
 % Show plot
 perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '1600', od1600v2);
+
+% Place legend in a better position
+legend(gca, 'Location', 'NorthOutside', 'Orientation', 'horizontal')
 ```
 
-![ex11](https://cloud.githubusercontent.com/assets/3018963/11914716/b543721a-a67e-11e5-9a34-cfd1eac7a3ba.png)
+![ex4 2 12](https://cloud.githubusercontent.com/assets/3018963/14693011/49f6088e-0753-11e6-974b-f920b8bb4167.png)
 
 <a name="customperformanceplot"></a>
 
