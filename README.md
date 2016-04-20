@@ -94,8 +94,9 @@ computational experiment using folders of files containing benchmarking results,
 optionally plotting a scalability graph if different setups correspond to
 different computational work sizes.
 
-* [speedup] - Determines speedups using folders of files containing benchmarking
-results, and optionally displays speedups in a bar plot.
+* [speedup] - Determines the average, maximum and minimum speedups against one
+or more reference *implementations* across a number of *setups*. Can optionally
+generate a bar plot displaying the various speedups.
 
 * [times_table] - Returns a matrix with useful contents for using in tables for
 publication, namely times (in seconds), absolute standard deviations (seconds),
@@ -105,13 +106,13 @@ relative standard deviations, speedups (vs the specified implementations).
 in plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
 [booktabs] packages).
 
-Although the [perfstats] and [speedup] function optionally create plots, these
+Although the [perfstats] and [speedup] functions optionally create plots, these
 are mainly intended to provide visual feedback on the performance analysis being
-undertaken. Those needing more control over the final figures should create
-custom plots using the data provided by [perfstats] and [speedup]. Either way,
-[MATLAB]/[Octave] plots can be used directly in publications, or converted to
-LaTeX using the excellent [matlab2tikz] script, as will be shown in some of the
-examples.
+undertaken. Those needing more control over the final figures can customize the
+generated plots via the returned figure handles or create custom plots using the
+data provided by [perfstats] and [speedup]. Either way, [MATLAB]/[Octave] plots
+can be used directly in publications, or converted to LaTeX using the excellent
+[matlab2tikz] script, as will be shown in some of the examples.
 
 <a name="examples"></a>
 
@@ -125,7 +126,8 @@ Examples are organized into two sections:
 Examples in the first section demonstrate the complete process of benchmarking a
 number of sorting algorithms with the [GNU time] command and then analyzing
 results with _PerfAndPubTools_. Since the [GNU time] command is not available on
-Windows, the data produced by the benchmarks is also [provided][sort_data].
+Windows, the data produced by the benchmarks is [included][sort_data] in the
+package.
 
 Examples in the second section focus on showing how _PerfAndPubTools_ was used
 to analyze performance data of multiple implementations of a
@@ -149,8 +151,8 @@ the linked page).
 2. Confirm that the [GNU time] program is installed (instructions also available
 in [sorttest.c]).
 3. In [MATLAB]/[Octave] create a `sortfolder` variable containing the full path
-of the [sorttest.c] program, for example `sortfolder = /home/user/sort`
-(Unix/Linux) or `sortfolder = C:\Users\UserName\Documents\sort` (Windows).
+of the [sorttest.c] program, for example `sortfolder = '/home/user/sort'`
+(Unix/Linux) or `sortfolder = 'C:\Users\UserName\Documents\sort'` (Windows).
 
 [GNU time] is usually invoked as `/usr/bin/time`, but this can vary for
 different Linux distributions. On OSX it is invoked as `gtime`. The usual Linux
@@ -161,7 +163,7 @@ examples only run unmodified on Linux and OSX. On Windows, benchmark the
 [sorttest.c] program using an [alternative] approach and replace [get_gtime]
 with a function which parses the produced output. Otherwise, skip the actual
 benchmarking steps within the examples, and use the benchmarking data bundled
-with the _PerfAndPubTools_ package in the [data][sort_data] folder.
+with _PerfAndPubTools_ in the [data][sort_data] folder.
 
 <a name="extractperformancedatafromafile"></a>
 
@@ -175,7 +177,7 @@ $ ./sorttest quick 1000000 2362 yes
 Sorting Ok!
 ```
 
-The value `2362` is the seed to the random number generator, and the optional
+The value `2362` is the seed for the random number generator, and the optional
 `yes` parameter asks the program to output a message confirming if the sorting
 was successful.
 
@@ -185,8 +187,8 @@ Now, create a benchmark file with [GNU time]:
 $ /usr/bin/time ./sorttest quick 1000000 2362 2> out.txt 
 ```
 
-The `2>` redirects the output of [GNU time] to a file called `out.txt`. This
-file can be parsed with the [get_gtime] function from [MATLAB] or [Octave]:
+The `2>` part redirects the output of [GNU time] to a file called `out.txt`.
+This file can be parsed with the [get_gtime] function from [MATLAB] or [Octave]:
 
 ```matlab
 p = get_gtime('out.txt')
@@ -224,10 +226,10 @@ are sorted by [Quicksort] each turn. In [MATLAB] or [Octave], use the
 exec_time = gather_times('Quicksort', sortfolder, 'time_quick_1000000_*.txt');
 ```
 
-The first parameter of [gather_times] names the list of gathered times, and is
-used as metadata by other functions. The second parameter specifies the folder
-where the [GNU time] output files are located. The vector of execution times is
-in the `elapsed` field of the returned structure:
+The first parameter names the list of gathered times, and is used as metadata by
+other functions. The second parameter specifies the folder where the [GNU time]
+output files are located. The vector of execution times is in the `elapsed`
+field of the returned structure:
 
 ```matlab
 exec_time.elapsed
@@ -264,7 +266,11 @@ std_time =
     0.0052
 ```
 
-The [perfstats] function uses [gather_times] internally.
+The `qs1M` variable specifies a *setup*. A setup is defined by the following
+fields: a) `sname`, the name of the setup; b) `folder`, the folder where to load
+benchmark files from; c) `files`, the specific files to load (using wildcards);
+and, d) `csize`, an optional computational size for plotting purposes. 
+
 
 <a name="comparemultiplesetupswithinthesameimplementation"></a>
 
@@ -272,11 +278,14 @@ The [perfstats] function uses [gather_times] internally.
 
 A more advanced use case for [perfstats] consists of comparing multiple setups
 associated with different computational sizes within the same implementation
-(e.g., the same sorting algorithm). In this example we analyze how the
-performance of the [Bubble sort] algorithm varies for increasing vector sizes.
+(e.g., the same sorting algorithm). A set of multiple setups is designated as an
+*implementation spec*, which are the basic objects accepted by the [perfstats],
+[speedup] and [times_table] functions. An implementation spec defines one or
+more *setups* for a single *implementation*.
 
-First, perform a number of runs with [sorttest.c] using [Bubble sort] for
-vectors of size 10,000, 20,000 and 30,000:
+In this example we analyze how the performance of the [Bubble sort] algorithm
+varies for increasing vector sizes. First, perform a number of runs with
+[sorttest.c] using [Bubble sort] for vectors of size 10,000, 20,000 and 30,000:
 
 ```
 $ for RUN in {1..10}; do for SIZE in 10000 20000 30000; do /usr/bin/time ./sorttest bubble $SIZE $RUN 2> time_bubble_${SIZE}_${RUN}.txt; done; done
@@ -308,9 +317,9 @@ avg_time =
 #### 4.1.5\. Same as previous, with a linear plot
 
 The [perfstats] function can also generate scalability plots. For this purpose,
-the computational size, `csize`, must be specified in each implementation spec,
-and the first parameter should be a value between 1 (linear plot) and 4
-(log-log plot), as shown in the following commands:
+the computational size, `csize`, must be specified in each setup, and the first
+parameter should be a value between 1 (linear plot) and 4 (log-log plot), as
+shown in the following commands:
 
 ```matlab
 % Specify the setups
@@ -325,7 +334,18 @@ bs =  {bs10k, bs20k, bs30k};
 perfstats(1, 'bubble', bs);
 ```
 
-![ex05s](https://cloud.githubusercontent.com/assets/3018963/12179235/9ed764d4-b56d-11e5-997d-d7a2fbca7ea4.png)
+![ex4 1 5_1](https://cloud.githubusercontent.com/assets/3018963/14684354/7fa43cca-0727-11e6-98d3-d2f7714b86ac.png)
+
+Error bars, showing the standard deviation, can be turned on by passing a
+negative value as the first parameter:
+
+```matlab
+% The first parameter defines the plot type: -1 is a linear plot
+% with error bars showing the standard deviation
+perfstats(-1, 'bubble', bs);
+```
+
+![ex4 1 5_2](https://cloud.githubusercontent.com/assets/3018963/14684355/7fc4a244-0727-11e6-889e-36451644775d.png)
 
 <a name="comparedifferentimplementations"></a>
 
