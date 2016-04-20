@@ -392,7 +392,7 @@ value as the first parameter to [perfstats]:
 
 ```matlab
 % Plot comparison with a log-log plot with error bars
-perfstats(4, 'Merge sort', ms, 'Quicksort', qs);
+perfstats(-4, 'Merge sort', ms, 'Quicksort', qs);
 ```
 
 ![ex4 1 6_2](https://cloud.githubusercontent.com/assets/3018963/14685461/a510c474-072c-11e6-85eb-fe082ff315de.png)
@@ -452,7 +452,7 @@ speedup(-1, 1, 'Merge sort', ms, 'Quicksort', qs);
 
 The [speedup] function is also able to determine relative speedups between
 different implementations for multiple computational sizes. In this example we
-plot the speedup of several sorting algorithms against [Bubble sort] and
+plot the average speedup of several sorting algorithms against [Bubble sort] and
 [Selection sort] for vector sizes 1e5, 2e5, 3e5 and 4e5. 
 
 First, perform a number of runs using the four sorting algorithms made available
@@ -500,23 +500,52 @@ qs = {qs1e5, qs2e5, qs3e5, qs4e5};
 speedup(2, 1, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 ```
 
-![ex08s_1](https://cloud.githubusercontent.com/assets/3018963/12197277/9af46e9e-b5fd-11e5-9184-07043179b17e.png)
+![ex4 1 8_1](https://cloud.githubusercontent.com/assets/3018963/14691087/3373b4b4-0747-11e6-9ea9-02e17612c780.png)
 
 ```matlab
 % Plot speedup of multiple sorting algorithms against Selection sort
 speedup(1, 1, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 ```
 
-![ex08s_2](https://cloud.githubusercontent.com/assets/3018963/12197278/9b1263f4-b5fd-11e5-928b-377699add9f2.png)
+![ex4 1 8_2](https://cloud.githubusercontent.com/assets/3018963/14691088/3395b4f6-0747-11e6-9e55-fcb1530c168f.png)
+
+
+If we require error bars, the first parameter should be a negative value:
+
+```matlab
+% Same plot with error bars
+speedup(-1, 1, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+```
+
+![ex4 1 8_3](https://cloud.githubusercontent.com/assets/3018963/14691089/339db11a-0747-11e6-9b65-b200f6986e73.png)
+
+Generated plots can be customized using the [MATLAB] or [Octave] GUI, or
+programmatically. The following commands change some of the default properties
+of the previous plot:
+
+```matlab
+% Get the current axes children objects
+ch = get(gca, 'Children')
+
+% Set the color of the '1e5' bars to white
+set(ch(8),'FaceColor', 'w')
+
+% Change the default labels
+ylabel('Average speedup over Selection sort')
+xlabel('Algorithms');
+```
+
+![ex4 1 8_4](https://cloud.githubusercontent.com/assets/3018963/14691557/c7e17b84-0749-11e6-8adc-41ae374206dc.png)
 
 <a name="customspeedupplots"></a>
 
 #### 4.1.9\. Custom speedup plots
 
-For more control over the speedup plots, it is preferable to use the data
-provided by [speedup]. Continuing from the previous example, the following
-sequence of instructions generates a customized plot showing the speedup of the
-sorting algorithms against [Bubble sort]:
+For more control over the speedup plots, it may preferable to use the data
+provided by [speedup] and build the plots from the beginning. Continuing from
+the previous example, the following sequence of instructions generates a
+customized plot showing the speedup of the sorting algorithms against
+[Bubble sort]:
 
 ```matlab
 % Obtain speedup of multiple sorting algorithms against Bubble sort, no plot
@@ -539,7 +568,7 @@ set(gca, 'XTickLabel', {'Selection', 'Merge', 'Quick'})
 ylabel('Speedup')
 ```
 
-![ex08s_3](https://cloud.githubusercontent.com/assets/3018963/12224864/c085e952-b7f2-11e5-8fa2-7342b2ed1c8a.png)
+![ex4 1 9_1](https://cloud.githubusercontent.com/assets/3018963/14691633/367ade1e-074a-11e6-9935-40f5e9f49763.png)
 
 Although the figure seems appropriate for publication purposes, it can be
 converted to native LaTeX via the [matlab2tikz] script:
@@ -551,7 +580,7 @@ matlab2tikz('standalone', true, 'filename', 'image.tex');
 
 Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
-![ex08s_4](https://cloud.githubusercontent.com/assets/3018963/12231929/e957106c-b852-11e5-8da9-05c6068639eb.png)
+![ex4 1 9_2](https://cloud.githubusercontent.com/assets/3018963/14691634/3681a91a-074a-11e6-818c-498c68d2f8f0.png)
 
 <a name="scalabilityofthedifferentsortingalgorithmsforincreasingvectorsizes"></a>
 
@@ -565,7 +594,7 @@ sizes:
 p = perfstats(3, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 ```
 
-![ex09s](https://cloud.githubusercontent.com/assets/3018963/12232823/d6524f84-b859-11e5-9906-b00ef0952434.png)
+![ex4 1 10](https://cloud.githubusercontent.com/assets/3018963/14691693/898b2140-074a-11e6-8162-393520dab9a8.png)
 
 The values plotted are returned in variable `p`:
 
@@ -613,7 +642,7 @@ xlabel('Vector size');
 ylabel('Time (s)');
 ```
 
-![ex09s_1](https://cloud.githubusercontent.com/assets/3018963/12232825/d6562474-b859-11e5-88e8-0febf822be6b.png)
+![ex4 1 11_1](https://cloud.githubusercontent.com/assets/3018963/14691914/c9e8deca-074b-11e6-8386-d15ca2f5f773.png)
 
 We can further improve the figure, and convert it to LaTeX with [matlab2tikz]:
 
@@ -631,8 +660,7 @@ matlab2tikz('standalone', true, 'filename', 'image.tex');
 
 Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
-![ex09s_2](https://cloud.githubusercontent.com/assets/3018963/12232824/d652ec50-b859-11e5-96d0-8b7a02b88fc5.png)
-
+![ex4 1 11_2](https://cloud.githubusercontent.com/assets/3018963/14691915/ca03003e-074b-11e6-85fd-155e7cf2314a.png)
 
 <a name="produceatableinsteadofaplot"></a>
 
@@ -687,7 +715,7 @@ instead of 0:
 times_table_f(1, 'vs Bubble', tdata)
 ```
 
-![ex10s](https://cloud.githubusercontent.com/assets/3018963/12204259/f166cd94-b62a-11e5-88ee-ec8ac6bb24c0.png)
+![ex4 1 12](https://cloud.githubusercontent.com/assets/3018963/14691916/ca160698-074b-11e6-9598-9bd2ce6f6a7e.png)
 
 <a name="exsimmods"></a>
 
