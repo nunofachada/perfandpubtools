@@ -279,7 +279,7 @@ and, d) `csize`, an optional computational size for plotting purposes.
 A more advanced use case for [perfstats] consists of comparing multiple setups
 associated with different computational sizes within the same implementation
 (e.g., the same sorting algorithm). A set of multiple setups is designated as an
-*implementation spec*, which are the basic objects accepted by the [perfstats],
+*implementation spec*, the basic object type accepted by the [perfstats],
 [speedup] and [times_table] functions. An implementation spec defines one or
 more *setups* for a single *implementation*.
 
@@ -336,7 +336,7 @@ perfstats(1, 'bubble', bs);
 
 ![ex4 1 5_1](https://cloud.githubusercontent.com/assets/3018963/14684354/7fa43cca-0727-11e6-98d3-d2f7714b86ac.png)
 
-Error bars, showing the standard deviation, can be turned on by passing a
+Error bars, showing the standard deviation, can be activated by passing a
 negative value as the first parameter:
 
 ```matlab
@@ -385,7 +385,17 @@ qs = {qs1e5, qs1e6, qs1e7, qs1e8};
 perfstats(4, 'Merge sort', ms, 'Quicksort', qs);
 ```
 
-![ex06s](https://cloud.githubusercontent.com/assets/3018963/12224504/af621950-b7ea-11e5-939a-c593e103e60b.png)
+![ex4 1 6_1](https://cloud.githubusercontent.com/assets/3018963/14685462/a51115a0-072c-11e6-860e-d976a7234929.png)
+
+Like in the previous example, error bars are displayed by passing a negative
+value as the first parameter to [perfstats]:
+
+```matlab
+% Plot comparison with a log-log plot with error bars
+perfstats(4, 'Merge sort', ms, 'Quicksort', qs);
+```
+
+![ex4 1 6_2](https://cloud.githubusercontent.com/assets/3018963/14685461/a510c474-072c-11e6-85eb-fe082ff315de.png)
 
 <a name="speedup"></a>
 
@@ -393,15 +403,15 @@ perfstats(4, 'Merge sort', ms, 'Quicksort', qs);
 
 The [speedup] function is used to obtain relative speedups between different
 implementations. Using the variables defined in the previous example, the
-following instruction obtains the speedup of [Quicksort] versus [Merge sort] for
-different vector sizes:
+following instruction obtains the average, maximum and minimum speedups of
+[Quicksort] versus [Merge sort] for different vector sizes:
 
 ```matlab
-s = speedup(0, 1, 'Merge sort', ms, 'Quicksort', qs);
+[s_avg, s_max, s_min] = speedup(0, 1, 'Merge sort', ms, 'Quicksort', qs);
 ```
 
 Speedups can be obtained by getting the first element of the returned cell, i.e.
-by invoking `s{1}`:
+by invoking `s_avg{1}`:
 
 ```
 ans =
@@ -417,14 +427,24 @@ Merge sort. The first row of the previous matrix shows the speedup of
 the speedup of [Quicksort] versus [Merge sort]. If the second parameter is a
 vector, speedups against more than one implementation are returned.
 
-Setting the 1st parameter to 1 will yield a bar plot displaying the relative
+Setting the first parameter to 1 will yield a bar plot displaying the average
 speedups:
 
 ```matlab
-s = speedup(1, 1, 'Merge sort', ms, 'Quicksort', qs);
+speedup(1, 1, 'Merge sort', ms, 'Quicksort', qs);
 ```
 
-![ex07s](https://cloud.githubusercontent.com/assets/3018963/12224522/02ec5c48-b7eb-11e5-9d6a-396c519d6530.png)
+![ex4 1 7_1](https://cloud.githubusercontent.com/assets/3018963/14688435/6bf1c108-073a-11e6-8cc8-258ea48f04a5.png)
+
+Speedup bar plots also support error bars, but in this case error bars show the
+maximum and minimum speedups. Error bars are activated by passing a negative
+number as the first argument to [speedup]:
+
+```matlab
+speedup(-1, 1, 'Merge sort', ms, 'Quicksort', qs);
+```
+
+![ex4 1 7_2](https://cloud.githubusercontent.com/assets/3018963/14688434/6bf16118-073a-11e6-8266-f0355fd3cb1f.png)
 
 <a name="speedupformultiplealgorithmsandvectorsizes"></a>
 
