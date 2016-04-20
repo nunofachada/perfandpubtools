@@ -161,10 +161,11 @@ if do_plot ~= 0
         
         % Other properties
         legend(impl_legend, 'Location', 'NorthWest');
-        set(gca,'XTick', set_sizes);
+        set(gca, 'XTick', set_sizes);
         xlim([llim rlim]);
         xlabel('Size');
         ylabel('Time (s)');
+        box on;
         
     end;
 end;
