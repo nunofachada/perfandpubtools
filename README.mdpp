@@ -280,7 +280,7 @@ bs =  {bs10k, bs20k, bs30k};
 perfstats(1, 'bubble', bs);
 ```
 
-![ex4 1 5_1](https://cloud.githubusercontent.com/assets/3018963/14684354/7fa43cca-0727-11e6-98d3-d2f7714b86ac.png)
+![ex4 1 5_1](https://cloud.githubusercontent.com/assets/3018963/14692286/0d3a86ae-074e-11e6-95c7-270c35ce04de.png)
 
 Error bars, showing the standard deviation, can be activated by passing a
 negative value as the first parameter:
@@ -291,7 +291,7 @@ negative value as the first parameter:
 perfstats(-1, 'bubble', bs);
 ```
 
-![ex4 1 5_2](https://cloud.githubusercontent.com/assets/3018963/14684355/7fc4a244-0727-11e6-889e-36451644775d.png)
+![ex4 1 5_2](https://cloud.githubusercontent.com/assets/3018963/14692287/0d40bbbe-074e-11e6-8d2c-c7d245b7cbd1.png)
 
 #### Compare different implementations
 
@@ -329,7 +329,7 @@ qs = {qs1e5, qs1e6, qs1e7, qs1e8};
 perfstats(4, 'Merge sort', ms, 'Quicksort', qs);
 ```
 
-![ex4 1 6_1](https://cloud.githubusercontent.com/assets/3018963/14685462/a51115a0-072c-11e6-860e-d976a7234929.png)
+![ex4 1 6_1](https://cloud.githubusercontent.com/assets/3018963/14692288/0d42faaa-074e-11e6-8eea-94dde29d3e5d.png)
 
 Like in the previous example, error bars are displayed by passing a negative
 value as the first parameter to [perfstats]:
@@ -339,7 +339,7 @@ value as the first parameter to [perfstats]:
 perfstats(-4, 'Merge sort', ms, 'Quicksort', qs);
 ```
 
-![ex4 1 6_2](https://cloud.githubusercontent.com/assets/3018963/14685461/a510c474-072c-11e6-85eb-fe082ff315de.png)
+![ex4 1 6_2](https://cloud.githubusercontent.com/assets/3018963/14692289/0d47a0c8-074e-11e6-928e-6f5fd8ed6528.png)
 
 #### Speedup
 
@@ -530,7 +530,7 @@ sizes:
 p = perfstats(3, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 ```
 
-![ex4 1 10](https://cloud.githubusercontent.com/assets/3018963/14691693/898b2140-074a-11e6-8162-393520dab9a8.png)
+![ex4 1 10](https://cloud.githubusercontent.com/assets/3018963/14692331/502d8646-074e-11e6-9cc9-fb7fe8fd9cb5.png)
 
 The values plotted are returned in variable `p`:
 
