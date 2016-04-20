@@ -139,12 +139,22 @@ if do_plot ~= 0
         switch abs(do_plot)
             case 1
                 set(ax, 'XScale', 'linear', 'YScale', 'linear');
+                limsep = (max(set_sizes) - min(set_sizes)) * 0.05;
+                llim = min(set_sizes) - limsep;
+                rlim = max(set_sizes) + limsep;
             case 2
                 set(ax, 'XScale', 'log', 'YScale', 'linear');
+                llim = min(set_sizes) * 0.5;
+                rlim = max(set_sizes) * 2;
             case 3
                 set(ax, 'XScale', 'linear', 'YScale', 'log');
+                limsep = (max(set_sizes) - min(set_sizes)) * 0.05;
+                llim = min(set_sizes) - limsep;
+                rlim = max(set_sizes) + limsep;
             case 4
                 set(ax, 'XScale', 'log', 'YScale', 'log');
+                llim = min(set_sizes) * 0.5;
+                rlim = max(set_sizes) * 2;
             otherwise
                 error('Unknown plot type');
         end;
@@ -152,6 +162,7 @@ if do_plot ~= 0
         % Other properties
         legend(impl_legend, 'Location', 'NorthWest');
         set(gca,'XTick', set_sizes);
+        xlim([llim rlim]);
         xlabel('Size');
         ylabel('Time (s)');
         
