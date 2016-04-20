@@ -528,7 +528,7 @@ of the previous plot:
 ch = get(gca, 'Children')
 
 % Set the color of the '1e5' bars to white
-set(ch(8),'FaceColor', 'w')
+set(ch(8), 'FaceColor', 'w')
 
 % Change the default labels
 ylabel('Average speedup over Selection sort')
@@ -884,9 +884,8 @@ avg_time =
 
 The [perfstats] function can also be used to generate scalability plots. For
 this purpose, the computational size, `csize`, must be specified in each
-implementation spec, and the first parameter of [perfstats] should be a value
-between 1 (linear plot) and 4 (log-log plot), as shown in the following code
-snippet:
+setup, and the first parameter of [perfstats] should be a value between 1
+(linear plot) and 4 (log-log plot), as shown in the following code snippet:
 
 ```matlab
 % Specify implementations specs for each model size, indicating the csize key
@@ -900,7 +899,20 @@ st1600v2 = struct('sname', '1600v2', 'csize', 1600, 'folder', [datafolder '/time
 perfstats(4, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2});
 ```
 
-![ex05](https://cloud.githubusercontent.com/assets/3018963/11914709/b521c1c4-a67e-11e5-9e20-f05bfbe6921d.png)
+![ex4 2 6_1](https://cloud.githubusercontent.com/assets/3018963/14692567/fc5a2004-074f-11e6-91d1-e82b5260f74c.png)
+
+Error bars showing the standard deviation can be requested by passing a negative
+value as the first parameter to [perfstats]:
+
+```matlab
+% The value -4 indicates a log-log plot with error bars
+perfstats(-4, 'ST', {st100v2, st200v2, st400v2, st800v2, st1600v2});
+```
+
+![ex4 2 6_2](https://cloud.githubusercontent.com/assets/3018963/14692568/fc5e537c-074f-11e6-81df-aecfda2c2618.png)
+
+Due to the run time variability being very low, the error bars are not very
+useful in this case.
 
 <a name="pphpccompdiffimpl"></a>
 
@@ -937,7 +949,7 @@ stv1 = {st100v1, st200v1, st400v1, st800v1, st1600v1};
 perfstats(4, 'NL', nlv1, 'ST', stv1);
 ```
 
-![ex06](https://cloud.githubusercontent.com/assets/3018963/11914710/b524dd5a-a67e-11e5-82d0-8f2ef0401e30.png)
+![ex4 2 7](https://cloud.githubusercontent.com/assets/3018963/14692605/3660f0a2-0750-11e6-9d5d-375a1b5777fe.png)
 
 <a name="speedup-1"></a>
 
@@ -945,14 +957,15 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 
 The [speedup] function is used to obtain relative speedups between different
 implementations. Using the variables defined in the previous example, the
-speedup of the Java ST version over the [NetLogo] implementation for different
-model sizes can be obtained with the following instruction:
+average, maximum and minimum speedups of the Java ST version over the [NetLogo]
+implementation for different model sizes can be obtained with the following
+instruction:
 
 ```matlab
-s = speedup(0, 1, 'NL', nlv1, 'ST', stv1);
+[s_avg, s_max, s_min] = speedup(0, 1, 'NL', nlv1, 'ST', stv1);
 ```
 
-The first element of the returned cell, i.e. `s{1}`, contains the speedups:
+The first element of the returned cell, i.e. `s_avg{1}`, contains the speedups:
 
 ```
 ans =
@@ -961,35 +974,44 @@ ans =
     5.8513    8.2370    5.7070    5.4285    5.4331
 ```
 
-The 2nd parameter of the [speedup] function indicates the reference
+The second parameter of the [speedup] function indicates the reference
 implementation from which to calculate speedups. In this case, specifying 1 will
 return speedups against the [NetLogo] implementation. The first row of the
-matrix in `s{1}` shows the speedup of the [NetLogo] implementation against
+matrix in `s_avg{1}` shows the speedup of the [NetLogo] implementation against
 itself, thus it is composed of ones. The second row shows the speedup of the
-Java ST implementation versus the [NetLogo] implementation. If the 2nd
+Java ST implementation versus the [NetLogo] implementation. If the second
 parameter of the [speedup] function is a vector, speedups against more than one
-implementation are returned in `s`.
+implementation are returned in `s_avg`, `s_max` and `s_min`.
 
-Setting the 1st parameter of [speedup] to 1 will yield a bar plot displaying the
+Setting the first parameter of [speedup] to 1 will yield a bar plot displaying the
 relative speedups:
 
 ```matlab
 speedup(1, 1, 'NL', nlv1, 'ST', stv1);
 ```
 
-![ex07](https://cloud.githubusercontent.com/assets/3018963/11914711/b5259966-a67e-11e5-9faf-32770a2f080e.png)
+![ex4 2 8_1](https://cloud.githubusercontent.com/assets/3018963/14692693/e6b122ce-0750-11e6-973d-1742d81974ed.png)
+
+Error bars representing the maximum and minimum speedups can be requested by
+passing a negative value as the first parameter:
+
+```matlab
+speedup(-1, 1, 'NL', nlv1, 'ST', stv1);
+```
+
+![ex4 2 8_2](https://cloud.githubusercontent.com/assets/3018963/14692694/e6b3b32c-0750-11e6-926c-d0ca95795c1f.png)
 
 <a name="speedupformultipleparallelimplementationsandsizes"></a>
 
 #### 4.2.9\. Speedup for multiple parallel implementations and sizes
 
-The [speedup] function is also able to determine relative speedups between
-different implementations for multiple computational sizes. In this example we
-plot the speedup of several [PPHPC] parallel Java implementations against the
-[NetLogo] and Java single-thread implementations for multiple sizes. This
-example uses the  `nlv1` and `stv1` variables defined in a
-[previous example](#pphpccompdiffimpl), and the plotted results are equivalent
-to figures 4a and 4b of reference [\[1\]](#ref1):
+The [speedup] function is also able to determine speedups between different
+implementations for multiple computational sizes. In this example we plot the
+speedup of several [PPHPC] parallel Java implementations against the [NetLogo]
+and Java single-thread implementations for multiple sizes. This example uses the
+`nlv1` and `stv1` variables defined in a [previous example](#pphpccompdiffimpl),
+and the plotted results are equivalent to figures 4a and 4b of reference
+[\[1\]](#ref1):
 
 ```matlab
 % Specify Java EQ implementation specs (runs with 12 threads)
@@ -1029,7 +1051,7 @@ odv1t12 = {od100v1t12, od200v1t12, od400v1t12, od800v1t12, od1600v1t12};
 speedup(1, 1, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 ```
 
-![ex08_1](https://cloud.githubusercontent.com/assets/3018963/11914712/b52c33b6-a67e-11e5-8ea6-489f025329f6.png)
+![ex4 2 9_1](https://cloud.githubusercontent.com/assets/3018963/14692790/943f2d32-0751-11e6-8deb-713381e88e71.png)
 
 ```matlab
 % Plot speedup of multiple parallel implementations against Java ST implementation
@@ -1037,7 +1059,7 @@ speedup(1, 1, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t1
 speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 ```
 
-![ex08_2](https://cloud.githubusercontent.com/assets/3018963/11914714/b52fdcbe-a67e-11e5-8da2-7aae819e1337.png)
+![ex4 2 9_2](https://cloud.githubusercontent.com/assets/3018963/14692791/945c9d18-0751-11e6-9855-f4c64331537d.png)
 
 <a name="scalabilityofthedifferentimplementationsforincreasingmodelsizes"></a>
 
