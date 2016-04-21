@@ -155,13 +155,19 @@ for cidx = 1:numel(compare)
             hold on;
             if do_plot < 1
 
-                % Determine left x coord. for all bars
-                xdata = get(get(h, 'Children'), 'XData');
-                xdata = unique(xdata);
-                xlefts = xdata(1:2:length(xdata));
+                % Determine x coord. for error bars
+                if exist('OCTAVE_VERSION', 'builtin') ...
+                    || verLessThan('matlab', '8.4.0')
+                    % MATLAB <= R2014a or GNU Octave
+                    xdata = get(get(h, 'Children'), 'XData');
+                    xerrbpos = mean(xdata, 1);
+                else
+                    % MATLAB >= 2014b
+                    xerrbpos =  get(h, 'XData');
+                end;
 
                 % Draw error bars
-                errorbar(xlefts, avg_speedup_mat, ...
+                errorbar(xerrbpos, avg_speedup_mat, ...
                     avg_speedup_mat - min_speedup_mat, ...
                     max_speedup_mat - avg_speedup_mat, ...
                     '+k');
@@ -187,13 +193,20 @@ for cidx = 1:numel(compare)
 
                 for i = 1:nset
 
-                    % Determine left x coord. for all bars
-                    xdata = get(get(h(i), 'Children'), 'XData');
-                    xdata = unique(xdata);
-                    xlefts = xdata(1:2:length(xdata));
+                    % Determine x coord. for error bars
+                    if exist('OCTAVE_VERSION', 'builtin') ...
+                        || verLessThan('matlab', '8.4.0')
+                        % MATLAB <= R2014a or GNU Octave
+                        xdata = get(get(h(i), 'Children'), 'XData');
+                        xerrbpos = mean(xdata, 1);
+                    else
+                        % MATLAB >= 2014b
+                        xerrbpos =  get(h(i), 'XData') + ...
+                            get(h(i), 'XOffset');
+                    end;
 
                     % Draw error bars
-                    errorbar(xlefts, avg_speedup_mat(:, i), ...
+                    errorbar(xerrbpos, avg_speedup_mat(:, i), ...
                         avg_speedup_mat(:, i) - min_speedup_mat(:, i), ...
                         max_speedup_mat(:, i) - avg_speedup_mat(:, i), ...
                         '+k');
