@@ -498,16 +498,22 @@ qs = {qs1e5, qs2e5, qs3e5, qs4e5};
 % Plot speedup of multiple sorting algorithms against Bubble sort
 % Setting the first parameter to 2 will yields a log-scale bar plot
 speedup(2, 1, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+
+% Place legend in a better position
+legend(gca, 'Location', 'NorthWest');
 ```
 
-![ex4 1 8_1](https://cloud.githubusercontent.com/assets/3018963/14691087/3373b4b4-0747-11e6-9ea9-02e17612c780.png)
+![ex4 1 8_1](https://cloud.githubusercontent.com/assets/3018963/14703285/15d2f75c-07a7-11e6-8f0f-bd5d83bb5774.png)
 
 ```matlab
 % Plot speedup of multiple sorting algorithms against Selection sort
 speedup(1, 1, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+
+% Place legend in a better position
+legend(gca, 'Location', 'NorthWest');
 ```
 
-![ex4 1 8_2](https://cloud.githubusercontent.com/assets/3018963/14691088/3395b4f6-0747-11e6-9e55-fcb1530c168f.png)
+![ex4 1 8_2](https://cloud.githubusercontent.com/assets/3018963/14703318/399654a4-07a7-11e6-8828-a84ce171ff5a.png)
 
 
 If we require error bars, the first parameter should be a negative value:
@@ -515,9 +521,13 @@ If we require error bars, the first parameter should be a negative value:
 ```matlab
 % Same plot with error bars
 speedup(-1, 1, 'Selection', ss, 'Merge', ms, 'Quick', qs);
+
+% Place legend in a better position
+legnd = legend(gca, 'show');
+set(legnd, 'Location', 'NorthWest');
 ```
 
-![ex4 1 8_3](https://cloud.githubusercontent.com/assets/3018963/14691089/339db11a-0747-11e6-9b65-b200f6986e73.png)
+![ex4 1 8_3](https://cloud.githubusercontent.com/assets/3018963/14703592/82136b9e-07a8-11e6-85fe-778b190c4cde.png)
 
 Generated plots can be customized using the [MATLAB] or [Octave] GUI, or
 programmatically. The following commands change some of the default properties
@@ -535,7 +545,7 @@ ylabel('Average speedup over Selection sort')
 xlabel('Algorithms');
 ```
 
-![ex4 1 8_4](https://cloud.githubusercontent.com/assets/3018963/14691557/c7e17b84-0749-11e6-8adc-41ae374206dc.png)
+![ex4 1 8_4](https://cloud.githubusercontent.com/assets/3018963/14703632/c29a1dfc-07a8-11e6-8876-b8b2b9578dc6.png)
 
 <a name="customspeedupplots"></a>
 
@@ -1049,17 +1059,23 @@ odv1t12 = {od100v1t12, od200v1t12, od400v1t12, od800v1t12, od1600v1t12};
 % Plot speedup of multiple parallel implementations against NetLogo implementation
 % This plot is figure 4a of reference [1]
 speedup(1, 1, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
+
+% Place legend in a better position
+legend(gca, 'Location', 'NorthWest');
 ```
 
-![ex4 2 9_1](https://cloud.githubusercontent.com/assets/3018963/14692790/943f2d32-0751-11e6-8deb-713381e88e71.png)
+![ex4 2 9_1](https://cloud.githubusercontent.com/assets/3018963/14706004/308d5576-07b4-11e6-8509-506cb4af5733.png)
 
 ```matlab
 % Plot speedup of multiple parallel implementations against Java ST implementation
 % This plot is figure 4b of reference [1]
 speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
+
+% Place legend in a better position
+legend(gca, 'Location', 'NorthOutside', 'Orientation', 'horizontal')
 ```
 
-![ex4 2 9_2](https://cloud.githubusercontent.com/assets/3018963/14692791/945c9d18-0751-11e6-9855-f4c64331537d.png)
+![ex4 2 9_2](https://cloud.githubusercontent.com/assets/3018963/14706005/30a50b30-07b4-11e6-963c-1b20102b1cbb.png)
 
 <a name="scalabilityofthedifferentimplementationsforincreasingmodelsizes"></a>
 
@@ -1243,7 +1259,7 @@ image is a publication quality equivalent of figure 7b in reference
 
 ```matlab
 % Get data from perfstats function
-p = perfstats(4, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '1600', od1600v2);
+p = perfstats(0, '100', od100v2, '200', od200v2, '400', od400v2, '800', od800v2, '1600', od1600v2);
 
 % Values of the b parameter
 bvals = [20 50 100 200 500 1000 2000 5000];
@@ -1274,7 +1290,7 @@ ylabel('Time ({\its})');
 legend({'100', '200', '400', '800', '1600'}, 'Location', 'NorthOutside', 'Orientation', 'horizontal');
 ```
 
-![ex12_1](https://cloud.githubusercontent.com/assets/3018963/12236741/606e979a-b873-11e5-882c-1a110b028c01.png)
+![ex4 2 13_1](https://cloud.githubusercontent.com/assets/3018963/14706270/8e7c0e9c-07b5-11e6-8fe8-cbd24c184cec.png)
 
 Although the figure looks appropriate for publication purposes, it can still be
 improved by converting it to native LaTeX via the [matlab2tikz] script:
@@ -1291,7 +1307,7 @@ matlab2tikz('standalone', true, 'filename', 'image.tex');
 
 Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
-![ex12_2](https://cloud.githubusercontent.com/assets/3018963/12236740/606d711c-b873-11e5-8142-e2df6ad713d2.png)
+![ex4 2 13_2](https://cloud.githubusercontent.com/assets/3018963/14706271/8e7c4fce-07b5-11e6-8ed5-09853541b4a4.png)
 
 <a name="showatableinsteadofaplot"></a>
 
@@ -1339,7 +1355,7 @@ instead of 0:
 times_table_f(1, 'NL vs ST', tdata)
 ```
 
-![ex12](https://cloud.githubusercontent.com/assets/3018963/11914717/b543e4ca-a67e-11e5-9d57-6348aabb91ad.png)
+![ex4 2 14](https://cloud.githubusercontent.com/assets/3018963/14706361/f6f1c8cc-07b5-11e6-9c7d-87af968ac115.png)
 
 <a name="complextables"></a>
 
@@ -1535,7 +1551,7 @@ Finally, we produce a LaTeX table, as shown in reference [\[1\]](#ref1):
 times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 ```
 
-![ex13](https://cloud.githubusercontent.com/assets/3018963/11914718/b54b70be-a67e-11e5-8ed0-5d3c99d2e93f.png)
+![ex4 2 15](https://cloud.githubusercontent.com/assets/3018963/14706360/f6f17d18-07b5-11e6-926f-2314f9d59206.png)
 
 <a name="license"></a>
 
