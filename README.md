@@ -444,7 +444,7 @@ number as the first argument to [speedup]:
 speedup(-1, 1, 'Merge sort', ms, 'Quicksort', qs);
 ```
 
-![ex4 1 7_2](https://cloud.githubusercontent.com/assets/3018963/14688434/6bf16118-073a-11e6-8266-f0355fd3cb1f.png)
+![ex4 1 7_2](https://cloud.githubusercontent.com/assets/3018963/14715181/cfda758e-07df-11e6-8013-10364091773b.png)
 
 <a name="speedupformultiplealgorithmsandvectorsizes"></a>
 
@@ -527,7 +527,7 @@ l = legend(gca);
 set(l, 'Location', 'NorthWest');
 ```
 
-![ex4 1 8_3](https://cloud.githubusercontent.com/assets/3018963/14703592/82136b9e-07a8-11e6-85fe-778b190c4cde.png)
+![ex4 1 8_3](https://cloud.githubusercontent.com/assets/3018963/14715383/83ffe3e6-07e0-11e6-8bd0-33898a6c5159.png)
 
 Generated plots can be customized using the [MATLAB] or [Octave] GUI, or
 programmatically. The following commands change some of the default properties
@@ -535,20 +535,20 @@ of the previous plot:
 
 ```matlab
 % Get the current axes children objects
-ch = get(gca, 'Children')
+ch = get(gca, 'Children');
 
 % Set the color of the '1e5' bars to white
-set(ch(8), 'FaceColor', 'w')
+set(ch(8), 'FaceColor', 'w');
 
 % This is required in Octave for updating the legend
 legend(gca);
 
 % Change the default labels
-ylabel('Average speedup over Selection sort')
+ylabel('Average speedup over Selection sort');
 xlabel('Algorithms');
 ```
 
-![ex4 1 8_4](https://cloud.githubusercontent.com/assets/3018963/14703632/c29a1dfc-07a8-11e6-8876-b8b2b9578dc6.png)
+![ex4 1 8_4](https://cloud.githubusercontent.com/assets/3018963/14715384/84054192-07e0-11e6-9da1-88bb990f4588.png)
 
 <a name="customspeedupplots"></a>
 
@@ -569,16 +569,16 @@ s = speedup(0, 1, 'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 h = bar(s{1}(2:4, :), 'basevalue', 1);
 
 % Customize plot
-set(h(1), 'FaceColor', [0 0 0])
-set(h(2), 'FaceColor', [0.33 0.33 0.33])
-set(h(3), 'FaceColor', [0.66 0.66 0.66])
-set(h(4), 'FaceColor', [1 1 1])
-set(gca, 'YScale', 'log')
-grid on
-grid minor
-legend({'1 \times 10^5', '2 \times 10^5', '3 \times 10^5', '4 \times 10^5'}, 'Location', 'NorthWest')
-set(gca, 'XTickLabel', {'Selection', 'Merge', 'Quick'})
-ylabel('Speedup')
+set(h(1), 'FaceColor', [0 0 0]);
+set(h(2), 'FaceColor', [0.33 0.33 0.33]);
+set(h(3), 'FaceColor', [0.66 0.66 0.66]);
+set(h(4), 'FaceColor', [1 1 1]);
+set(gca, 'YScale', 'log');
+grid on;
+grid minor;
+legend({'1 \times 10^5', '2 \times 10^5', '3 \times 10^5', '4 \times 10^5'}, 'Location', 'NorthWest');
+set(gca, 'XTickLabel', {'Selection', 'Merge', 'Quick'});
+ylabel('Speedup');
 ```
 
 ![ex4 1 9_1](https://cloud.githubusercontent.com/assets/3018963/14691633/367ade1e-074a-11e6-9935-40f5e9f49763.png)
@@ -1012,7 +1012,7 @@ passing a negative value as the first parameter:
 speedup(-1, 1, 'NL', nlv1, 'ST', stv1);
 ```
 
-![ex4 2 8_2](https://cloud.githubusercontent.com/assets/3018963/14692694/e6b3b32c-0750-11e6-926c-d0ca95795c1f.png)
+![ex4 2 8_2](https://cloud.githubusercontent.com/assets/3018963/14715792/2214f98a-07e2-11e6-807f-cd37b88533d8.png)
 
 <a name="speedupformultipleparallelimplementationsandsizes"></a>
 
@@ -1075,7 +1075,7 @@ legend(gca, 'Location', 'NorthWest');
 speedup(1, 1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
 
 % Place legend in a better position
-legend(gca, 'Location', 'NorthOutside', 'Orientation', 'horizontal')
+legend(gca, 'Location', 'NorthOutside', 'Orientation', 'horizontal');
 ```
 
 ![ex4 2 9_2](https://cloud.githubusercontent.com/assets/3018963/14706005/30a50b30-07b4-11e6-963c-1b20102b1cbb.png)
