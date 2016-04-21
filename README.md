@@ -523,8 +523,8 @@ If we require error bars, the first parameter should be a negative value:
 speedup(-1, 1, 'Selection', ss, 'Merge', ms, 'Quick', qs);
 
 % Place legend in a better position
-legnd = legend(gca, 'show');
-set(legnd, 'Location', 'NorthWest');
+l = legend(gca);
+set(l, 'Location', 'NorthWest');
 ```
 
 ![ex4 1 8_3](https://cloud.githubusercontent.com/assets/3018963/14703592/82136b9e-07a8-11e6-85fe-778b190c4cde.png)
@@ -539,6 +539,9 @@ ch = get(gca, 'Children')
 
 % Set the color of the '1e5' bars to white
 set(ch(8), 'FaceColor', 'w')
+
+% This is required in Octave for updating the legend
+legend(gca);
 
 % Change the default labels
 ylabel('Average speedup over Selection sort')
