@@ -7,7 +7,8 @@ PerfAndPubTools
 
 _PerfAndPubTools_ consists of a set of [MATLAB]/[Octave] functions for analyzing
 software performance benchmark results and producing associated publication
-quality materials.
+quality materials. If you use this software please cite reference
+[\[1\]](#ref1).
 
 ## Benchmark file format
 
@@ -90,7 +91,7 @@ package.
 Examples in the second section focus on showing how _PerfAndPubTools_ was used
 to analyze performance data of multiple implementations of a
 [simulation model][PPHPC], replicating results presented in a peer-reviewed
-article [\[1\]](#ref1). The initial benchmarking steps are skipped in these
+article [\[2\]](#ref2). The initial benchmarking steps are skipped in these
 examples, but the produced data and the scripts used to generate it are also
 made [available][pphpc_data].
 
@@ -678,7 +679,7 @@ datafolder = 'path/to/dataset';
 ```
 
 This [dataset][pphpc_data] corresponds to the results presented in reference
-[\[1\]](#ref1), which compares the performance of several implementations of the
+[\[2\]](#ref2), which compares the performance of several implementations of the
 [PPHPC] agent-based model. Among several aspects of _PerfAndPubTools_, the
 following examples show how to replicate these results.
 
@@ -686,7 +687,7 @@ following examples show how to replicate these results.
 
 While most details about [PPHPC] and its various implementations are not
 important for this discussion, is convenient to know which implementations and
-setups were experimented with in reference [\[1\]](#ref1). A total of six
+setups were experimented with in reference [\[2\]](#ref2). A total of six
 implementations of the [PPHPC] model were compared:
 
 Implementation | Description
@@ -936,7 +937,7 @@ speedup of several [PPHPC] parallel Java implementations against the [NetLogo]
 and Java single-thread implementations for multiple sizes. This example uses the
 `nlv1` and `stv1` variables defined in a [previous example](#pphpccompdiffimpl),
 and the plotted results are equivalent to figures 4a and 4b of reference
-[\[1\]](#ref1):
+[\[2\]](#ref2):
 
 ```matlab
 % Specify Java EQ implementation specs (runs with 12 threads)
@@ -998,7 +999,7 @@ In a slightly more complex scenario than the one described in a
 [previous example](#pphpccompdiffimpl), here we use the [perfstats] function to
 plot the scalability of the different [PPHPC] implementations for increasing
 model sizes. Using the variables defined in the previous examples, the following
-command generates the equivalent to figure 5a of reference [\[1\]](#ref1):
+command generates the equivalent to figure 5a of reference [\[2\]](#ref2):
 
 ```matlab
 perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12, 'OD', odv1t12);
@@ -1014,7 +1015,7 @@ this example, we use the `csize` field to specify the number of threads used to
 perform a set of simulation runs or replications. The following commands
 will plot the scalability of the several [PPHPC] parallel implementations for an
 increasing number of threads. The plotted results are equivalent to figure 6d of
-reference [\[1\]](#ref1):
+reference [\[2\]](#ref2):
 
 ```matlab
 % Specify ST implementation specs, note that the data is always the same
@@ -1089,7 +1090,7 @@ For this example, in yet another possible use of the [perfstats] function,  we
 use the `csize` field to specify the value of the _b_ parameter of the [PPHPC]
 model Java OD variant. This allows us to analyze the performance of the OD
 parallelization strategy for different values of _b_. The plot created by the
-following commands is equivalent to figure 7b of reference [\[1\]](#ref1):
+following commands is equivalent to figure 7b of reference [\[2\]](#ref2):
 
 ```matlab
 % Specify the OD implementation specs for size 100 and increasing values of b
@@ -1162,7 +1163,7 @@ As previously discussed, it is possible to generate custom plots using the data
 returned by [perfstats] and [speedup]. The following code snippet produces a
 customized version of the plot generated in the previous example. The resulting
 image is a publication quality equivalent of figure 7b in reference
-[\[1\]](#ref1):
+[\[2\]](#ref2):
 
 ```matlab
 % Get data from perfstats function
@@ -1266,7 +1267,7 @@ times_table_f(1, 'NL vs ST', tdata)
 
 The [times_table] and [times_table_f] functions are capable of producing more
 complex tables. In this example, we show how to reproduce table 7 of reference
-[\[1\]](#ref1), containing times and speedups for multiple model
+[\[2\]](#ref2), containing times and speedups for multiple model
 implementations, different sizes and both parameter sets, showing speedups of
 all implementations versus the [NetLogo] and Java ST versions.
 
@@ -1447,7 +1448,7 @@ times_table_f(0, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 ---------------------------------------------------------------------------------------------------------------------------------------
 ```
 
-Finally, we produce a LaTeX table, as shown in reference [\[1\]](#ref1):
+Finally, we produce a LaTeX table, as shown in reference [\[2\]](#ref2):
 
 ```matlab
 % LaTex table
@@ -1464,7 +1465,14 @@ times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 
 <a name="ref1"></a>
 
-[\[1\]](#ref1) Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
+[\[1\]](#ref1) Fachada N, Lopes VV, Martins RC, Rosa AC., (2016).
+PerfAndPubTools – Tools for Software Performance Analysis and Publishing of
+Results. *Journal of Open Research Software*. 4(1), p.e18. 
+http://doi.org/10.5334/jors.115
+
+<a name="ref2"></a>
+
+[\[2\]](#ref2) Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
 Strategies for Spatial Agent-Based Models. *International Journal of Parallel
 Programming*. https://doi.org/10.1007/s10766-015-0399-9 (arXiv version available
 at http://arxiv.org/abs/1507.04047)
