@@ -117,7 +117,15 @@ end;
 
 % Create a plot?
 if do_plot
-           
+    
+    % Alternate stuff
+    avg_speedup = avg_speedup';
+    max_speedup = max_speedup';
+    min_speedup = min_speedup';
+    finalxticklabel = set_legend;
+    final_legend = impl_legend;
+    nimpl = npairs; %nset
+    
     % Create a new figure
     fid = figure();
         
@@ -169,10 +177,10 @@ if do_plot
     else % More than one implementation
 
         % x tick label will correspond to implementation names
-        set(gca, 'XTickLabel', impl_legend);
+        set(gca, 'XTickLabel', finalxticklabel);
 
         % Set legend for setups
-        legend(set_legend);
+        legend(final_legend);
 
         % Set x,y labels
         xlabel('Implementations');
@@ -181,7 +189,7 @@ if do_plot
         hold on;
         if do_plot < 1
 
-            for i = 1:nset
+            for i = 1:nimpl
 
                 % Determine x coord. for error bars
                 if exist('OCTAVE_VERSION', 'builtin') ...
