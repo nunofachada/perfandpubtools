@@ -51,5 +51,11 @@ for i = 1:numFiles
 
 end;
 
+% TEMPORARY: Remove max and min
+[~, idx] = max(elapsed);
+elapsed(idx) = [];
+[~, idx] = min(elapsed);
+elapsed(idx) = [];
+
 % Return struct with name and elapsed times
 timings = struct('name', name, 'elapsed', elapsed);
