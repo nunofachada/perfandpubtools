@@ -1576,10 +1576,11 @@ http://doi.org/10.5334/jors.115
 
 <a name="ref2"></a>
 
-[\[2\]](#ref2) Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
-Strategies for Spatial Agent-Based Models. *International Journal of Parallel
-Programming*. https://doi.org/10.1007/s10766-015-0399-9 (arXiv version available
-at http://arxiv.org/abs/1507.04047)
+[\[2\]](#ref2) Fachada N, Lopes VV, Martins RC, Rosa AC. (2017)
+Parallelization strategies for spatial agent-based models. *International
+Journal of Parallel Programming*. 45(3):449–481.
+http://dx.doi.org/10.1007/s10766-015-0399-9
+([arXiv preprint](http://arxiv.org/abs/1507.04047))
 
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
