@@ -4,18 +4,18 @@
 % These tests require the MOxUnit framework available at
 % https://github.com/MOxUnit/MOxUnit
 %    
-% Copyright (c) 2016 Nuno Fachada
+% Copyright (c) 2015-2017 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
 function test_suite = unittests_ppt
     initTestSuite
 
-% Test function get_gtime
-function test_get_gtime
+% Test function get_time_gnu
+function test_get_time_gnu
 
-    % Check that get_gtime returns a struct with the expected values
-    p = get_gtime(['data' filesep 'out.txt']);
+    % Check that get_time_gnu returns a struct with the expected values
+    p = get_time_gnu([['..' filesep 'data'] filesep 'out.txt']);
     assertElementsAlmostEqual(p.user, 0.2);
     assertElementsAlmostEqual(p.sys, 0);
     assertElementsAlmostEqual(p.elapsed, 0.2);
@@ -25,7 +25,7 @@ function test_get_gtime
 function test_gather_times
 
     % Folder and files
-    folder = 'data';
+    folder = ['..' filesep 'data'];
     files = 'time_quick_1000000_*.txt';
     name = 'QuickSort';
     
@@ -42,14 +42,14 @@ function test_gather_times
     assertEqual(numel(et.elapsed), size(filelist, 1));
     
     % Check that the first value is the same as read by get_getime
-    p = get_gtime([folder filesep 'time_quick_1000000_1.txt']);
+    p = get_time_gnu([folder filesep 'time_quick_1000000_1.txt']);
     assertElementsAlmostEqual(et.elapsed(1), p.elapsed);
     
 % Test function perf_stats
 function test_perfstats
 
     % Folder and files
-    folder = 'data';
+    folder = ['..' filesep 'data'];
     files = 'time_quick_1000000_*.txt';
     name = 'QuickSort';
     
@@ -145,7 +145,7 @@ function test_perfstats
 function test_speedup
 
     % Data folder
-    folder = 'data';
+    folder = ['..' filesep 'data'];
     
     % Specify merge sort implementation specs
     ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
@@ -195,7 +195,7 @@ function test_speedup
 function test_times_table
 
     % Data folder
-    folder = 'data';
+    folder = ['..' filesep 'data'];
 
     % Specify Bubble sort implementation specs
     bs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', folder, ...
