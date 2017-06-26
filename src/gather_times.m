@@ -19,14 +19,15 @@ function timings = gather_times(name, folder, files)
 %  program. To use use other type of output change the function used by
 %  default by editing the first line of the body of this function.
 %    
-% Copyright (c) 2016 Nuno Fachada
+% Copyright (c) 2015-2017 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
 
-% Function used to read individual files - Edit this line to use another
-% function to read different file types
-tfun = @get_gtime;
+% Function used to read individual files. Functions to read different file
+% types can be specified by setting the global perfnpubtools_get_time_
+% variable.
+global perfnpubtools_get_time_;
 
 % Get file list
 listing = dir([folder filesep files]);
@@ -44,7 +45,7 @@ end;
 for i = 1:numFiles
     
     % Get timing information from current file
-    timing = tfun([folder filesep listing(i).name]);
+    timing = perfnpubtools_get_time_([folder filesep listing(i).name]);
     
     % Gather timing
     elapsed(i, 1) = timing.elapsed;
