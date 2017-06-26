@@ -24,10 +24,10 @@ function timings = gather_times(name, folder, files)
 % at http://opensource.org/licenses/MIT)
 %
 
-% Function used to read individual files. Functions to read different file
-% types can be specified by setting the global perfnpubtools_get_time_
-% variable.
-global perfnpubtools_get_time_;
+% Global variabless.
+global perfnpubtools_get_time_ ...
+    perfnpubtools_remove_fastest ...
+    perfnpubtools_remove_slowest;
 
 % Get file list
 listing = dir([folder filesep files]);
@@ -52,11 +52,52 @@ for i = 1:numFiles
 
 end;
 
-% TEMPORARY: Remove max and min
-[~, idx] = max(elapsed);
-elapsed(idx) = [];
-[~, idx] = min(elapsed);
-elapsed(idx) = [];
+% Are there observations to remove?
+nrem_fastest = rem_times(perfnpubtools_remove_fastest, numFiles);
+nrem_slowest = rem_times(perfnpubtools_remove_slowest, numFiles);
+
+% How many observations are left after removal?
+nobs = numFiles - nrem_fastest - nrem_slowest;
+
+% At least one observation should exist after removal
+if nobs < 1
+    error(['Not enough observations after removal of fastest ' ... 
+        'and slowest times']);
+end;
+
+% Remove fastest and slowest observations
+elapsed = sort(elapsed);
+elapsed = elapsed((1 + nrem_fastest):(numFiles - nrem_slowest));
 
 % Return struct with name and elapsed times
 timings = struct('name', name, 'elapsed', elapsed);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Auxiliary function which determines exact number of observations to
+% remove.
+function nrem = rem_times(nrem_user, total_obs)
+
+% Nothing to remove by default...
+nrem = 0;
+
+% Remove observations if value is larger than zero
+if nrem_user > 0
+    
+    % How many observations to remove?
+    if nrem_user < 1
+        
+        % Remove percentage of observations?
+        nrem = round(nrem_user * total_obs);
+        
+    else
+        
+        % Remove absolute number of observations?
+        nrem = round(nrem_user);
+        
+    end;
+    
+end;
