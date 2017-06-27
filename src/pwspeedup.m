@@ -1,11 +1,11 @@
 function [avg_speedup, max_speedup, min_speedup, times, std_times, ...
     times_raw, fid, impl_legend, set_legend] = ...
-    pwspeedup(do_plot, compare, varargin)
+    pwspeedup(do_plot, pnames, varargin)
 % PWSPEEDUP Determines pairwise speedups using folders of files containing
 % benchmarking results, and optionally displays speedups in a bar plot.
 %
 % [s, smax, smin, t_avg, t_std, t_raw, fids, il, sl] = ...
-%     SPEEDUP(do_plot, compare, varargin)
+%     PWSPEEDUP(do_plot, pnames, varargin)
 %
 % Parameters:
 %     do_plot - Draw speedup plot?
@@ -14,13 +14,12 @@ function [avg_speedup, max_speedup, min_speedup, times, std_times, ...
 %                     0 - No plot
 %                     1 - Regular plot
 %                     2 - Log plot (bars only)
-%    compare - Vector containing indexes of reference implementation from 
-%              which to calculate speedups. Number of elements will 
-%              determine number of plots.
-%   varargin - Pairs of implementation name and implementation specs. An
-%              implementation name is simply a string specifying the name
-%              of an implementation. An implementation spec is a cell array
-%              where each cell contains a struct with the following fields:
+%     pnames - Cell array of two strings identifying the pair elements.
+%   varargin - Sets of three elements: 1) implementation name;
+%              2) implementation spec of first pair element; and,
+%              3) implementation spec of second pair element.
+%              An implementation spec is a cell array where each cell
+%              contains a struct with the following fields:
 %                 sname - Name of setup, e.g. of series of runs with a 
 %                         given parameter set.
 %                folder - Folder with files containing benchmarking
@@ -54,36 +53,46 @@ function [avg_speedup, max_speedup, min_speedup, times, std_times, ...
 %  set_legends - Setups legend.
 %
 %    
-% Copyright (c) 2016 Nuno Fachada
+% Copyright (c) 2015-2017 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
 
 % compare must be a cell with two strings.
-if ~iscellstr(compare) || numel(compare) ~= 2
-    error('The "compare" argument must be a cell with two strings.');
+if ~iscellstr(pnames) || numel(pnames) ~= 2
+    error('The "pnames" argument must be a cell with two strings.');
 end;
 
-% Pairwise comparisons requires that name/spec pairs are themselves given
-% in pairs
-if mod(numel(varargin), 4) > 0
-    error(['Pairwise speedups require that each '...
-        'implementation name / implementation spec pair has a '...
-        'corresponding name/spec pair.']);
+% Pairwise comparisons requires sets containing three elements: impl. name,
+% impl. spec 1, and impl. spec 2
+if mod(numel(varargin), 3) > 0
+    error(['Variable arguments must be sets of three elements: 1) ' ...
+        'implementation name; 2) implementation spec of first pair ' ...
+        'element; and, 3) implementation spec of second pair element.']);
 end;         
         
 % Number of pairs to compare
-npairs = numel(varargin) / 4;
-    
+npairs = numel(varargin) / 3;
+
+% Use implementation names for legends
+impl_legend = varargin((1:npairs) * 3 - 2);
+
+% Put varargin in appropriate format for perfstats
+varg4perfst = cell(npairs * 4, 1);
+for i = 1:npairs
+    bidx = (i - 1) * 4;
+    varg4perfst{bidx + 1} = impl_legend{i};
+    varg4perfst{bidx + 2} = varargin{(i - 1) * 3 + 2};
+    varg4perfst{bidx + 3} = impl_legend{i};
+    varg4perfst{bidx + 4} = varargin{(i - 1) * 3 + 3};
+end;
+
 % Determine mean time and sample standard deviation for all implementations
 % and setups
-[times, std_times, times_raw, ~, impl_legend, set_legend] = ...
-    perfstats(0, varargin{:});
+[times, std_times, times_raw, ~, ~, set_legend] = ...
+    perfstats(0, varg4perfst{:});
 
-% Use only first element of each pair for implementation legend
-impl_legend = impl_legend((1:npairs) * 2 - 1);
-
-% Get number of implementations and number of setups
+% Get number of setups
 [~, nset] = size(times);
 
 % Setup output variables
@@ -138,7 +147,7 @@ if do_plot
         h = bar(avg_speedup, 'basevalue', 1);
     end;
 
-    ylabel(['Speedup ' compare{1} ' vs ' compare{2}]);
+    ylabel(['Speedup ' pnames{1} ' vs ' pnames{2}]);
     
     % Legends and x-ticks will be different if there is only one 
     % implementation to plot, or more than one implementation to plot
