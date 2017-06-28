@@ -41,7 +41,7 @@ PerfAndPubTools
 
 ## 1\. What is PerfAndPubTools?
 
-_PerfAndPubTools_ consists of a set of [MATLAB]/[Octave] functions for analyzing
+**PerfAndPubTools** consists of a set of [MATLAB]/[Octave] functions for analyzing
 software performance benchmark results and producing associated publication
 quality materials. If you use this software please cite reference
 [\[1\]](#ref1).
@@ -50,7 +50,7 @@ quality materials. If you use this software please cite reference
 
 ## 2\. Benchmark file format
 
-By default, _PerfAndPubTools_ expects individual benchmarking results to be
+By default, **PerfAndPubTools** expects individual benchmarking results to be
 available as files containing the default output of [GNU time] command, for
 example:
 
@@ -65,12 +65,12 @@ This preset selection can be easily modified as described in the next sections.
 
 ## 3\. Architecture and functions
 
-_PerfAndPubTools_ is implemented in a layered architecture using a procedural
+**PerfAndPubTools** is implemented in a layered architecture using a procedural
 programming approach, as shown in the following figure:
 
-![arch](https://cloud.githubusercontent.com/assets/3018963/12206544/74c5ac38-b639-11e5-87c2-fc65e6bf8875.png)
+![arch_v2](https://user-images.githubusercontent.com/3018963/27658231-3aaa5246-5c47-11e7-8cf7-05c212dae25c.png)
 
-Performance analysis in _PerfAndPubTools_ takes place at two levels:
+Performance analysis in **PerfAndPubTools** takes place at two levels:
 *implementation* and *setup*. The *implementation* level is meant to be
 associated with specific software implementations for performing a given task,
 for example a particular sorting algorithm or a simulation model realized in
@@ -79,15 +79,15 @@ software can be executed under different *setups*. These can be different
 computational sizes (e.g. vector lengths in a sorting algorithm) or distinct
 execution parameters (e.g. number of threads used).
 
-_PerfAndPubTools_ is bundled with the following functions, from lowest to
+**PerfAndPubTools** is bundled with the following functions, from lowest to
 highest-level of functionality:
 
-* [get_gtime] - Given a file containing the default output of the [GNU time]
+* [get_time_gnu] - Given a file containing the default output of the [GNU time]
 command, this function extracts the user, system and elapsed times in seconds,
 as well as the percentage of CPU usage.
 
 * [gather_times] - Loads execution times from files in a given folder. This
-function uses [get_gtime] by default, but can be configured to use another
+function uses [get_time_gnu] by default, but can be configured to use another
 function to load individual benchmark files with a different format.
 
 * [perfstats] - Determines mean times and respective standard deviations of a
@@ -126,11 +126,11 @@ Examples are organized into two sections:
 
 Examples in the first section demonstrate the complete process of benchmarking a
 number of sorting algorithms with the [GNU time] command and then analyzing
-results with _PerfAndPubTools_. Since the [GNU time] command is not available on
+results with **PerfAndPubTools**. Since the [GNU time] command is not available on
 Windows, the data produced by the benchmarks is [included][sort_data] in the
 package.
 
-Examples in the second section focus on showing how _PerfAndPubTools_ was used
+Examples in the second section focus on showing how **PerfAndPubTools** was used
 to analyze performance data of multiple implementations of a
 [simulation model][PPHPC], replicating results presented in a peer-reviewed
 article [\[2\]](#ref2). The initial benchmarking steps are skipped in these
@@ -143,7 +143,7 @@ made [available][pphpc_data].
 
 ### 4.1\. Performance analysis of sorting algorithms
 
-In following examples, we use _PerfAndPubTools_ to analyze the performance of
+In following examples, we use **PerfAndPubTools** to analyze the performance of
 several sorting algorithms implemented in C. Perform the following steps before
 proceeding:
 
@@ -161,10 +161,10 @@ invocation is used for throughout the examples, replace it as appropriate.
 
 Since the [GNU time] program does not seem to be available for Windows, these
 examples only run unmodified on Linux and OSX. On Windows, benchmark the
-[sorttest.c] program using an [alternative] approach and replace [get_gtime]
+[sorttest.c] program using an [alternative] approach and replace [get_time_gnu]
 with a function which parses the produced output. Otherwise, skip the actual
 benchmarking steps within the examples, and use the benchmarking data bundled
-with _PerfAndPubTools_ in the [data][sort_data] folder.
+with **PerfAndPubTools** in the [data][sort_data] folder.
 
 <a name="extractperformancedatafromafile"></a>
 
@@ -189,7 +189,7 @@ $ /usr/bin/time ./sorttest quick 1000000 2362 2> out.txt
 ```
 
 The `2>` part redirects the output of [GNU time] to a file called `out.txt`.
-This file can be parsed with the [get_gtime] function from [MATLAB] or [Octave]:
+This file can be parsed with the [get_time_gnu] function from [MATLAB] or [Octave]:
 
 ```matlab
 p = get_gtime('out.txt')
@@ -236,10 +236,10 @@ field of the returned structure:
 exec_time.elapsed
 ```
 
-The [gather_times] function uses [get_gtime] internally by default. However, 
+The [gather_times] function uses [get_time_gnu] internally by default. However, 
 other functions can be specified in the first line of the [gather_times]
-function body, allowing _PerfAndPubTools_ to support benchmarking formats other
-than the output of [GNU time]. Alternatives to [get_gtime] are only required to
+function body, allowing **PerfAndPubTools** to support benchmarking formats other
+than the output of [GNU time]. Alternatives to [get_time_gnu] are only required to
 return a struct with the `elapsed` field, indicating the duration (in seconds)
 of a program execution.
 
@@ -750,7 +750,7 @@ datafolder = 'path/to/dataset';
 
 This [dataset][pphpc_data] corresponds to the results presented in reference
 [\[2\]](#ref2), which compares the performance of several implementations of the
-[PPHPC] agent-based model. Among several aspects of _PerfAndPubTools_, the
+[PPHPC] agent-based model. Among several aspects of **PerfAndPubTools**, the
 following examples show how to replicate these results.
 
 <a name="implementationsandsetupsofthepphpcagent-basedmodel"></a>
@@ -792,7 +792,7 @@ applicable).
 
 #### 4.2.2\. Extract performance data from a file
 
-The [get_gtime] function extracts performance data from one file containing the
+The [get_time_gnu] function extracts performance data from one file containing the
 default output of [GNU time] command. For example:
 
 ```matlab
@@ -828,10 +828,10 @@ structure:
 exec_time.elapsed
 ```
 
-The [gather_times] function uses [get_gtime] internally by default. However, 
+The [gather_times] function uses [get_time_gnu] internally by default. However, 
 other functions can be specified in the first line of the [gather_times]
-function body, allowing _PerfAndPubTools_ to support benchmarking formats other
-than the output of [GNU time]. Alternatives to [get_gtime] are only required to
+function body, allowing **PerfAndPubTools** to support benchmarking formats other
+than the output of [GNU time]. Alternatives to [get_time_gnu] are only required to
 return a struct with the `elapsed` field, indicating the duration (in seconds)
 of a program execution.
 
@@ -1599,10 +1599,10 @@ http://dx.doi.org/10.1007/s10766-015-0399-9
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [multirow]: https://www.ctan.org/pkg/multirow
 [booktabs]: https://www.ctan.org/pkg/booktabs
-[get_gtime]: get_gtime.m
-[gather_times]: gather_times.m
-[perfstats]: perfstats.m
-[speedup]: speedup.m
-[times_table]: times_table.m
-[times_table_f]: times_table_f.m
+[get_time_gnu]: ../src/get_gtime.m
+[gather_times]: ../src/gather_times.m
+[perfstats]: ../src/perfstats.m
+[speedup]: ../src/speedup.m
+[times_table]: ../src/times_table.m
+[times_table_f]: ../src/times_table_f.m
 

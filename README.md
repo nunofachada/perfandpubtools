@@ -30,13 +30,13 @@ Journal of Parallel Programming*. 45(3):449–481.
 http://dx.doi.org/10.1007/s10766-015-0399-9
 ([arXiv preprint](http://arxiv.org/abs/1507.04047))
 
-* Fachada, N., Lopes, V.V., Martins, R.C., Rosa, A.C., (2017)
+* Fachada N, Lopes VV, Martins RC, Rosa AC. (2017)
 cf4ocl: A C framework for OpenCL,
 [Science of Computer Programming](https://www.journals.elsevier.com/science-of-computer-programming),
 143:9–19, http://www.sciencedirect.com/science/article/pii/S0167642317300540
 ([arXiv preprint](https://arxiv.org/abs/1609.01257))
 
-* Fachada, N., Rosa, A.C., (2017)
+* Fachada N, Rosa AC. (2017)
 Assessing the feasibility of OpenCL CPU implementations for agent-based simulations,
 [Proceedings of the 5th International Workshop on OpenCL (IWOCL 2017)](http://www.iwocl.org/),
 Article No. 4,
