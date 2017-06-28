@@ -13,14 +13,14 @@ PerfAndPubTools – Tools for Software Performance Analysis and Publishing of
 Results. *Journal of Open Research Software*. 4(1), p.e18. 
 http://doi.org/10.5334/jors.115
 
-The [PerfAndPubTools User Guide](userguide.md) describes the basic concepts and
-explains how to use the package by presenting two different use cases
+The [PerfAndPubTools User Guide](docs/userguide.md) describes the basic concepts
+and explains how to use the package by presenting two different use cases
 exemplifying the provided functionality.
 
 ## Papers authored with the help of PerfAndPubTools
 
 Here's a list of papers authored with the help of **PerfAndPubTools**. If you
-want your paper listed here, clone this repository, edit this file and open a
+want your paper listed here, fork this repository, edit this file and open a
 pull request. Alternatively,
 [open an issue](https://github.com/fakenmc/perfandpubtools/issues).
 
