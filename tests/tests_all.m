@@ -3,7 +3,14 @@
 %
 % These tests require the MOxUnit framework available at
 % https://github.com/MOxUnit/MOxUnit
-%    
+%
+% To run the tests: 
+% 1 - Make sure MOxUnit is on the MATLAB/Octave path
+% 2 - Make sure PerfAndPubTools is on the MATLAB/Octave path by running
+%     startup.m
+% 3 - cd into the tests folder
+% 4 - Invoke the moxunit_runtests script
+%
 % Copyright (c) 2015-2017 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
