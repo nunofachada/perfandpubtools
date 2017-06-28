@@ -8,7 +8,13 @@
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
-function test_suite = unittests_ppt
+function test_suite = tests_all
+    try
+        % assignment of 'localfunctions' is necessary in Matlab >= 2016
+        test_functions=localfunctions();
+    catch
+        % no problem; early Matlab versions can use initTestSuite fine
+    end;
     initTestSuite
 
 % Test function get_time_gnu
