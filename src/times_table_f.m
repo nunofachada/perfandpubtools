@@ -18,7 +18,7 @@ function tbl = times_table_f(type, varargin)
 %
 % See also TIMES_TABLE.
 %    
-% Copyright (c) 2016 Nuno Fachada
+% Copyright (c) 2015-2017 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
