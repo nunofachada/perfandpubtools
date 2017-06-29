@@ -192,7 +192,7 @@ The `2>` part redirects the output of [GNU time] to a file called `out.txt`.
 This file can be parsed with the [get_time_gnu] function from [MATLAB] or [Octave]:
 
 ```matlab
-p = get_gtime('out.txt')
+p = get_time_gnu('out.txt')
 ```
 
 The function returns a structure with several fields:
@@ -796,7 +796,7 @@ The [get_time_gnu] function extracts performance data from one file containing t
 default output of [GNU time] command. For example:
 
 ```matlab
-p = get_gtime([datafolder '/times/NL/time100v1r1.txt'])
+p = get_time_gnu([datafolder '/times/NL/time100v1r1.txt'])
 ```
 
 The function returns a structure with several fields:
@@ -1599,7 +1599,7 @@ http://dx.doi.org/10.1007/s10766-015-0399-9
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [multirow]: https://www.ctan.org/pkg/multirow
 [booktabs]: https://www.ctan.org/pkg/booktabs
-[get_time_gnu]: ../src/get_gtime.m
+[get_time_gnu]: ../src/get_time_gnu.m
 [gather_times]: ../src/gather_times.m
 [perfstats]: ../src/perfstats.m
 [speedup]: ../src/speedup.m

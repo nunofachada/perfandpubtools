@@ -14,10 +14,10 @@ function timings = gather_times(name, folder, files)
 %  seconds) extracted from the specified files.
 %
 % Note:
-%  By default, the get_gtime function is used to read individual files.
+%  By default, the get_time_gnu function is used to read individual files.
 %  This function expects files containing the output of the GNU time
-%  program. To use use other type of output change the function used by
-%  default by editing the first line of the body of this function.
+%  program. To use use other type of output, specify an alternative
+%  output parsing function in the perfnpubtools_get_time_ global variable.
 %    
 % Copyright (c) 2015-2017 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
