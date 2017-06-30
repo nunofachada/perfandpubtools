@@ -1,15 +1,11 @@
-function data = times_table(compare, varargin)
-% TIMES_TABLE Returns a matrix with useful contents for using in tables for
-% publication, namely times (in seconds), absolute standard deviations 
-% (seconds), relative standard deviations, speedups (vs the implementations
-% specified in the compare input variable).
+function data = pwtimes_table(compare, varargin)
+% PWTIMES_TABLE **Update docs**
 %
-% data = TIMES_TABLE(compare, varargin)
+% data = PWTIMES_TABLE(compare, varargin)
 %
 % Parameters:
-%  compare - Vector indicating what implementations to compare.
-% varargin - Pairs of implementation name (string) + implementation specs
-%            (see help for speedup.m).
+%  compare - **Update this**
+% varargin - **Update this**
 %
 % Outputs:
 %   data - Structure containing the following fields:
@@ -29,12 +25,12 @@ function data = times_table(compare, varargin)
 %
 
 [speedups, ~, ~, times, std_times, ~, ~, impl_legends, set_legends] = ...
-    speedup(0, compare, varargin{:});
+    pwspeedup(0, compare, varargin{:});
 
 [nimpl, nset] = size(times);
 
-t = zeros(nimpl * nset, 3 + numel(compare)); % 3 = t(s) + std + std%%
- 
+t = zeros(nimpl * nset, 6 + numel(compare)); % 6 = t(s)+std+std%% per pair
+
 for i = 1:nimpl
     
     istart = (i - 1) * nset + 1;
@@ -50,5 +46,7 @@ end;
 
 data = struct('t', t, 'compare', compare, ...
     'inames', {impl_legends}, 'snames', {set_legends});
+
+
 
 
