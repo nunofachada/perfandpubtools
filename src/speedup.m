@@ -77,7 +77,7 @@ end;
 avg_speedups = cell(numel(compare), 1);
 max_speedups = cell(numel(compare), 1);
 min_speedups = cell(numel(compare), 1);
-fids = zeros(numel(compare), 1);
+fids = NaN(numel(compare), 1);
 
 for cidx = 1:numel(compare)
     avg_speedups{cidx} = zeros(nimpl, nset);

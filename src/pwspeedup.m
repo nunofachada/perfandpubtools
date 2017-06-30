@@ -230,5 +230,9 @@ if do_plot
     if abs(do_plot) == 2
         set(gca, 'YScale', 'log');
     end;
- 
+
+else % i.e. if no plot
+
+    fid = NaN;
+
 end;

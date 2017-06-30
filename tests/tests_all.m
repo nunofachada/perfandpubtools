@@ -81,7 +81,7 @@ function test_perfstats
     assertEqual(raw_times{1}.name, [name '-' name]);
     assertEqual(numel(raw_times{1}.elapsed), 10);
     assertElementsAlmostEqual(avg_time, mean(raw_times{1}.elapsed));
-    assertEqual(fid, 0);
+    assertEqual(fid, NaN);
     
     % %%%%
     % Case 2: one implementation, three setups
@@ -107,7 +107,7 @@ function test_perfstats
     assertElementsAlmostEqual(sdt, ...
         [0.02573367875 0.009486832981 0.08300602388]);
     assertEqual(numel(rt), 3);
-    assertEqual(fid, 0);
+    assertEqual(fid, NaN);
     
     % %%%%
     % Case 3: multiple implementations
@@ -152,7 +152,7 @@ function test_perfstats
                 std(rt{i, j}.elapsed));
         end;
     end;
-    assertEqual(fid, 0);
+    assertEqual(fid, NaN);
 
 % Test function speedup
 function test_speedup

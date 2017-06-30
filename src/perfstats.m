@@ -51,7 +51,7 @@ function [times, std_times, times_raw, fid, impl_legend, set_legend] ...
 % at http://opensource.org/licenses/MIT)
 %
 
-fid = 0;
+fid = NaN;
 
 % Check arguments and obtain number of implementations and setups
 [nimpl, nset, set_legend, set_sizes] = check_args(varargin);
