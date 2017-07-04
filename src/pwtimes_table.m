@@ -18,7 +18,7 @@ function data = pwtimes_table(pnames, varargin)
 %                files  - Name of files containing benchmarking results
 %                         (use wildcards if necessary).
 %                 csize - Computational size associated with setup (can be
-%                         ignored - TODO: CHECK THIS).
+%                         ignored).
 %
 % Outputs:
 %   data - Structure containing the following fields:
