@@ -162,7 +162,7 @@ if do_plot
     legend(final_legend);
     
     % Set x,y labels
-    xlabel('Sizes/Problem');
+    xlabel('Setup');
     
     % Draw error bars?
     hold on;

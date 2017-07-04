@@ -50,5 +50,3 @@ end;
 
 data = struct('t', t, 'compare', compare, ...
     'inames', {impl_legends}, 'snames', {set_legends});
-
-
