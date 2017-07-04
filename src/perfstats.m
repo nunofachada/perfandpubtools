@@ -202,7 +202,7 @@ for i=1:2:numel(args)
     
     % Check if implementation name is a string
     if ~ischar(arg_name)
-        error(['The ' num2str(i) ' parameter should be a string '...
+        error(['Parameter ' num2str(i) ' should be a string '...
             'with an implementation name']);
     end;
     

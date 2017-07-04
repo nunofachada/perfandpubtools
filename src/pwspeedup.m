@@ -74,6 +74,12 @@ end;
 % Number of pairs to compare
 npairs = numel(varargin) / 3;
 
+% For less than two pairs use speedup function instead
+if numel(varargin{2}) < 2
+    error(['At least two implementations need to be specified ' ...
+        'per implementation spec.']);
+end;
+
 % Use implementation names for legends
 impl_legend = varargin((1:npairs) * 3 - 2);
 
@@ -149,80 +155,43 @@ if do_plot
 
     ylabel(['Speedup ' pnames{1} ' vs ' pnames{2}]);
     
-    % Legends and x-ticks will be different if there is only one 
-    % implementation to plot, or more than one implementation to plot
+    % x tick label will correspond to implementation names
+    set(gca, 'XTickLabel', finalxticklabel);
     
-    if size(avg_speedup, 1) == 1 % Only one implementation
+    % Set legend for setups
+    legend(final_legend);
+    
+    % Set x,y labels
+    xlabel('Sizes/Problem');
+    
+    % Draw error bars?
+    hold on;
+    if do_plot < 1
+        
+        for i = 1:nimpl
             
-        % x tick labels will correspond to setup names
-        set(gca, 'XTickLabel', set_legends);
-
-        % Set x,y labels
-        xlabel('Setups');
-
-        % Draw error bars?
-        hold on;
-        if do_plot < 1
-
             % Determine x coord. for error bars
             if exist('OCTAVE_VERSION', 'builtin') ...
-                || verLessThan('matlab', '8.4.0')
+                    || verLessThan('matlab', '8.4.0')
                 % MATLAB <= R2014a or GNU Octave
-                xdata = get(get(h, 'Children'), 'XData');
+                xdata = get(get(h(i), 'Children'), 'XData');
                 xerrbpos = mean(xdata, 1);
             else
                 % MATLAB >= 2014b
-                xerrbpos =  get(h, 'XData');
+                xerrbpos =  get(h(i), 'XData') + ...
+                    get(h(i), 'XOffset');
             end;
-
+            
             % Draw error bars
-            errorbar(xerrbpos, avg_speedup, ...
-                avg_speedup - min_speedup, ...
-                max_speedup - avg_speedup, ...
+            errorbar(xerrbpos, avg_speedup(:, i), ...
+                avg_speedup(:, i) - min_speedup(:, i), ...
+                max_speedup(:, i) - avg_speedup(:, i), ...
                 '+k');
-
+            
         end;
-
-    else % More than one implementation
-
-        % x tick label will correspond to implementation names
-        set(gca, 'XTickLabel', finalxticklabel);
-
-        % Set legend for setups
-        legend(final_legend);
-
-        % Set x,y labels
-        xlabel('Implementations');
-
-        % Draw error bars?
-        hold on;
-        if do_plot < 1
-
-            for i = 1:nimpl
-
-                % Determine x coord. for error bars
-                if exist('OCTAVE_VERSION', 'builtin') ...
-                    || verLessThan('matlab', '8.4.0')
-                    % MATLAB <= R2014a or GNU Octave
-                    xdata = get(get(h(i), 'Children'), 'XData');
-                    xerrbpos = mean(xdata, 1);
-                else
-                    % MATLAB >= 2014b
-                    xerrbpos =  get(h(i), 'XData') + ...
-                        get(h(i), 'XOffset');
-                end;
-
-                % Draw error bars
-                errorbar(xerrbpos, avg_speedup(:, i), ...
-                    avg_speedup(:, i) - min_speedup(:, i), ...
-                    max_speedup(:, i) - avg_speedup(:, i), ...
-                    '+k');
-
-           end;
-
-        end;            
+        
     end;
-
+    
     % Set grid
     grid on;
 
