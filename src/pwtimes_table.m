@@ -96,5 +96,5 @@ end;
 
 % Return structure which can be used for formatting publication quality
 % tables
-data = struct('t', t, 'pnames', pnames, ...
+data = struct('t', t, 'pnames', {pnames}, ...
     'inames', {impl_legend}, 'snames', {set_legend});
