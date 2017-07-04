@@ -665,6 +665,15 @@ times_table_f(1, 'vs Bubble', tdata)
 
 <a name="exsimmods"></a>
 
+#### Pairwise speedups
+
+* Explain what are pairwise speedups
+* Discuss Python sorting algorithms in 
+
+```
+for RUN in {1..10}; do for IMPL in bubble selection merge quick; do for SIZE in 100000 200000 300000 400000; do /usr/bin/time python sorttest.py $IMPL $SIZE $RUN 2> time_py_${IMPL}_${SIZE}_${RUN}.txt; done; done; done
+```
+
 ### Performance analysis of a simulation model
 
 The examples in this section use the following [dataset][pphpc_data]:
@@ -1483,7 +1492,7 @@ http://dx.doi.org/10.1007/s10766-015-0399-9
 [NetLogo]: https://ccl.northwestern.edu/netlogo/
 [sorttest.c]: https://github.com/fakenmc/sorttest_c
 [alternative]: http://stackoverflow.com/questions/673523/how-to-measure-execution-time-of-command-in-windows-command-line
-[sort_data]: data
+[sort_data]: ../data
 [pphpc_data]: http://dx.doi.org/10.5281/zenodo.34049
 [matlab2tikz]: http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
 [Bubble sort]: https://en.wikipedia.org/wiki/Bubble_sort
