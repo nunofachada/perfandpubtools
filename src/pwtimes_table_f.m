@@ -1,7 +1,7 @@
 function tbl = pwtimes_table_f(type, data)
-% TIMES_TABLE_F Returns a table with performance analysis results oriented
-% towards pairwise speedups formatted in plain text or in LaTeX (the latter
-% requires the siunitx, multirow and booktabs packages).
+% PWTIMES_TABLE_F Returns a table with performance analysis results
+% oriented towards pairwise speedups formatted in plain text or in LaTeX
+% (the latter requires the siunitx, multirow and booktabs packages).
 %
 %   tbl = PWTIMES_TABLE_F(type, data)
 %
@@ -54,12 +54,19 @@ elseif type == 1 % Print a Latex table
 
         % Cycle through setups
         for s = 1:nset
+            
+            % Current row in data matrix/table
+            r = (i - 1) * nset + s;
 
             % Print setup name
             tbl = sprintf('%s & %s ', tbl, data.snames{s});
 
-            % Temporary
-            tbl = sprintf('%s & & & & & & ', tbl)
+            % Print data
+            tbl = sprintf(['%s & \\num{% 9.2f} & \\num{% 6.2f} & ' ...
+                '\\num{% 9.2f} & \\num{% 6.2f} & \\num{% 7.2f} '], tbl, ...
+                data.t(r, 1), data.t(r, 3), ... % First pair element
+                data.t(r, 4), data.t(r, 6), ... % Second pair element
+                data.t(r, 7));                  % Avg. speedup
 
             % Newline
             tbl = sprintf('%s \\\\\n', tbl);

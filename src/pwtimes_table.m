@@ -22,11 +22,19 @@ function data = pwtimes_table(pnames, varargin)
 %
 % Outputs:
 %   data - Structure containing the following fields:
-%                t - Matrix with the following columns per pair name for
-%                    each combination of implementation and setup:
-%                    time (in seconds), absolute standard deviation
-%                    (seconds), relative standard deviation, average
-%                    speedup, max. speedup, min. speedup.
+%                t - Matrix with the following columns for each combination
+%                    of implementation and setup:
+%                    * Time (in seconds) for first pair element
+%                    * Absolute standard deviation for first pair element
+%                      (seconds)
+%                    * Relative standard deviation for first pair element
+%                    * Time (in seconds) for second pair element
+%                    * Absolute standard deviation for second pair element
+%                      (seconds)
+%                    * Relative standard deviation for second pair element
+%                    * Average speedup
+%                    * Maximum speedup
+%                    * Minimum speedup
 %           pnames - Cell array of two strings identifying the pair
 %                    elements.
 %           inames - Implementation names.
