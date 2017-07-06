@@ -42,9 +42,13 @@ execution parameters (e.g. number of threads used).
 **PerfAndPubTools** is bundled with the following functions, from lowest to
 highest-level of functionality:
 
+### Time parsing functions (plugins)
+
 * [get_time_gnu] - Given a file containing the default output of the [GNU time]
 command, this function extracts the user, system and elapsed times in seconds,
 as well as the percentage of CPU usage.
+
+### Base functions
 
 * [gather_times] - Loads execution times from files in a given folder. This
 function uses [get_time_gnu] by default, but can be configured to use another
@@ -54,6 +58,8 @@ function to load individual benchmark files with a different format.
 computational experiment using folders of files containing benchmarking results,
 optionally plotting a scalability graph if different setups correspond to
 different computational work sizes.
+
+### Speedup comparison against one or more reference implementations
 
 * [speedup] - Determines the average, maximum and minimum speedups against one
 or more reference *implementations* across a number of *setups*. Can optionally
@@ -66,6 +72,16 @@ relative standard deviations, speedups (vs the specified implementations).
 * [times_table_f] - Returns a table with performance analysis results formatted
 in plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
 [booktabs] packages).
+
+### Pairwise speedup comparison
+
+* [pwspeedup] - **TODO**
+
+* [pwtimes_table] - **TODO**
+
+* [pwtimes_table_f] - **TODO**
+
+### Plotting
 
 Although the [perfstats] and [speedup] functions optionally create plots, these
 are mainly intended to provide visual feedback on the performance analysis being
@@ -666,6 +682,8 @@ times_table_f(1, 'vs Bubble', tdata)
 <a name="exsimmods"></a>
 
 #### Pairwise speedups
+
+**TODO**
 
 * Explain what are pairwise speedups
 * Discuss Python sorting algorithms in 
@@ -1510,4 +1528,7 @@ http://dx.doi.org/10.1007/s10766-015-0399-9
 [speedup]: ../src/speedup.m
 [times_table]: ../src/times_table.m
 [times_table_f]: ../src/times_table_f.m
+[pwspeedup]: ../src/pwspeedup.m
+[pwtimes_table]: ../src/pwtimes_table.m
+[pwtimes_table_f]: ../src/pwtimes_table_f.m
 
