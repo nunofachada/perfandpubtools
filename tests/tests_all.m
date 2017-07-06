@@ -59,7 +59,7 @@ function test_gather_times
     assertElementsAlmostEqual(et.elapsed(1), p.elapsed);
 
 % Test function gather_times with outliers defined
-function test_gather_times_outliers
+function test_gather_times_with_outliers
 
     error('Test not implemented');
     
@@ -209,7 +209,7 @@ function test_speedup
         end;
     end;
     
-% Test function times_table
+% Test functions times_table and times_table_f
 function test_times_table
 
     % Data folder
@@ -273,4 +273,19 @@ function test_times_table
     t2 = times_table_f(1, 'vs Bubble', tdata);
     assertEqual(class(t1), 'char');
     assertEqual(class(t2), 'char');
+
+% Test function pwspeedup
+function test_pwspeedup
+
+    error('Test not implemented');
+
+% Test functions pwtimes_table and  pwtimes_table_f
+function test_pwtimes_table
+
+    error('Test not implemented');
+
+% Test several possible plots
+function test_plots
+
+    error('Test not implemented');
     
