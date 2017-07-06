@@ -57,6 +57,11 @@ function test_gather_times
     % Check that the first value is the same as read by get_getime
     p = get_time_gnu([folder filesep 'time_c_quick_1000000_1.txt']);
     assertElementsAlmostEqual(et.elapsed(1), p.elapsed);
+
+% Test function gather_times with outliers defined
+function test_gather_times_outliers
+
+    error('Test not implemented');
     
 % Test function perf_stats
 function test_perfstats
