@@ -61,8 +61,53 @@ function test_gather_times
 % Test function gather_times with outliers defined
 function test_gather_times_with_outliers
 
-    error('Test not implemented');
+    % Outlier specification globals
+    global perfnpubtools_remove_fastest perfnpubtools_remove_slowest;
     
+    % Keep the original outlier specifications
+    orig_remove_fastest = perfnpubtools_remove_fastest;
+    orig_remove_slowest = perfnpubtools_remove_slowest;
+    
+    % Remove the two fastest observations and the 10% slowest observations
+    % (which will be one observation, since there are a total of ten
+    % observations)
+    perfnpubtools_remove_fastest = 2;
+    perfnpubtools_remove_slowest = 0.1;
+
+    % Folder and files
+    folder = ['..' filesep 'data'];
+    files = 'time_c_quick_1000000_*.txt';
+    name = 'QuickSort';
+    
+    % Get file list
+    filelist = dir([folder filesep files]);
+    nfiles = size(filelist, 1);
+    
+    % Invoke gather_times
+    et = gather_times(name, folder, files);
+
+    % Check that name is properly kept
+    assertEqual(et.name, name);
+    
+    % Check that the correct number of values is read by test_gather_times
+    assertEqual(numel(et.elapsed), nfiles - 2 - nfiles * 0.1);
+    
+    % Check that the first value is the same as read by get_getime
+    p = get_time_gnu([folder filesep 'time_c_quick_1000000_1.txt']);
+    assertElementsAlmostEqual(et.elapsed(1), p.elapsed);
+
+    % Restore the original outlier specifications (no outliers)
+    perfnpubtools_remove_fastest = orig_remove_fastest;
+    perfnpubtools_remove_slowest = orig_remove_slowest;
+    
+    % Re-invoke gather_times without outliers
+    etno = gather_times(name, folder, files);
+    
+    % Manually remove outliers
+    etnoelap = sort(etno.elapsed);
+    etnoelap = etnoelap(3:9);
+    assertEqual(mean(etnoelap), mean(et.elapsed));
+
 % Test function perf_stats
 function test_perfstats
 
