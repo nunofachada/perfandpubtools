@@ -692,6 +692,43 @@ times_table_f(1, 'vs Bubble', tdata)
 for RUN in {1..10}; do for IMPL in bubble selection merge quick; do for SIZE in 100000 200000 300000 400000; do /usr/bin/time python sorttest.py $IMPL $SIZE $RUN 2> time_c_py_${IMPL}_${SIZE}_${RUN}.txt; done; done; done
 ```
 
+Specify Python implementations and setups:
+
+```matlab
+% Specify Bubble sort implementation specs
+bs1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_py_bubble_100000_*.txt');
+bs2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_py_bubble_200000_*.txt');
+bs3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_py_bubble_300000_*.txt');
+bs4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_py_bubble_400000_*.txt');
+bspy = {bs1e5py, bs2e5py, bs3e5py, bs4e5py};
+
+% Specify Selection sort implementation specs
+ss1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_py_selection_100000_*.txt');
+ss2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_py_selection_200000_*.txt');
+ss3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_py_selection_300000_*.txt');
+ss4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_py_selection_400000_*.txt');
+sspy = {ss1e5py, ss2e5py, ss3e5py, ss4e5py};
+
+% Specify Merge sort implementation specs
+ms1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_py_merge_100000_*.txt');
+ms2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_py_merge_200000_*.txt');
+ms3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_py_merge_300000_*.txt');
+ms4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_py_merge_400000_*.txt');
+mspy = {ms1e5py, ms2e5py, ms3e5py, ms4e5py};
+
+% Specify Quicksort implementation specs
+qs1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_py_quick_100000_*.txt');
+qs2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_py_quick_200000_*.txt');
+qs3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_py_quick_300000_*.txt');
+qs4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_py_quick_400000_*.txt');
+qspy = {qs1e5py, qs2e5py, qs3e5py, qs4e5py};
+```
+
+Pairwise comparison with C sort implementations:
+
+```matlab
+pwspeedup(-1, {'C', 'Python'}, 'Bubble', bsc, bspy, 'Selection', ssc, sspy, 'Merge', msc, mspy, 'Quick', qsc, qspy);
+```
 ### Performance analysis of a simulation model
 
 The examples in this section use the following [dataset][pphpc_data]:
