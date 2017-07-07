@@ -1,0 +1,2 @@
+4932.21user 0.00system 1:22:11elapsed 100%CPU (0avgtext+0avgdata 37064maxresident)k
+0inputs+0outputs (0major+8747minor)pagefaults 0swaps

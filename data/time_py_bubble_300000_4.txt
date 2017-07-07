@@ -1,0 +1,2 @@
+4931.18user 0.06system 1:22:11elapsed 100%CPU (0avgtext+0avgdata 37132maxresident)k
+4608inputs+0outputs (21major+8740minor)pagefaults 0swaps
