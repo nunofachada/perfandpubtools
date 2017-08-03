@@ -28,7 +28,7 @@ This preset selection can be easily modified as described in the next sections.
 **PerfAndPubTools** is implemented in a layered architecture using a procedural
 programming approach, as shown in the following figure:
 
-![arch_v2](https://user-images.githubusercontent.com/3018963/27658231-3aaa5246-5c47-11e7-8cf7-05c212dae25c.png)
+![architecture](https://user-images.githubusercontent.com/3018963/28936022-47455688-787e-11e7-8ced-242bb6104f52.png)
 
 Performance analysis in **PerfAndPubTools** takes place at two levels:
 *implementation* and *setup*. The *implementation* level is meant to be

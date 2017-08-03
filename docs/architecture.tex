@@ -1,0 +1,65 @@
+% This LaTeX/TiKZ document by Nuno Fachada is licensed under the 
+% Creative Commons Attribution 4.0 International License. To view a 
+% copy of this license, visit http://creativecommons.org/licenses/by/4.0/ 
+% or send a letter to Creative Commons, PO Box 1866, Mountain View, 
+% CA 94042, USA.
+
+\documentclass[tikz,border=2mm]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,decorations}
+\usepgflibrary{decorations.pathmorphing}
+
+\begin{document}
+
+\tikzstyle{function}=[draw, fill=blue!22, text centered, 
+	minimum height=1.2cm, minimum width=7cm, font=\ttfamily\LARGE]
+
+\tikzstyle{timefiles}=[draw=gray, thick, rounded corners, fill=orange!40,minimum width=7cm, minimum height=3.9cm, font=\Large\bfseries, align=center]
+	
+\tikzstyle{arrowstl}=[->,font=\Large\sffamily,black,rounded corners]
+
+\def\vdist{1.5cm}
+\def\hdist{3cm}
+
+\begin{tikzpicture}[>=triangle 45]
+
+% Functions
+\node (tfiles) [timefiles] {Files containing\\ execution times};
+\node (gett) [function,above=\vdist of tfiles,dashed] {get\_time\_*};
+\node (gatt)[function,above=\vdist of gett] {gather\_times};
+\node (pstat) [function,above=\vdist of gatt] {perf\_stats};
+
+\node (spdu) [function,left=\hdist of gett] {speedup};
+\node (tt) [function,left=\hdist of gatt] {times\_table};
+\node (ttf) [function,left=\hdist of pstat] {times\_table\_f};
+
+\node (pwspdu) [function,right=\hdist of gett] {pwspeedup};
+\node (pwtt) [function,right=\hdist of gatt] {pwtimes\_table};
+\node (pwttf) [function,right=\hdist of pstat] {pwtimes\_table\_f};
+
+% Some necessary coordinates
+\path (tt.east) -- (gatt.west) coordinate [pos=0.5] (midl);
+\path (spdu.south -| midl)+(0,-1cm) coordinate (midllow);
+\path (ttf.north -| midl)+(0,1cm) coordinate (midlhigh);
+
+\path (gatt.east) -- (pwtt.west) coordinate [pos=0.5] (midr);
+\path (pwspdu.south -| midr)+(0,-1cm) coordinate (midrlow);
+\path (pwttf.north -| midr)+(0,1cm) coordinate (midrhigh);
+
+% Arrows
+\draw[arrowstl,gray,thick] (gett) -- (tfiles) node[midway,right] {$\ll$Load$\gg$};
+\draw[arrowstl,dashed] (gatt) -- (gett) node[midway,right] {$\ll$Call$\gg$};
+\draw[arrowstl] (pstat) -- (gatt) node[midway,right] {$\ll$Call$\gg$};
+
+\draw[arrowstl] (ttf) -- (tt) node[midway,right] {$\ll$Uses data from$\gg$};
+\draw[arrowstl] (tt) -- (spdu) node [midway,right] {$\ll$Call$\gg$};
+\draw[arrowstl] (spdu.south) |- (midllow) -- (midlhigh) node [midway,sloped,below] {$\ll$Call$\gg$} -| (pstat.north);
+
+\draw[arrowstl] (pwttf) -- (pwtt) node[midway,right] {$\ll$Uses data from$\gg$};
+\draw[arrowstl] (pwtt) -- (pwspdu) node [midway,right] {$\ll$Call$\gg$};
+\draw[arrowstl] (pwspdu.south) |- (midrlow) -- (midrhigh) node [midway,sloped,below] {$\ll$Call$\gg$} -| (pstat.north);
+
+\end{tikzpicture}
+
+\end{document}
