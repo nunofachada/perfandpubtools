@@ -2,13 +2,13 @@ PerfAndPubTools
 ===============
 
 1\.  [What is PerfAndPubTools?](#whatisperfandpubtools?)  
-2\.  [Benchmark file format](#benchmarkfileformat)  
-3\.  [Architecture and functions](#architectureandfunctions)  
-3.1\.  [Time parsing functions (plugins)](#timeparsingfunctionsplugins)  
-3.2\.  [Base functions](#basefunctions)  
-3.3\.  [Speedup comparison against one or more reference implementations](#speedupcomparisonagainstoneormorereferenceimplementations)  
-3.4\.  [Pairwise speedup comparison](#pairwisespeedupcomparison)  
-3.5\.  [Plotting](#plotting)  
+2\.  [Architecture and functions](#architectureandfunctions)  
+2.1\.  [Time parsing functions (plugins)](#timeparsingfunctionsplugins)  
+2.2\.  [Base functions](#basefunctions)  
+2.3\.  [Speedup comparison against one or more reference implementations](#speedupcomparisonagainstoneormorereferenceimplementations)  
+2.4\.  [Pairwise speedup comparison](#pairwisespeedupcomparison)  
+2.5\.  [Plotting](#plotting)  
+3\.  [Default benchmark file format and alternative implementations](#defaultbenchmarkfileformatandalternativeimplementations)  
 4\.  [Examples](#examples)  
 4.1\.  [Performance analysis of sorting algorithms](#performanceanalysisofsortingalgorithms)  
 4.1.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
@@ -52,24 +52,9 @@ software performance benchmark results and producing associated publication
 quality materials. If you use this software please cite reference
 [\[1\]](#ref1).
 
-<a name="benchmarkfileformat"></a>
-
-## 2\. Benchmark file format
-
-By default, **PerfAndPubTools** expects individual benchmarking results to be
-available as files containing the default output of [GNU time] command, for
-example:
-
-```
-512.66user 2.17system 8:01.34elapsed 106%CPU (0avgtext+0avgdata 1271884maxresident)k
-0inputs+2136outputs (0major+49345minor)pagefaults 0swaps
-```
-
-This preset selection can be easily modified as described in the next sections.
-
 <a name="architectureandfunctions"></a>
 
-## 3\. Architecture and functions
+## 2\. Architecture and functions
 
 **PerfAndPubTools** is implemented in a layered architecture using a procedural
 programming approach, as shown in the following figure:
@@ -85,20 +70,22 @@ software can be executed under different *setups*. These can be different
 computational sizes (e.g. vector lengths in a sorting algorithm) or distinct
 execution parameters (e.g. number of threads used).
 
-**PerfAndPubTools** is bundled with the following functions, from lowest to
-highest-level of functionality:
+The next sections describe the functions provided with **PerfAndPubTools**.
 
 <a name="timeparsingfunctionsplugins"></a>
 
-### 3.1\. Time parsing functions (plugins)
+### 2.1\. Time parsing functions (plugins)
 
 * [get_time_gnu] - Given a file containing the default output of the [GNU time]
 command, this function extracts the user, system and elapsed times in seconds,
 as well as the percentage of CPU usage.
 
+* Additional functions/plugins for parsing other types of benchmarking files
+can easily be implemented by the user, as described in the next section.
+
 <a name="basefunctions"></a>
 
-### 3.2\. Base functions
+### 2.2\. Base functions
 
 * [gather_times] - Loads execution times from files in a given folder. This
 function uses [get_time_gnu] by default, but can be configured to use another
@@ -111,7 +98,7 @@ different computational work sizes.
 
 <a name="speedupcomparisonagainstoneormorereferenceimplementations"></a>
 
-### 3.3\. Speedup comparison against one or more reference implementations
+### 2.3\. Speedup comparison against one or more reference implementations
 
 * [speedup] - Determines the average, maximum and minimum speedups against one
 or more reference *implementations* across a number of *setups*. Can optionally
@@ -127,7 +114,7 @@ in plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
 
 <a name="pairwisespeedupcomparison"></a>
 
-### 3.4\. Pairwise speedup comparison
+### 2.4\. Pairwise speedup comparison
 
 * [pwspeedup] - **TODO**
 
@@ -137,7 +124,7 @@ in plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
 
 <a name="plotting"></a>
 
-### 3.5\. Plotting
+### 2.5\. Plotting
 
 Although the [perfstats] and [speedup] functions optionally create plots, these
 are mainly intended to provide visual feedback on the performance analysis being
@@ -146,6 +133,24 @@ generated plots via the returned figure handles or create custom plots using the
 data provided by [perfstats] and [speedup]. Either way, [MATLAB]/[Octave] plots
 can be used directly in publications, or converted to LaTeX using the excellent
 [matlab2tikz] script, as will be shown in some of the examples.
+
+
+<a name="defaultbenchmarkfileformatandalternativeimplementations"></a>
+
+## 3\. Default benchmark file format and alternative implementations
+
+By default, **PerfAndPubTools** expects individual benchmarking results to be
+available as files containing the default output of [GNU time] command, for
+example:
+
+```
+512.66user 2.17system 8:01.34elapsed 106%CPU (0avgtext+0avgdata 1271884maxresident)k
+0inputs+2136outputs (0major+49345minor)pagefaults 0swaps
+```
+
+This preset selection can be easily modified as follows.
+
+**TODO**
 
 <a name="examples"></a>
 

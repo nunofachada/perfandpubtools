@@ -10,19 +10,6 @@ software performance benchmark results and producing associated publication
 quality materials. If you use this software please cite reference
 [\[1\]](#ref1).
 
-## Benchmark file format
-
-By default, **PerfAndPubTools** expects individual benchmarking results to be
-available as files containing the default output of [GNU time] command, for
-example:
-
-```
-512.66user 2.17system 8:01.34elapsed 106%CPU (0avgtext+0avgdata 1271884maxresident)k
-0inputs+2136outputs (0major+49345minor)pagefaults 0swaps
-```
-
-This preset selection can be easily modified as described in the next sections.
-
 ## Architecture and functions
 
 **PerfAndPubTools** is implemented in a layered architecture using a procedural
@@ -39,14 +26,16 @@ software can be executed under different *setups*. These can be different
 computational sizes (e.g. vector lengths in a sorting algorithm) or distinct
 execution parameters (e.g. number of threads used).
 
-**PerfAndPubTools** is bundled with the following functions, from lowest to
-highest-level of functionality:
+The next sections describe the functions provided with **PerfAndPubTools**.
 
 ### Time parsing functions (plugins)
 
 * [get_time_gnu] - Given a file containing the default output of the [GNU time]
 command, this function extracts the user, system and elapsed times in seconds,
 as well as the percentage of CPU usage.
+
+* Additional functions/plugins for parsing other types of benchmarking files
+can easily be implemented by the user, as described in the next section.
 
 ### Base functions
 
@@ -90,6 +79,22 @@ generated plots via the returned figure handles or create custom plots using the
 data provided by [perfstats] and [speedup]. Either way, [MATLAB]/[Octave] plots
 can be used directly in publications, or converted to LaTeX using the excellent
 [matlab2tikz] script, as will be shown in some of the examples.
+
+
+## Default benchmark file format and alternative implementations
+
+By default, **PerfAndPubTools** expects individual benchmarking results to be
+available as files containing the default output of [GNU time] command, for
+example:
+
+```
+512.66user 2.17system 8:01.34elapsed 106%CPU (0avgtext+0avgdata 1271884maxresident)k
+0inputs+2136outputs (0major+49345minor)pagefaults 0swaps
+```
+
+This preset selection can be easily modified as follows.
+
+**TODO**
 
 ## Examples
 
