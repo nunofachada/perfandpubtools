@@ -5,8 +5,8 @@ PerfAndPubTools
 2\.  [Architecture and functions](#architectureandfunctions)  
 2.1\.  [Time parsing functions (plugins)](#timeparsingfunctionsplugins)  
 2.2\.  [Base functions](#basefunctions)  
-2.3\.  [Speedup comparison against one or more reference implementations](#speedupcomparisonagainstoneormorereferenceimplementations)  
-2.4\.  [Pairwise speedup comparison](#pairwisespeedupcomparison)  
+2.3\.  [Speedups against one or more reference implementations](#speedupsagainstoneormorereferenceimplementations)  
+2.4\.  [Pairwise speedups](#pairwisespeedups)  
 2.5\.  [Plotting](#plotting)  
 3\.  [Default benchmark file format and alternative implementations](#defaultbenchmarkfileformatandalternativeimplementations)  
 4\.  [Examples](#examples)  
@@ -23,7 +23,7 @@ PerfAndPubTools
 4.1.10\.  [Scalability of the different sorting algorithms for increasing vector sizes](#scalabilityofthedifferentsortingalgorithmsforincreasingvectorsizes)  
 4.1.11\.  [Custom scalability plots](#customscalabilityplots)  
 4.1.12\.  [Produce a table instead of a plot](#produceatableinsteadofaplot)  
-4.1.13\.  [Pairwise speedups](#pairwisespeedups)  
+4.1.13\.  [Pairwise speedups](#pairwisespeedups-1)  
 4.2\.  [Performance analysis of a simulation model](#performanceanalysisofasimulationmodel)  
 4.2.1\.  [Implementations and setups of the PPHPC agent-based model](#implementationsandsetupsofthepphpcagent-basedmodel)  
 4.2.2\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
@@ -76,9 +76,9 @@ The next sections describe the functions provided with **PerfAndPubTools**.
 
 ### 2.1\. Time parsing functions (plugins)
 
-* [get_time_gnu] - Given a file containing the default output of the [GNU time]
-command, this function extracts the user, system and elapsed times in seconds,
-as well as the percentage of CPU usage.
+* [get_time_gnu] - Extract the user time, system time and elapsed time
+(in seconds), as well as the percentage of CPU usage, from files containing the
+default output of the [GNU time] command.
 
 * Additional functions/plugins for parsing other types of benchmarking files
 can easily be implemented by the user, as described in the next section.
@@ -89,16 +89,17 @@ can easily be implemented by the user, as described in the next section.
 
 * [gather_times] - Loads execution times from files in a given folder. This
 function uses [get_time_gnu] by default, but can be configured to use another
-function to load individual benchmark files with a different format.
+function to load individual benchmark files with a different format, as
+described in the next section..
 
 * [perfstats] - Determines mean times and respective standard deviations of a
 computational experiment using folders of files containing benchmarking results,
 optionally plotting a scalability graph if different setups correspond to
 different computational work sizes.
 
-<a name="speedupcomparisonagainstoneormorereferenceimplementations"></a>
+<a name="speedupsagainstoneormorereferenceimplementations"></a>
 
-### 2.3\. Speedup comparison against one or more reference implementations
+### 2.3\. Speedups against one or more reference implementations
 
 * [speedup] - Determines the average, maximum and minimum speedups against one
 or more reference *implementations* across a number of *setups*. Can optionally
@@ -106,34 +107,36 @@ generate a bar plot displaying the various speedups.
 
 * [times_table] - Returns a matrix with useful contents for using in tables for
 publication, namely times (in seconds), absolute standard deviations (seconds),
-relative standard deviations, speedups (vs the specified implementations).
+relative standard deviations and speedups (vs the specified implementations).
 
 * [times_table_f] - Returns a table with performance analysis results formatted
 in plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
 [booktabs] packages).
 
-<a name="pairwisespeedupcomparison"></a>
+<a name="pairwisespeedups"></a>
 
-### 2.4\. Pairwise speedup comparison
+### 2.4\. Pairwise speedups
 
-* [pwspeedup] - **TODO**
-
-* [pwtimes_table] - **TODO**
-
-* [pwtimes_table_f] - **TODO**
+The pairwise speedup functions, [pwspeedup], [pwtimes_table] and
+[pwtimes_table_f], have similar goals to their non-pairwise counterparts. They
+are, however, able to compare multiple _implementations_ and _setups_ under two
+different _contexts_. Using the sorting algorithms example, these functions
+can evaluate how different algorithms scale for increasing vector sizes under,
+e.g., a) *two different programming languages*, b) *serial or parallel
+execution*, or c) *two parallelization backends (e.g. CUDA and OpenCL)*.
 
 <a name="plotting"></a>
 
 ### 2.5\. Plotting
 
-Although the [perfstats] and [speedup] functions optionally create plots, these
-are mainly intended to provide visual feedback on the performance analysis being
-undertaken. Those needing more control over the final figures can customize the
-generated plots via the returned figure handles or create custom plots using the
-data provided by [perfstats] and [speedup]. Either way, [MATLAB]/[Octave] plots
-can be used directly in publications, or converted to LaTeX using the excellent
-[matlab2tikz] script, as will be shown in some of the examples.
-
+Although the [perfstats] and [speedup] functions and their pairwise counterparts
+optionally create plots, these are mainly intended to provide visual feedback on
+the performance analysis being undertaken. Those needing more control over the
+final figures can customize the generated plots via the returned figure handles
+or create custom plots using the data returned by these functions. Either way,
+[MATLAB]/[Octave] plots can be used directly in publications, or converted to
+LaTeX using the excellent [matlab2tikz] script, as will be shown in some of the
+examples.
 
 <a name="defaultbenchmarkfileformatandalternativeimplementations"></a>
 
@@ -770,7 +773,7 @@ times_table_f(1, 'vs Bubble', tdata)
 
 <a name="exsimmods"></a>
 
-<a name="pairwisespeedups"></a>
+<a name="pairwisespeedups-1"></a>
 
 #### 4.1.13\. Pairwise speedups
 
