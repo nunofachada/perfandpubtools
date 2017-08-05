@@ -3,11 +3,12 @@ PerfAndPubTools
 
 1\.  [What is PerfAndPubTools?](#whatisperfandpubtools?)  
 2\.  [Architecture and functions](#architectureandfunctions)  
-2.1\.  [Time parsing functions (plugins)](#timeparsingfunctionsplugins)  
-2.2\.  [Base functions](#basefunctions)  
-2.3\.  [Speedups against one or more reference implementations](#speedupsagainstoneormorereferenceimplementations)  
-2.4\.  [Pairwise speedups](#pairwisespeedups)  
-2.5\.  [Plotting](#plotting)  
+2.1\.  [Initialization](#initialization)  
+2.2\.  [Time parsing functions (plugins)](#timeparsingfunctionsplugins)  
+2.3\.  [Base functions](#basefunctions)  
+2.4\.  [Speedups against one or more reference implementations](#speedupsagainstoneormorereferenceimplementations)  
+2.5\.  [Pairwise speedups](#pairwisespeedups)  
+2.6\.  [Plotting](#plotting)  
 3\.  [Default benchmark file format and alternative implementations](#defaultbenchmarkfileformatandalternativeimplementations)  
 4\.  [Examples](#examples)  
 4.1\.  [Performance analysis of sorting algorithms](#performanceanalysisofsortingalgorithms)  
@@ -70,11 +71,36 @@ software can be executed under different *setups*. These can be different
 computational sizes (e.g. vector lengths in a sorting algorithm) or distinct
 execution parameters (e.g. number of threads used).
 
-The next sections describe the functions provided with **PerfAndPubTools**.
+The next sections describe package initialization and configuration, as well as
+the functionality offered by **PerfAndPubTools**.
+
+<a name="initialization"></a>
+
+### 2.1\. Initialization
+
+**PerfAndPubTools** must be initialized before use by invoking the [startup]
+script. This script is automatically executed (and thus, initialization is
+automatically performed) if [MATLAB] or [Octave] are launched from the
+**PerfAndPubTools** folder.
+
+Initialization adds **PerfAndPubTools** functions to the [MATLAB]/[Octave] path
+and declares the following global variables:
+
+* `perfnpubtools_get_time_` -  Specifies the function for parsing files with
+benchmarking information (default is [get_time_gnu]).
+* `perfnpubtools_version` - Specifies the package version.
+* `perfnpubtools_remove_fastest` - Specifies the number or percentage of
+fastest observations to remove (default is 0). 
+* `perfnpubtools_remove_slowest` - Specifies the number or percentage of
+slowest observations to remove (default is 0).
+
+Regarding the last two variables, if these contain integers >= 1, then they
+specify the number of observations to remove. If these values are reals in the
+]0, 1[ interval, then they specify the percentage of observations to remove.
 
 <a name="timeparsingfunctionsplugins"></a>
 
-### 2.1\. Time parsing functions (plugins)
+### 2.2\. Time parsing functions (plugins)
 
 * [get_time_gnu] - Extract the user time, system time and elapsed time
 (in seconds), as well as the percentage of CPU usage, from files containing the
@@ -85,7 +111,7 @@ can easily be implemented by the user, as described in the next section.
 
 <a name="basefunctions"></a>
 
-### 2.2\. Base functions
+### 2.3\. Base functions
 
 * [gather_times] - Loads execution times from files in a given folder. This
 function uses [get_time_gnu] by default, but can be configured to use another
@@ -99,7 +125,7 @@ different computational work sizes.
 
 <a name="speedupsagainstoneormorereferenceimplementations"></a>
 
-### 2.3\. Speedups against one or more reference implementations
+### 2.4\. Speedups against one or more reference implementations
 
 * [speedup] - Determines the average, maximum and minimum speedups against one
 or more reference *implementations* across a number of *setups*. Can optionally
@@ -115,28 +141,28 @@ in plain text or in LaTeX (the latter requires the [siunitx], [multirow] and
 
 <a name="pairwisespeedups"></a>
 
-### 2.4\. Pairwise speedups
+### 2.5\. Pairwise speedups
 
 The pairwise speedup functions, [pwspeedup], [pwtimes_table] and
 [pwtimes_table_f], have similar goals to their non-pairwise counterparts. They
 are, however, able to compare multiple _implementations_ and _setups_ under two
 different _contexts_. Using the sorting algorithms example, these functions
 can evaluate how different algorithms scale for increasing vector sizes under,
-e.g., a) *two different programming languages*, b) *serial or parallel
-execution*, or c) *two parallelization backends (e.g. CUDA and OpenCL)*.
+e.g., a) two different programming languages, b) serial or parallel
+execution, c) two parallelization backends (e.g. CUDA and OpenCL), or any other
+pair of contexts deemed relevant.
 
 <a name="plotting"></a>
 
-### 2.5\. Plotting
+### 2.6\. Plotting
 
-Although the [perfstats] and [speedup] functions and their pairwise counterparts
-optionally create plots, these are mainly intended to provide visual feedback on
-the performance analysis being undertaken. Those needing more control over the
-final figures can customize the generated plots via the returned figure handles
-or create custom plots using the data returned by these functions. Either way,
-[MATLAB]/[Octave] plots can be used directly in publications, or converted to
-LaTeX using the excellent [matlab2tikz] script, as will be shown in some of the
-examples.
+Although the [perfstats], [speedup] and [pwspeedup] functions optionally create
+plots, these are mainly intended to provide visual feedback on the performance
+analysis being undertaken. Those needing more control over the final figures can
+customize the generated plots via the returned figure handles or create custom
+plots using the data returned by these functions. Either way, [MATLAB]/[Octave]
+plots can be used directly in publications, or converted to LaTeX using the
+excellent [matlab2tikz] script, as will be shown in some of the examples.
 
 <a name="defaultbenchmarkfileformatandalternativeimplementations"></a>
 
@@ -151,9 +177,13 @@ example:
 0inputs+2136outputs (0major+49345minor)pagefaults 0swaps
 ```
 
-This preset selection can be easily modified as follows.
-
-**TODO**
+This preset selection can be modified by specifying an alternative function in
+the `perfnpubtools_get_time_` global variable (by default, this variable is set
+to the [get_time_gnu] function). Alternative functions should respect the
+prototype defined by the default [get_time_gnu] function. More specifically,
+alternative functions should accept one argument specifying the full path of the
+file containing the profiling information, and should return a structure with
+(at least) the `elapsed` field, containing the elapsed time in seconds.
 
 <a name="examples"></a>
 
@@ -1689,6 +1719,7 @@ http://dx.doi.org/10.1007/s10766-015-0399-9
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [multirow]: https://www.ctan.org/pkg/multirow
 [booktabs]: https://www.ctan.org/pkg/booktabs
+[startup]: ../startup.m
 [get_time_gnu]: ../src/get_time_gnu.m
 [gather_times]: ../src/gather_times.m
 [perfstats]: ../src/perfstats.m
