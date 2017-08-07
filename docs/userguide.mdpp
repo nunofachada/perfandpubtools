@@ -127,7 +127,7 @@ full path of the file containing the profiling information, and should return a
 structure with (at least) the `elapsed` field, containing the elapsed time in
 seconds.
 
-## Tutorial: performance analysis of sorting algorithms
+## Tutorial - performance analysis of sorting algorithms
 
 This tutorial demonstrates how to benchmark several sorting algorithms with the
 [GNU time] command and analyze results with **PerfAndPubTools**. Since the
@@ -763,9 +763,61 @@ ans =
 ```
 
 Note that, analogously to [speedup], [pwspeedup] also returns the maximum and
-minimum speedups, mean and standard deviations of computational times, etc.
+minimum speedups, mean and standard deviations of computational times, and so
+on.
 
-**TODO: example of [pwtimes_table] and [pw_times_table_f]**
+The [pwtimes_table] and [pw_times_table_f] functions, like their non-pairwise
+counterparts, can be used to create performance tables formatted in plain text
+or LaTeX. Using the data defined in the previous examples, the following
+commands produce a plain text table comparing the performance of the C and
+Python programming languages when used for implementing various sorting
+algorithms:
+
+```matlab
+% Put data in table format
+tdata = pwtimes_table({'C', 'Python'}, 'Bubble', bs, bspy, 'Selection', ss, sspy, 'Merge', ms, mspy, 'Quick', qs, qspy);
+
+% Print a plain text table
+pwtimes_table_f(0, tdata)
+```
+
+```
+                  ----------------------------------------------------------------------
+                  |                 C                |              Python             |
+----------------------------------------------------------------------------------------------------------------------------
+| Imp.   | Set.   |    t(s)     |   std     |  std%  |    t(s)    |   std     |  std%  | Avg.Spdup | Max.Spdup | Min.Spdup |
+----------------------------------------------------------------------------------------------------------------------------
+| Bubble |   1e5  |          36 |     0.887 |   2.46 |        446 |        14 |   3.14 |      12.4 |      13.3 |      11.3 |
+|        |   2e5  |         145 |      2.92 |   2.02 |   2.13e+03 |       121 |   5.66 |      14.7 |        17 |      13.3 |
+|        |   3e5  |         325 |      6.19 |   1.90 |   5.06e+03 |       123 |   2.43 |      15.6 |      16.4 |      14.6 |
+|        |   4e5  |         578 |      6.38 |   1.10 |   9.96e+03 |       750 |   7.53 |      17.2 |      20.7 |      15.5 |
+----------------------------------------------------------------------------------------------------------------------------
+| Select |   1e5  |        9.53 |     0.069 |   0.72 |        219 |      6.99 |   3.20 |        23 |      24.6 |      21.9 |
+|        |   2e5  |          38 |     0.283 |   0.74 |    1.2e+03 |      38.3 |   3.18 |      31.6 |      33.2 |      29.2 |
+|        |   3e5  |        88.5 |       3.7 |   4.18 |   3.19e+03 |      89.4 |   2.80 |        36 |      39.7 |      32.6 |
+|        |   4e5  |         154 |      3.06 |   1.99 |   6.29e+03 |       303 |   4.82 |      40.9 |      45.1 |      35.9 |
+----------------------------------------------------------------------------------------------------------------------------
+|  Merge |   1e5  |        0.02 |  3.66e-18 |   0.00 |      0.569 |    0.0582 |  10.23 |      28.5 |      35.5 |        25 |
+|        |   2e5  |       0.041 |   0.00316 |   7.71 |       1.05 |   0.00789 |   0.75 |      25.7 |      26.8 |      20.8 |
+|        |   3e5  |        0.06 |  1.46e-17 |   0.00 |       1.63 |    0.0149 |   0.91 |      27.2 |      27.7 |      26.8 |
+|        |   4e5  |       0.085 |    0.0127 |  14.93 |       2.23 |     0.022 |   0.99 |      26.3 |      28.5 |      18.4 |
+----------------------------------------------------------------------------------------------------------------------------
+|  Quick |   1e5  |        0.01 |  1.83e-18 |   0.00 |       0.39 |    0.0105 |   2.70 |        39 |        41 |        38 |
+|        |   2e5  |        0.02 |  3.66e-18 |   0.00 |      0.815 |    0.0246 |   3.02 |      40.8 |      43.5 |      39.5 |
+|        |   3e5  |        0.03 |  7.31e-18 |   0.00 |       1.31 |    0.0647 |   4.94 |      43.7 |      48.3 |      41.3 |
+|        |   4e5  |       0.051 |   0.00316 |   6.20 |        1.8 |     0.052 |   2.89 |      35.3 |        38 |      28.7 |
+----------------------------------------------------------------------------------------------------------------------------
+```
+ 
+In order to obtain the equivalent LaTeX table, we set the first parameter to 1
+instead of 0:
+
+```matlab
+% Print a Latex table
+pwtimes_table_f(1, tdata)
+```
+
+**TODO: Add LaTeX table**
 
 ## Real world cases
 
