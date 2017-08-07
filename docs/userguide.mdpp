@@ -140,14 +140,13 @@ the linked page).
 2. Download the [sorttest.py] program.
 3. Confirm that the [GNU time] program is installed (instructions also available
 in [sorttest.c]).
-4. In [MATLAB]/[Octave] create a `sortfolder` variable containing the full path
-of the folder where the benchmark output files will be placed, for example
-`sortfolder = '/home/user/sort'` (Unix/Linux) or
-`sortfolder = 'C:\Users\UserName\Documents\sort'` (Windows).
+4. In [MATLAB]/[Octave] create two variables, `sortfolder_c` and
+`sortfolder_py`, containing the full path where the C and Python benchmark
+output files will be placed, respectively.
 
 [GNU time] is usually invoked as `/usr/bin/time`, but this can vary for
 different Linux distributions. On OSX it is invoked as `gtime`. The usual Linux
-invocation is used for throughout the examples, replace it as appropriate.
+invocation is used for throughout the tutorial, replace it as appropriate.
 
 Since the [GNU time] program does not seem to be available for Windows, the
 given command-line instructions only run unmodified on Linux and OSX. On
@@ -156,7 +155,7 @@ Windows, benchmark the [sorttest.c] program using an [alternative] approach and
 Otherwise, skip the command-line benchmarking instructions and directly use the
 [benchmarking data](sort_data) bundled with **PerfAndPubTools**.
 
-#### Extract performance data from a file
+### Extract performance data from a file
 
 First, check that the [sorttest.c] program is working by testing the [Quicksort]
 algorithm with a vector of 1,000,000 random integers:
@@ -177,7 +176,8 @@ $ /usr/bin/time ./sorttest quick 1000000 2362 2> out.txt
 ```
 
 The `2>` part redirects the output of [GNU time] to a file called `out.txt`.
-This file can be parsed with the [get_time_gnu] function from [MATLAB] or [Octave]:
+This file can be parsed with the [get_time_gnu] function from [MATLAB] or
+[Octave]:
 
 ```matlab
 p = get_time_gnu('out.txt')
@@ -194,7 +194,7 @@ p =
         cpu: 99
 ```
 
-#### Extract execution times from files in a folder
+### Extract execution times from files in a folder
 
 The [gather_times] function extracts execution times from multiple files in a
 folder. This is useful for analyzing average run times over a number of runs.
@@ -202,7 +202,7 @@ First, we need to perform these runs. From a terminal, run the following
 command, which performs 10 runs of the [sorttest.c] program:
 
 ```
-$ for RUN in {1..10}; do /usr/bin/time ./sorttest quick 1000000 $RUN 2> time_c_quick_1000000_$RUN.txt; done
+$ for RUN in {1..10}; do /usr/bin/time ./sorttest quick 1000000 $RUN 2> time_c_quick_1000000_${RUN}.txt; done
 ```
 
 Note that each run is performed with a different seed, so that different vectors
@@ -210,7 +210,7 @@ are sorted by [Quicksort] each turn. In [MATLAB] or [Octave], use the
 [gather_times] function to extract execution times:
 
 ```matlab
-exec_time = gather_times('Quicksort', sortfolder, 'time_c_quick_1000000_*.txt');
+exec_time = gather_times('Quicksort', sortfolder_c, 'time_c_quick_1000000_*.txt');
 ```
 
 The first parameter names the list of gathered times, and is used as metadata by
@@ -222,21 +222,14 @@ field of the returned structure:
 exec_time.elapsed
 ```
 
-The [gather_times] function uses [get_time_gnu] internally by default. However, 
-other functions can be specified in the first line of the [gather_times]
-function body, allowing **PerfAndPubTools** to support benchmarking formats other
-than the output of [GNU time]. Alternatives to [get_time_gnu] are only required to
-return a struct with the `elapsed` field, indicating the duration (in seconds)
-of a program execution.
-
-#### Average execution times and standard deviations
+### Average execution times and standard deviations
 
 In its most basic usage, the [perfstats] function obtains performance
 statistics. In this example, average execution times and standard deviations are
 obtained from the runs performed in the previous example:
 
 ```matlab
-qs1M = struct('sname', 'Quicksort', 'folder', sortfolder, 'files', 'time_c_quick_1000000_*.txt');
+qs1M = struct('sname', 'Quicksort', 'folder', sortfolder_c, 'files', 'time_c_quick_1000000_*.txt');
 [avg_time, std_time] = perfstats(0, 'QuickSort', {qs1M})
 ```
 
@@ -257,7 +250,7 @@ benchmark files from; c) `files`, the specific files to load (using wildcards);
 and, d) `csize`, an optional computational size for plotting purposes. 
 
 
-#### Compare multiple setups within the same implementation
+### Compare multiple setups within the same implementation
 
 A more advanced use case for [perfstats] consists of comparing multiple setups
 associated with different computational sizes within the same implementation
@@ -278,9 +271,9 @@ Second, obtain the average times for the several vector sizes using [perfstats]:
 
 ```matlab
 % Specify the setups
-bs10k = struct('sname', 'bs10k', 'folder', sortfolder, 'files', 'time_c_bubble_10000_*.txt');
-bs20k = struct('sname', 'bs20k', 'folder', sortfolder, 'files', 'time_c_bubble_20000_*.txt');
-bs30k = struct('sname', 'bs30k', 'folder', sortfolder, 'files', 'time_c_bubble_30000_*.txt');
+bs10k = struct('sname', 'bs10k', 'folder', sortfolder_c, 'files', 'time_c_bubble_10000_*.txt');
+bs20k = struct('sname', 'bs20k', 'folder', sortfolder_c, 'files', 'time_c_bubble_20000_*.txt');
+bs30k = struct('sname', 'bs30k', 'folder', sortfolder_c, 'files', 'time_c_bubble_30000_*.txt');
 
 % Specify the implementation spec
 bs =  {bs10k, bs20k, bs30k};
@@ -295,7 +288,7 @@ avg_time =
     0.3220    1.3370    3.1070
 ```
 
-#### Same as previous, with a linear plot
+### Same as previous, with a linear plot
 
 The [perfstats] function can also generate scalability plots. For this purpose,
 the computational size, `csize`, must be specified in each setup, and the first
@@ -304,9 +297,9 @@ shown in the following commands:
 
 ```matlab
 % Specify the setups
-bs10k = struct('sname', 'bs10k', 'csize', 1e4, 'folder', sortfolder, 'files', 'time_c_bubble_10000_*.txt');
-bs20k = struct('sname', 'bs20k', 'csize', 2e4, 'folder', sortfolder, 'files', 'time_c_bubble_20000_*.txt');
-bs30k = struct('sname', 'bs30k', 'csize', 3e4, 'folder', sortfolder, 'files', 'time_c_bubble_30000_*.txt');
+bs10k = struct('sname', 'bs10k', 'csize', 1e4, 'folder', sortfolder_c, 'files', 'time_c_bubble_10000_*.txt');
+bs20k = struct('sname', 'bs20k', 'csize', 2e4, 'folder', sortfolder_c, 'files', 'time_c_bubble_20000_*.txt');
+bs30k = struct('sname', 'bs30k', 'csize', 3e4, 'folder', sortfolder_c, 'files', 'time_c_bubble_30000_*.txt');
 
 % Specify the implementation spec
 bs =  {bs10k, bs20k, bs30k};
@@ -328,7 +321,7 @@ perfstats(-1, 'bubble', bs);
 
 ![ex4 1 5_2](https://cloud.githubusercontent.com/assets/3018963/14692287/0d40bbbe-074e-11e6-8d2c-c7d245b7cbd1.png)
 
-#### Compare different implementations
+### Compare different implementations
 
 Besides comparing multiple setups within the same implementation, the
 [perfstats] function is also able to compare multiple setups from multiple
@@ -347,17 +340,17 @@ Second, use [perfstats] to plot the respective scalability graph:
 
 ```matlab
 % Specify Merge sort implementation specs
-ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_c_merge_100000_*.txt');
-ms1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', sortfolder, 'files', 'time_c_merge_1000000_*.txt');
-ms1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', sortfolder, 'files', 'time_c_merge_10000000_*.txt');
-ms1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', sortfolder, 'files', 'time_c_merge_100000000_*.txt');
+ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_c, 'files', 'time_c_merge_100000_*.txt');
+ms1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', sortfolder_c, 'files', 'time_c_merge_1000000_*.txt');
+ms1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', sortfolder_c, 'files', 'time_c_merge_10000000_*.txt');
+ms1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', sortfolder_c, 'files', 'time_c_merge_100000000_*.txt');
 ms = {ms1e5, ms1e6, ms1e7, ms1e8};
 
 % Specify Quicksort implementation specs
-qs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_c_quick_100000_*.txt');
-qs1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', sortfolder, 'files', 'time_c_quick_1000000_*.txt');
-qs1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', sortfolder, 'files', 'time_c_quick_10000000_*.txt');
-qs1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', sortfolder, 'files', 'time_c_quick_100000000_*.txt');
+qs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_c, 'files', 'time_c_quick_100000_*.txt');
+qs1e6 = struct('sname', '1e6', 'csize', 1e6, 'folder', sortfolder_c, 'files', 'time_c_quick_1000000_*.txt');
+qs1e7 = struct('sname', '1e7', 'csize', 1e7, 'folder', sortfolder_c, 'files', 'time_c_quick_10000000_*.txt');
+qs1e8 = struct('sname', '1e8', 'csize', 1e8, 'folder', sortfolder_c, 'files', 'time_c_quick_100000000_*.txt');
 qs = {qs1e5, qs1e6, qs1e7, qs1e8};
 
 % Plot comparison with a log-log plot
@@ -376,7 +369,7 @@ perfstats(-4, 'Merge sort', ms, 'Quicksort', qs);
 
 ![ex4 1 6_2](https://cloud.githubusercontent.com/assets/3018963/14692289/0d47a0c8-074e-11e6-928e-6f5fd8ed6528.png)
 
-#### Speedup
+### Speedup
 
 The [speedup] function is used to obtain relative speedups between different
 implementations. Using the variables defined in the previous example, the
@@ -423,7 +416,7 @@ speedup(-1, 1, 'Merge sort', ms, 'Quicksort', qs);
 
 ![ex4 1 7_2](https://cloud.githubusercontent.com/assets/3018963/14715181/cfda758e-07df-11e6-8013-10364091773b.png)
 
-#### Speedup for multiple algorithms and vector sizes
+### Speedup for multiple algorithms and vector sizes
 
 The [speedup] function is also able to determine relative speedups between
 different implementations for multiple computational sizes. In this example we
@@ -443,31 +436,31 @@ respective speedup plot:
 
 ```matlab
 % Specify Bubble sort implementation specs
-bs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_c_bubble_100000_*.txt');
-bs2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_c_bubble_200000_*.txt');
-bs3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_c_bubble_300000_*.txt');
-bs4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_c_bubble_400000_*.txt');
+bs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_c, 'files', 'time_c_bubble_100000_*.txt');
+bs2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder_c, 'files', 'time_c_bubble_200000_*.txt');
+bs3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder_c, 'files', 'time_c_bubble_300000_*.txt');
+bs4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder_c, 'files', 'time_c_bubble_400000_*.txt');
 bs = {bs1e5, bs2e5, bs3e5, bs4e5};
 
 % Specify Selection sort implementation specs
-ss1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_c_selection_100000_*.txt');
-ss2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_c_selection_200000_*.txt');
-ss3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_c_selection_300000_*.txt');
-ss4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_c_selection_400000_*.txt');
+ss1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_c, 'files', 'time_c_selection_100000_*.txt');
+ss2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder_c, 'files', 'time_c_selection_200000_*.txt');
+ss3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder_c, 'files', 'time_c_selection_300000_*.txt');
+ss4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder_c, 'files', 'time_c_selection_400000_*.txt');
 ss = {ss1e5, ss2e5, ss3e5, ss4e5};
 
 % Specify Merge sort implementation specs
-ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_c_merge_100000_*.txt');
-ms2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_c_merge_200000_*.txt');
-ms3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_c_merge_300000_*.txt');
-ms4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_c_merge_400000_*.txt');
+ms1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_c, 'files', 'time_c_merge_100000_*.txt');
+ms2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder_c, 'files', 'time_c_merge_200000_*.txt');
+ms3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder_c, 'files', 'time_c_merge_300000_*.txt');
+ms4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder_c, 'files', 'time_c_merge_400000_*.txt');
 ms = {ms1e5, ms2e5, ms3e5, ms4e5};
 
 % Specify Quicksort implementation specs
-qs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_c_quick_100000_*.txt');
-qs2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_c_quick_200000_*.txt');
-qs3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_c_quick_300000_*.txt');
-qs4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_c_quick_400000_*.txt');
+qs1e5 = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_c, 'files', 'time_c_quick_100000_*.txt');
+qs2e5 = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder_c, 'files', 'time_c_quick_200000_*.txt');
+qs3e5 = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder_c, 'files', 'time_c_quick_300000_*.txt');
+qs4e5 = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder_c, 'files', 'time_c_quick_400000_*.txt');
 qs = {qs1e5, qs2e5, qs3e5, qs4e5};
 
 % Plot speedup of multiple sorting algorithms against Bubble sort
@@ -525,7 +518,7 @@ xlabel('Algorithms');
 
 ![ex4 1 8_4](https://cloud.githubusercontent.com/assets/3018963/14715384/84054192-07e0-11e6-9da1-88bb990f4588.png)
 
-#### Custom speedup plots
+### Custom speedup plots
 
 For more control over the speedup plots, it may preferable to use the data
 provided by [speedup] and build the plots from the beginning. Continuing from
@@ -568,7 +561,7 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 ![ex4 1 9_2](https://cloud.githubusercontent.com/assets/3018963/14691634/3681a91a-074a-11e6-818c-498c68d2f8f0.png)
 
-#### Scalability of the different sorting algorithms for increasing vector sizes
+### Scalability of the different sorting algorithms for increasing vector sizes
 
 Continuing from the previous example, we can use [perfstats] to determine and
 plot the scalability of the different sorting algorithms for increasing vector
@@ -591,7 +584,7 @@ p =
     0.0100    0.0200    0.0300    0.0510
 ```
 
-#### Custom scalability plots
+### Custom scalability plots
 
 In a similar fashion to the speedup plots, finer control over the scalability
 plots is possible by directly using the data provided by [perfstats]. The
@@ -644,7 +637,7 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 ![ex4 1 11_2](https://cloud.githubusercontent.com/assets/3018963/14691915/ca03003e-074b-11e6-85fd-155e7cf2314a.png)
 
-#### Produce a table instead of a plot
+### Produce a table instead of a plot
 
 The [times_table] and [times_table_f] functions can be used to create
 performance tables formatted in plain text or LaTeX. Using the data defined in
@@ -697,7 +690,7 @@ times_table_f(1, 'vs Bubble', tdata)
 
 ![ex4 1 12](https://cloud.githubusercontent.com/assets/3018963/14691916/ca160698-074b-11e6-9598-9bd2ce6f6a7e.png)
 
-#### Pairwise speedups
+### Pairwise speedups
 
 **TODO**
 
@@ -705,38 +698,38 @@ times_table_f(1, 'vs Bubble', tdata)
 * Discuss Python sorting algorithms in 
 
 ```
-for RUN in {1..10}; do for IMPL in bubble selection merge quick; do for SIZE in 100000 200000 300000 400000; do /usr/bin/time python sorttest.py $IMPL $SIZE $RUN 2> time_c_py_${IMPL}_${SIZE}_${RUN}.txt; done; done; done
+for RUN in {1..10}; do for IMPL in bubble selection merge quick; do for SIZE in 100000 200000 300000 400000; do /usr/bin/time python sorttest.py $IMPL $SIZE $RUN 2> time_py_${IMPL}_${SIZE}_${RUN}.txt; done; done; done
 ```
 
 Specify Python implementations and setups:
 
 ```matlab
 % Specify Bubble sort implementation specs
-bs1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_py_bubble_100000_*.txt');
-bs2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_py_bubble_200000_*.txt');
-bs3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_py_bubble_300000_*.txt');
-bs4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_py_bubble_400000_*.txt');
+bs1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_py, 'files', 'time_py_bubble_100000_*.txt');
+bs2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder_py, 'files', 'time_py_bubble_200000_*.txt');
+bs3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder_py, 'files', 'time_py_bubble_300000_*.txt');
+bs4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder_py, 'files', 'time_py_bubble_400000_*.txt');
 bspy = {bs1e5py, bs2e5py, bs3e5py, bs4e5py};
 
 % Specify Selection sort implementation specs
-ss1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_py_selection_100000_*.txt');
-ss2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_py_selection_200000_*.txt');
-ss3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_py_selection_300000_*.txt');
-ss4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_py_selection_400000_*.txt');
+ss1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_py, 'files', 'time_py_selection_100000_*.txt');
+ss2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder_py, 'files', 'time_py_selection_200000_*.txt');
+ss3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder_py, 'files', 'time_py_selection_300000_*.txt');
+ss4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder_py, 'files', 'time_py_selection_400000_*.txt');
 sspy = {ss1e5py, ss2e5py, ss3e5py, ss4e5py};
 
 % Specify Merge sort implementation specs
-ms1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_py_merge_100000_*.txt');
-ms2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_py_merge_200000_*.txt');
-ms3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_py_merge_300000_*.txt');
-ms4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_py_merge_400000_*.txt');
+ms1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_py, 'files', 'time_py_merge_100000_*.txt');
+ms2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder_py, 'files', 'time_py_merge_200000_*.txt');
+ms3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder_py, 'files', 'time_py_merge_300000_*.txt');
+ms4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder_py, 'files', 'time_py_merge_400000_*.txt');
 mspy = {ms1e5py, ms2e5py, ms3e5py, ms4e5py};
 
 % Specify Quicksort implementation specs
-qs1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder, 'files', 'time_py_quick_100000_*.txt');
-qs2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder, 'files', 'time_py_quick_200000_*.txt');
-qs3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder, 'files', 'time_py_quick_300000_*.txt');
-qs4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder, 'files', 'time_py_quick_400000_*.txt');
+qs1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', sortfolder_py, 'files', 'time_py_quick_100000_*.txt');
+qs2e5py = struct('sname', '2e5', 'csize', 2e5, 'folder', sortfolder_py, 'files', 'time_py_quick_200000_*.txt');
+qs3e5py = struct('sname', '3e5', 'csize', 3e5, 'folder', sortfolder_py, 'files', 'time_py_quick_300000_*.txt');
+qs4e5py = struct('sname', '4e5', 'csize', 4e5, 'folder', sortfolder_py, 'files', 'time_py_quick_400000_*.txt');
 qspy = {qs1e5py, qs2e5py, qs3e5py, qs4e5py};
 ```
 
