@@ -817,7 +817,8 @@ instead of 0:
 pwtimes_table_f(1, tdata)
 ```
 
-**TODO: Add LaTeX table**
+![ex_pw_table](https://user-images.githubusercontent.com/3018963/29043497-57cb5e52-7bb3-11e7-990a-7feb5db55726.png)
+
 
 ## Real world cases
 
