@@ -10,39 +10,40 @@ PerfAndPubTools
 2.5\.  [Pairwise speedups](#pairwisespeedups)  
 2.6\.  [Plotting](#plotting)  
 3\.  [Default benchmark file format and alternative implementations](#defaultbenchmarkfileformatandalternativeimplementations)  
-4\.  [Examples](#examples)  
-4.1\.  [Performance analysis of sorting algorithms](#performanceanalysisofsortingalgorithms)  
-4.1.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
-4.1.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder)  
-4.1.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations)  
-4.1.4\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation)  
-4.1.5\.  [Same as previous, with a linear plot](#sameaspreviouswithalinearplot)  
-4.1.6\.  [Compare different implementations](#comparedifferentimplementations)  
-4.1.7\.  [Speedup](#speedup)  
-4.1.8\.  [Speedup for multiple algorithms and vector sizes](#speedupformultiplealgorithmsandvectorsizes)  
-4.1.9\.  [Custom speedup plots](#customspeedupplots)  
-4.1.10\.  [Scalability of the different sorting algorithms for increasing vector sizes](#scalabilityofthedifferentsortingalgorithmsforincreasingvectorsizes)  
-4.1.11\.  [Custom scalability plots](#customscalabilityplots)  
-4.1.12\.  [Produce a table instead of a plot](#produceatableinsteadofaplot)  
-4.1.13\.  [Pairwise speedups](#pairwisespeedups-1)  
-4.2\.  [Performance analysis of a simulation model](#performanceanalysisofasimulationmodel)  
-4.2.1\.  [Implementations and setups of the PPHPC agent-based model](#implementationsandsetupsofthepphpcagent-basedmodel)  
-4.2.2\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
-4.2.3\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
-4.2.4\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations-1)  
-4.2.5\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation-1)  
-4.2.6\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
-4.2.7\.  [Compare different implementations](#comparedifferentimplementations-1)  
-4.2.8\.  [Speedup](#speedup-1)  
-4.2.9\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
-4.2.10\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
-4.2.11\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
-4.2.12\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
-4.2.13\.  [Custom performance plot](#customperformanceplot)  
-4.2.14\.  [Show a table instead of a plot](#showatableinsteadofaplot)  
-4.2.15\.  [Complex tables](#complextables)  
-5\.  [License](#license)  
-6\.  [References](#references)  
+4\.  [Tutorial: performance analysis of sorting algorithms](#tutorial:performanceanalysisofsortingalgorithms)  
+4.0.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
+4.0.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder)  
+4.0.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations)  
+4.0.4\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation)  
+4.0.5\.  [Same as previous, with a linear plot](#sameaspreviouswithalinearplot)  
+4.0.6\.  [Compare different implementations](#comparedifferentimplementations)  
+4.0.7\.  [Speedup](#speedup)  
+4.0.8\.  [Speedup for multiple algorithms and vector sizes](#speedupformultiplealgorithmsandvectorsizes)  
+4.0.9\.  [Custom speedup plots](#customspeedupplots)  
+4.0.10\.  [Scalability of the different sorting algorithms for increasing vector sizes](#scalabilityofthedifferentsortingalgorithmsforincreasingvectorsizes)  
+4.0.11\.  [Custom scalability plots](#customscalabilityplots)  
+4.0.12\.  [Produce a table instead of a plot](#produceatableinsteadofaplot)  
+4.0.13\.  [Pairwise speedups](#pairwisespeedups-1)  
+5\.  [Real world cases](#realworldcases)  
+5.1\.  [Performance analysis of a simulation model](#performanceanalysisofasimulationmodel)  
+5.1.1\.  [Implementations and setups of the PPHPC agent-based model](#implementationsandsetupsofthepphpcagent-basedmodel)  
+5.1.2\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
+5.1.3\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
+5.1.4\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations-1)  
+5.1.5\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation-1)  
+5.1.6\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
+5.1.7\.  [Compare different implementations](#comparedifferentimplementations-1)  
+5.1.8\.  [Speedup](#speedup-1)  
+5.1.9\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
+5.1.10\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
+5.1.11\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
+5.1.12\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
+5.1.13\.  [Custom performance plot](#customperformanceplot)  
+5.1.14\.  [Show a table instead of a plot](#showatableinsteadofaplot)  
+5.1.15\.  [Complex tables](#complextables)  
+5.2\.  [Pairwise comparison of two implementations of a GPU pseudo-random number generator](#pairwisecomparisonoftwoimplementationsofagpupseudo-randomnumbergenerator)  
+6\.  [License](#license)  
+7\.  [References](#references)  
 
 <a name="whatisperfandpubtools?"></a>
 
@@ -114,9 +115,8 @@ can easily be implemented by the user, as described in the next section.
 ### 2.3\. Base functions
 
 * [gather_times] - Loads execution times from files in a given folder. This
-function uses [get_time_gnu] by default, but can be configured to use another
-function to load individual benchmark files with a different format, as
-described in the next section..
+function uses the parsing function defined in the `perfnpubtools_get_time_`
+global variable.
 
 * [perfstats] - Determines mean times and respective standard deviations of a
 computational experiment using folders of files containing benchmarking results,
@@ -164,6 +164,8 @@ plots using the data returned by these functions. Either way, [MATLAB]/[Octave]
 plots can be used directly in publications, or converted to LaTeX using the
 excellent [matlab2tikz] script, as will be shown in some of the examples.
 
+<a name="parsealt"></a>
+
 <a name="defaultbenchmarkfileformatandalternativeimplementations"></a>
 
 ## 3\. Default benchmark file format and alternative implementations
@@ -178,67 +180,47 @@ example:
 ```
 
 This preset selection can be modified by specifying an alternative function in
-the `perfnpubtools_get_time_` global variable (by default, this variable is set
-to the [get_time_gnu] function). Alternative functions should respect the
-prototype defined by the default [get_time_gnu] function. More specifically,
-alternative functions should accept one argument specifying the full path of the
-file containing the profiling information, and should return a structure with
-(at least) the `elapsed` field, containing the elapsed time in seconds.
+the `perfnpubtools_get_time_` global variable. Alternative functions should
+respect the prototype defined by the default [get_time_gnu] function. More
+specifically, alternative functions should accept one argument specifying the
+full path of the file containing the profiling information, and should return a
+structure with (at least) the `elapsed` field, containing the elapsed time in
+seconds.
 
-<a name="examples"></a>
+<a name="tutorial:performanceanalysisofsortingalgorithms"></a>
 
-## 4\. Examples
+## 4\. Tutorial: performance analysis of sorting algorithms
 
-Examples are organized into two sections:
-
-1. [Performance analysis of sorting algorithms](#exsortalgs)
-2. [Performance analysis of a simulation model](#exsimmods)
-
-Examples in the first section demonstrate the complete process of benchmarking a
-number of sorting algorithms with the [GNU time] command and then analyzing
-results with **PerfAndPubTools**. Since the [GNU time] command is not available on
-Windows, the data produced by the benchmarks is [included][sort_data] in the
-package.
-
-Examples in the second section focus on showing how **PerfAndPubTools** was used
-to analyze performance data of multiple implementations of a
-[simulation model][PPHPC], replicating results presented in a peer-reviewed
-article [\[2\]](#ref2). The initial benchmarking steps are skipped in these
-examples, but the produced data and the scripts used to generate it are also
-made [available][pphpc_data].
-
-<a name="exsortalgs"></a>
-
-<a name="performanceanalysisofsortingalgorithms"></a>
-
-### 4.1\. Performance analysis of sorting algorithms
-
-In following examples, we use **PerfAndPubTools** to analyze the performance of
-several sorting algorithms implemented in C. Perform the following steps before
-proceeding:
+This tutorial demonstrates how to benchmark several sorting algorithms with the
+[GNU time] command and analyze results with **PerfAndPubTools**. Since the
+[GNU time] command is not available on Windows, the data produced by the
+benchmarks is [included][sort_data] in the package. Perform the following steps
+before proceeding:
 
 1. Download and compile the [sorttest.c] program (instructions are available in
 the linked page).
-2. Confirm that the [GNU time] program is installed (instructions also available
+2. Download the [sorttest.py] program.
+3. Confirm that the [GNU time] program is installed (instructions also available
 in [sorttest.c]).
-3. In [MATLAB]/[Octave] create a `sortfolder` variable containing the full path
-of the [sorttest.c] program, for example `sortfolder = '/home/user/sort'`
-(Unix/Linux) or `sortfolder = 'C:\Users\UserName\Documents\sort'` (Windows).
+4. In [MATLAB]/[Octave] create a `sortfolder` variable containing the full path
+of the folder where the benchmark output files will be placed, for example
+`sortfolder = '/home/user/sort'` (Unix/Linux) or
+`sortfolder = 'C:\Users\UserName\Documents\sort'` (Windows).
 
 [GNU time] is usually invoked as `/usr/bin/time`, but this can vary for
 different Linux distributions. On OSX it is invoked as `gtime`. The usual Linux
 invocation is used for throughout the examples, replace it as appropriate.
 
-Since the [GNU time] program does not seem to be available for Windows, these
-examples only run unmodified on Linux and OSX. On Windows, benchmark the
-[sorttest.c] program using an [alternative] approach and replace [get_time_gnu]
-with a function which parses the produced output. Otherwise, skip the actual
-benchmarking steps within the examples, and use the benchmarking data bundled
-with **PerfAndPubTools** in the [data][sort_data] folder.
+Since the [GNU time] program does not seem to be available for Windows, the
+given command-line instructions only run unmodified on Linux and OSX. On
+Windows, benchmark the [sorttest.c] program using an [alternative] approach and
+[replace `get_time_gnu` with a function which parses the produced output](#parsealt).
+Otherwise, skip the command-line benchmarking instructions and directly use the
+[benchmarking data](sort_data) bundled with **PerfAndPubTools**.
 
 <a name="extractperformancedatafromafile"></a>
 
-#### 4.1.1\. Extract performance data from a file
+#### 4.0.1\. Extract performance data from a file
 
 First, check that the [sorttest.c] program is working by testing the [Quicksort]
 algorithm with a vector of 1,000,000 random integers:
@@ -278,7 +260,7 @@ p =
 
 <a name="extractexecutiontimesfromfilesinafolder"></a>
 
-#### 4.1.2\. Extract execution times from files in a folder
+#### 4.0.2\. Extract execution times from files in a folder
 
 The [gather_times] function extracts execution times from multiple files in a
 folder. This is useful for analyzing average run times over a number of runs.
@@ -315,7 +297,7 @@ of a program execution.
 
 <a name="averageexecutiontimesandstandarddeviations"></a>
 
-#### 4.1.3\. Average execution times and standard deviations
+#### 4.0.3\. Average execution times and standard deviations
 
 In its most basic usage, the [perfstats] function obtains performance
 statistics. In this example, average execution times and standard deviations are
@@ -345,7 +327,7 @@ and, d) `csize`, an optional computational size for plotting purposes.
 
 <a name="comparemultiplesetupswithinthesameimplementation"></a>
 
-#### 4.1.4\. Compare multiple setups within the same implementation
+#### 4.0.4\. Compare multiple setups within the same implementation
 
 A more advanced use case for [perfstats] consists of comparing multiple setups
 associated with different computational sizes within the same implementation
@@ -385,7 +367,7 @@ avg_time =
 
 <a name="sameaspreviouswithalinearplot"></a>
 
-#### 4.1.5\. Same as previous, with a linear plot
+#### 4.0.5\. Same as previous, with a linear plot
 
 The [perfstats] function can also generate scalability plots. For this purpose,
 the computational size, `csize`, must be specified in each setup, and the first
@@ -420,7 +402,7 @@ perfstats(-1, 'bubble', bs);
 
 <a name="comparedifferentimplementations"></a>
 
-#### 4.1.6\. Compare different implementations
+#### 4.0.6\. Compare different implementations
 
 Besides comparing multiple setups within the same implementation, the
 [perfstats] function is also able to compare multiple setups from multiple
@@ -470,7 +452,7 @@ perfstats(-4, 'Merge sort', ms, 'Quicksort', qs);
 
 <a name="speedup"></a>
 
-#### 4.1.7\. Speedup
+#### 4.0.7\. Speedup
 
 The [speedup] function is used to obtain relative speedups between different
 implementations. Using the variables defined in the previous example, the
@@ -519,7 +501,7 @@ speedup(-1, 1, 'Merge sort', ms, 'Quicksort', qs);
 
 <a name="speedupformultiplealgorithmsandvectorsizes"></a>
 
-#### 4.1.8\. Speedup for multiple algorithms and vector sizes
+#### 4.0.8\. Speedup for multiple algorithms and vector sizes
 
 The [speedup] function is also able to determine relative speedups between
 different implementations for multiple computational sizes. In this example we
@@ -623,7 +605,7 @@ xlabel('Algorithms');
 
 <a name="customspeedupplots"></a>
 
-#### 4.1.9\. Custom speedup plots
+#### 4.0.9\. Custom speedup plots
 
 For more control over the speedup plots, it may preferable to use the data
 provided by [speedup] and build the plots from the beginning. Continuing from
@@ -668,7 +650,7 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 <a name="scalabilityofthedifferentsortingalgorithmsforincreasingvectorsizes"></a>
 
-#### 4.1.10\. Scalability of the different sorting algorithms for increasing vector sizes
+#### 4.0.10\. Scalability of the different sorting algorithms for increasing vector sizes
 
 Continuing from the previous example, we can use [perfstats] to determine and
 plot the scalability of the different sorting algorithms for increasing vector
@@ -693,7 +675,7 @@ p =
 
 <a name="customscalabilityplots"></a>
 
-#### 4.1.11\. Custom scalability plots
+#### 4.0.11\. Custom scalability plots
 
 In a similar fashion to the speedup plots, finer control over the scalability
 plots is possible by directly using the data provided by [perfstats]. The
@@ -748,7 +730,7 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 <a name="produceatableinsteadofaplot"></a>
 
-#### 4.1.12\. Produce a table instead of a plot
+#### 4.0.12\. Produce a table instead of a plot
 
 The [times_table] and [times_table_f] functions can be used to create
 performance tables formatted in plain text or LaTeX. Using the data defined in
@@ -801,11 +783,9 @@ times_table_f(1, 'vs Bubble', tdata)
 
 ![ex4 1 12](https://cloud.githubusercontent.com/assets/3018963/14691916/ca160698-074b-11e6-9598-9bd2ce6f6a7e.png)
 
-<a name="exsimmods"></a>
-
 <a name="pairwisespeedups-1"></a>
 
-#### 4.1.13\. Pairwise speedups
+#### 4.0.13\. Pairwise speedups
 
 **TODO**
 
@@ -853,9 +833,29 @@ Pairwise comparison with C sort implementations:
 ```matlab
 pwspeedup(-1, {'C', 'Python'}, 'Bubble', bsc, bspy, 'Selection', ssc, sspy, 'Merge', msc, mspy, 'Quick', qsc, qspy);
 ```
+
+<a name="realworldcases"></a>
+
+## 5\. Real world cases
+
+Two real world cases of how **PerfAndPubTools** was used to produce plots and
+tables for scientific papers are discussed in this section. The first case
+consists of a performance analysis of
+[multiple implementations simulation model](#rwsimmods), while the second
+consists of a [pairwise comparison](#rwlibrary) between two implementations of a
+GPU pseudo-random number generator.
+
+<a name="rwsimmods"></a>
+
 <a name="performanceanalysisofasimulationmodel"></a>
 
-### 4.2\. Performance analysis of a simulation model
+### 5.1\. Performance analysis of a simulation model
+
+Here we describe how **PerfAndPubTools** was used to analyze performance data of
+multiple implementations of a [simulation model][PPHPC], replicating results
+presented in a peer-reviewed paper [\[2\]](#ref2). The initial benchmarking
+steps are skipped in these examples, but the produced data and the scripts used
+to generate it are also made [available][pphpc_data].
 
 The examples in this section use the following [dataset][pphpc_data]:
 
@@ -875,7 +875,7 @@ following examples show how to replicate these results.
 
 <a name="implementationsandsetupsofthepphpcagent-basedmodel"></a>
 
-#### 4.2.1\. Implementations and setups of the PPHPC agent-based model
+#### 5.1.1\. Implementations and setups of the PPHPC agent-based model
 
 While most details about [PPHPC] and its various implementations are not
 important for this discussion, is convenient to know which implementations and
@@ -910,7 +910,7 @@ applicable).
 
 <a name="extractperformancedatafromafile-1"></a>
 
-#### 4.2.2\. Extract performance data from a file
+#### 5.1.2\. Extract performance data from a file
 
 The [get_time_gnu] function extracts performance data from one file containing the
 default output of [GNU time] command. For example:
@@ -932,7 +932,7 @@ p =
 
 <a name="extractexecutiontimesfromfilesinafolder-1"></a>
 
-#### 4.2.3\. Extract execution times from files in a folder
+#### 5.1.3\. Extract execution times from files in a folder
 
 The [gather_times] function extracts execution times from multiple files in a
 folder, as shown in the following command:
@@ -957,7 +957,7 @@ of a program execution.
 
 <a name="averageexecutiontimesandstandarddeviations-1"></a>
 
-#### 4.2.4\. Average execution times and standard deviations
+#### 5.1.4\. Average execution times and standard deviations
 
 In its most basic usage, the [perfstats] function obtains performance
 statistics. In this example, average execution times and standard deviations are
@@ -984,7 +984,7 @@ The [perfstats] function uses [gather_times] internally.
 
 <a name="comparemultiplesetupswithinthesameimplementation-1"></a>
 
-#### 4.2.5\. Compare multiple setups within the same implementation
+#### 5.1.5\. Compare multiple setups within the same implementation
 
 A more advanced use case for [perfstats] consists of comparing multiple setups,
 associated with different computational sizes, within the same implementation.
@@ -1014,7 +1014,7 @@ avg_time =
 
 <a name="sameaspreviouswithalog-logplot"></a>
 
-#### 4.2.6\. Same as previous, with a log-log plot
+#### 5.1.6\. Same as previous, with a log-log plot
 
 The [perfstats] function can also be used to generate scalability plots. For
 this purpose, the computational size, `csize`, must be specified in each
@@ -1052,7 +1052,7 @@ useful in this case.
 
 <a name="comparedifferentimplementations-1"></a>
 
-#### 4.2.7\. Compare different implementations
+#### 5.1.7\. Compare different implementations
 
 Besides comparing multiple setups within the same implementation, the
 [perfstats] function is also able to compare multiple setups from a number
@@ -1087,7 +1087,7 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 
 <a name="speedup-1"></a>
 
-#### 4.2.8\. Speedup
+#### 5.1.8\. Speedup
 
 The [speedup] function is used to obtain relative speedups between different
 implementations. Using the variables defined in the previous example, the
@@ -1137,7 +1137,7 @@ speedup(-1, 1, 'NL', nlv1, 'ST', stv1);
 
 <a name="speedupformultipleparallelimplementationsandsizes"></a>
 
-#### 4.2.9\. Speedup for multiple parallel implementations and sizes
+#### 5.1.9\. Speedup for multiple parallel implementations and sizes
 
 The [speedup] function is also able to determine speedups between different
 implementations for multiple computational sizes. In this example we plot the
@@ -1203,7 +1203,7 @@ legend(gca, 'Location', 'NorthOutside', 'Orientation', 'horizontal');
 
 <a name="scalabilityofthedifferentimplementationsforincreasingmodelsizes"></a>
 
-#### 4.2.10\. Scalability of the different implementations for increasing model sizes
+#### 5.1.10\. Scalability of the different implementations for increasing model sizes
 
 In a slightly more complex scenario than the one described in a
 [previous example](#pphpccompdiffimpl), here we use the [perfstats] function to
@@ -1219,7 +1219,7 @@ perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12
 
 <a name="scalabilityofparallelimplementationsforincreasingnumberofthreads"></a>
 
-#### 4.2.11\. Scalability of parallel implementations for increasing number of threads
+#### 5.1.11\. Scalability of parallel implementations for increasing number of threads
 
 The 'computational size', i.e. the `csize` field, defined in the implementation
 specs passed to the [perfstats] function can be used in alternative contexts. In
@@ -1298,7 +1298,7 @@ legend(gca, 'Location', 'northeast');
 
 <a name="performanceofodstrategyfordifferentvaluesof_b_"></a>
 
-#### 4.2.12\. Performance of OD strategy for different values of _b_
+#### 5.1.12\. Performance of OD strategy for different values of _b_
 
 For this example, in yet another possible use of the [perfstats] function,  we
 use the `csize` field to specify the value of the _b_ parameter of the [PPHPC]
@@ -1373,7 +1373,7 @@ legend(gca, 'Location', 'NorthOutside', 'Orientation', 'horizontal')
 
 <a name="customperformanceplot"></a>
 
-#### 4.2.13\. Custom performance plot
+#### 5.1.13\. Custom performance plot
 
 As previously discussed, it is possible to generate custom plots using the data
 returned by [perfstats] and [speedup]. The following code snippet produces a
@@ -1435,7 +1435,7 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 <a name="showatableinsteadofaplot"></a>
 
-#### 4.2.14\. Show a table instead of a plot
+#### 5.1.14\. Show a table instead of a plot
 
 The [times_table] and [times_table_f] functions can be used to create
 performance tables formatted in plain text or LaTeX. Using the data defined in a
@@ -1483,7 +1483,7 @@ times_table_f(1, 'NL vs ST', tdata)
 
 <a name="complextables"></a>
 
-#### 4.2.15\. Complex tables
+#### 5.1.15\. Complex tables
 
 The [times_table] and [times_table_f] functions are capable of producing more
 complex tables. In this example, we show how to reproduce table 7 of reference
@@ -1677,15 +1677,23 @@ times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 
 ![ex4 2 15](https://cloud.githubusercontent.com/assets/3018963/14706360/f6f17d18-07b5-11e6-926f-2314f9d59206.png)
 
+<a name="rwlibrary"></a>
+
+<a name="pairwisecomparisonoftwoimplementationsofagpupseudo-randomnumbergenerator"></a>
+
+### 5.2\. Pairwise comparison of two implementations of a GPU pseudo-random number generator
+
+** TODO **
+
 <a name="license"></a>
 
-## 5\. License
+## 6\. License
 
 [MIT License](LICENSE)
 
 <a name="references"></a>
 
-## 6\. References
+## 7\. References
 
 <a name="ref1"></a>
 
@@ -1702,10 +1710,18 @@ Journal of Parallel Programming*. 45(3):449–481.
 http://dx.doi.org/10.1007/s10766-015-0399-9
 ([arXiv preprint](http://arxiv.org/abs/1507.04047))
 
+<a name="ref3"></a>
+
+[\[3\]](#ref3) Fachada N, Lopes VV, Martins RC, Rosa AC. (2017)
+cf4ocl: A C framework for OpenCL. *Science of Computer Programming*. 143:9–19.
+https://doi.org/10.1016/j.scico.2017.03.005
+([arXiv preprint](https://arxiv.org/abs/1609.01257))
+
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
 [NetLogo]: https://ccl.northwestern.edu/netlogo/
 [sorttest.c]: https://github.com/fakenmc/sorttest_c
+[sorttest.py]: https://github.com/fakenmc/sorttest_py
 [alternative]: http://stackoverflow.com/questions/673523/how-to-measure-execution-time-of-command-in-windows-command-line
 [sort_data]: ../data
 [pphpc_data]: http://dx.doi.org/10.5281/zenodo.34049

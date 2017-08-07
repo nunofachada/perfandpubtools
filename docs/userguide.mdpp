@@ -63,9 +63,8 @@ can easily be implemented by the user, as described in the next section.
 ### Base functions
 
 * [gather_times] - Loads execution times from files in a given folder. This
-function uses [get_time_gnu] by default, but can be configured to use another
-function to load individual benchmark files with a different format, as
-described in the next section..
+function uses the parsing function defined in the `perfnpubtools_get_time_`
+global variable.
 
 * [perfstats] - Determines mean times and respective standard deviations of a
 computational experiment using folders of files containing benchmarking results,
@@ -107,6 +106,8 @@ plots using the data returned by these functions. Either way, [MATLAB]/[Octave]
 plots can be used directly in publications, or converted to LaTeX using the
 excellent [matlab2tikz] script, as will be shown in some of the examples.
 
+<a name="parsealt"></a>
+
 ## Default benchmark file format and alternative implementations
 
 By default, **PerfAndPubTools** expects individual benchmarking results to be
@@ -119,59 +120,41 @@ example:
 ```
 
 This preset selection can be modified by specifying an alternative function in
-the `perfnpubtools_get_time_` global variable (by default, this variable is set
-to the [get_time_gnu] function). Alternative functions should respect the
-prototype defined by the default [get_time_gnu] function. More specifically,
-alternative functions should accept one argument specifying the full path of the
-file containing the profiling information, and should return a structure with
-(at least) the `elapsed` field, containing the elapsed time in seconds.
+the `perfnpubtools_get_time_` global variable. Alternative functions should
+respect the prototype defined by the default [get_time_gnu] function. More
+specifically, alternative functions should accept one argument specifying the
+full path of the file containing the profiling information, and should return a
+structure with (at least) the `elapsed` field, containing the elapsed time in
+seconds.
 
-## Examples
+## Tutorial: performance analysis of sorting algorithms
 
-Examples are organized into two sections:
-
-1. [Performance analysis of sorting algorithms](#exsortalgs)
-2. [Performance analysis of a simulation model](#exsimmods)
-
-Examples in the first section demonstrate the complete process of benchmarking a
-number of sorting algorithms with the [GNU time] command and then analyzing
-results with **PerfAndPubTools**. Since the [GNU time] command is not available on
-Windows, the data produced by the benchmarks is [included][sort_data] in the
-package.
-
-Examples in the second section focus on showing how **PerfAndPubTools** was used
-to analyze performance data of multiple implementations of a
-[simulation model][PPHPC], replicating results presented in a peer-reviewed
-article [\[2\]](#ref2). The initial benchmarking steps are skipped in these
-examples, but the produced data and the scripts used to generate it are also
-made [available][pphpc_data].
-
-<a name="exsortalgs"></a>
-
-### Performance analysis of sorting algorithms
-
-In following examples, we use **PerfAndPubTools** to analyze the performance of
-several sorting algorithms implemented in C. Perform the following steps before
-proceeding:
+This tutorial demonstrates how to benchmark several sorting algorithms with the
+[GNU time] command and analyze results with **PerfAndPubTools**. Since the
+[GNU time] command is not available on Windows, the data produced by the
+benchmarks is [included][sort_data] in the package. Perform the following steps
+before proceeding:
 
 1. Download and compile the [sorttest.c] program (instructions are available in
 the linked page).
-2. Confirm that the [GNU time] program is installed (instructions also available
+2. Download the [sorttest.py] program.
+3. Confirm that the [GNU time] program is installed (instructions also available
 in [sorttest.c]).
-3. In [MATLAB]/[Octave] create a `sortfolder` variable containing the full path
-of the [sorttest.c] program, for example `sortfolder = '/home/user/sort'`
-(Unix/Linux) or `sortfolder = 'C:\Users\UserName\Documents\sort'` (Windows).
+4. In [MATLAB]/[Octave] create a `sortfolder` variable containing the full path
+of the folder where the benchmark output files will be placed, for example
+`sortfolder = '/home/user/sort'` (Unix/Linux) or
+`sortfolder = 'C:\Users\UserName\Documents\sort'` (Windows).
 
 [GNU time] is usually invoked as `/usr/bin/time`, but this can vary for
 different Linux distributions. On OSX it is invoked as `gtime`. The usual Linux
 invocation is used for throughout the examples, replace it as appropriate.
 
-Since the [GNU time] program does not seem to be available for Windows, these
-examples only run unmodified on Linux and OSX. On Windows, benchmark the
-[sorttest.c] program using an [alternative] approach and replace [get_time_gnu]
-with a function which parses the produced output. Otherwise, skip the actual
-benchmarking steps within the examples, and use the benchmarking data bundled
-with **PerfAndPubTools** in the [data][sort_data] folder.
+Since the [GNU time] program does not seem to be available for Windows, the
+given command-line instructions only run unmodified on Linux and OSX. On
+Windows, benchmark the [sorttest.c] program using an [alternative] approach and
+[replace `get_time_gnu` with a function which parses the produced output](#parsealt).
+Otherwise, skip the command-line benchmarking instructions and directly use the
+[benchmarking data](sort_data) bundled with **PerfAndPubTools**.
 
 #### Extract performance data from a file
 
@@ -714,8 +697,6 @@ times_table_f(1, 'vs Bubble', tdata)
 
 ![ex4 1 12](https://cloud.githubusercontent.com/assets/3018963/14691916/ca160698-074b-11e6-9598-9bd2ce6f6a7e.png)
 
-<a name="exsimmods"></a>
-
 #### Pairwise speedups
 
 **TODO**
@@ -764,7 +745,25 @@ Pairwise comparison with C sort implementations:
 ```matlab
 pwspeedup(-1, {'C', 'Python'}, 'Bubble', bsc, bspy, 'Selection', ssc, sspy, 'Merge', msc, mspy, 'Quick', qsc, qspy);
 ```
+
+## Real world cases
+
+Two real world cases of how **PerfAndPubTools** was used to produce plots and
+tables for scientific papers are discussed in this section. The first case
+consists of a performance analysis of
+[multiple implementations simulation model](#rwsimmods), while the second
+consists of a [pairwise comparison](#rwlibrary) between two implementations of a
+GPU pseudo-random number generator.
+
+<a name="rwsimmods"></a>
+
 ### Performance analysis of a simulation model
+
+Here we describe how **PerfAndPubTools** was used to analyze performance data of
+multiple implementations of a [simulation model][PPHPC], replicating results
+presented in a peer-reviewed paper [\[2\]](#ref2). The initial benchmarking
+steps are skipped in these examples, but the produced data and the scripts used
+to generate it are also made [available][pphpc_data].
 
 The examples in this section use the following [dataset][pphpc_data]:
 
@@ -1556,6 +1555,12 @@ times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 
 ![ex4 2 15](https://cloud.githubusercontent.com/assets/3018963/14706360/f6f17d18-07b5-11e6-926f-2314f9d59206.png)
 
+<a name="rwlibrary"></a>
+
+### Pairwise comparison of two implementations of a GPU pseudo-random number generator
+
+** TODO **
+
 ## License
 
 [MIT License](LICENSE)
@@ -1577,10 +1582,18 @@ Journal of Parallel Programming*. 45(3):449–481.
 http://dx.doi.org/10.1007/s10766-015-0399-9
 ([arXiv preprint](http://arxiv.org/abs/1507.04047))
 
+<a name="ref3"></a>
+
+[\[3\]](#ref3) Fachada N, Lopes VV, Martins RC, Rosa AC. (2017)
+cf4ocl: A C framework for OpenCL. *Science of Computer Programming*. 143:9–19.
+https://doi.org/10.1016/j.scico.2017.03.005
+([arXiv preprint](https://arxiv.org/abs/1609.01257))
+
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
 [NetLogo]: https://ccl.northwestern.edu/netlogo/
 [sorttest.c]: https://github.com/fakenmc/sorttest_c
+[sorttest.py]: https://github.com/fakenmc/sorttest_py
 [alternative]: http://stackoverflow.com/questions/673523/how-to-measure-execution-time-of-command-in-windows-command-line
 [sort_data]: ../data
 [pphpc_data]: http://dx.doi.org/10.5281/zenodo.34049
