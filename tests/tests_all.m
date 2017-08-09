@@ -322,7 +322,81 @@ function test_times_table
 % Test function pwspeedup
 function test_pwspeedup
 
-    error('Test not implemented');
+    % Data folder
+    folder = ['..' filesep 'data'];
+    
+    % Specify merge sort implementation specs for C context
+    ms1e5c = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_c_merge_100000_*.txt');
+    ms1e6c = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_c_merge_200000_*.txt');
+    ms1e7c = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_c_merge_300000_*.txt');
+    ms1e8c = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_c_merge_400000_*.txt');
+    msc = {ms1e5c, ms1e6c, ms1e7c, ms1e8c};
+
+    % Specify Quicksort implementation specs for C context
+    qs1e5c = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_c_quick_100000_*.txt');
+    qs1e6c = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_c_quick_200000_*.txt');
+    qs1e7c = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_c_quick_300000_*.txt');
+    qs1e8c = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_c_quick_400000_*.txt');
+    qsc = {qs1e5c, qs1e6c, qs1e7c, qs1e8c};
+    
+    % Specify merge sort implementation specs for Python context
+    ms1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_py_merge_100000_*.txt');
+    ms1e6py = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_py_merge_200000_*.txt');
+    ms1e7py = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_py_merge_300000_*.txt');
+    ms1e8py = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_py_merge_400000_*.txt');
+    mspy = {ms1e5py, ms1e6py, ms1e7py, ms1e8py};
+
+    % Specify Quicksort implementation specs for Python context
+    qs1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_py_quick_100000_*.txt');
+    qs1e6py = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_py_quick_200000_*.txt');
+    qs1e7py = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_py_quick_300000_*.txt');
+    qs1e8py = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_py_quick_400000_*.txt');
+    qspy = {qs1e5py, qs1e6py, qs1e7py, qs1e8py};
+    
+    % Obtain speedup outputs
+    [s, smax, smin, t, sdt, t_raw] = pwspeedup(0, {'C', 'Python'}, ...
+        'Merge', msc, mspy, 'Quick', qsc, qspy);
+    
+    % Check if outputs are as expected
+    assertEqual(size(s), [2 4]);    % 2 implementations, 4 setups
+    assertEqual(size(smax), [2 4]); % 2 implementations, 4 setups
+    assertEqual(size(smin), [2 4]);  % 2 implementations, 4 setups
+    assertEqual(size(t), [2 * 2 4]); % 2 impls * 2 contexts, 4 setups
+    assertEqual(size(sdt), [2 * 2 4]); % 2 impls * 2 contexts, 4 setups
+    
+    for i = 1:2 % Number of implementations
+        for j = 1:4 % Index of setup
+            
+            i1 = i * 2 - 1; % Index of implementation 1 time
+            i2 = i1 + 1;    % Index of implementation 2 time
+            
+            % Is speedup correctly calculated?
+            assertElementsAlmostEqual(s(i, j), t(i2, j) / t(i1, j));
+            
+            % Are maximum and minimum speedups correctly calculated?
+            assertElementsAlmostEqual(smax(i, j), ...
+                max(t_raw{i2, j}.elapsed) / min(t_raw{i1, j}.elapsed));
+            assertElementsAlmostEqual(smin(i, j), ...
+                min(t_raw{i2, j}.elapsed) / max(t_raw{i1, j}.elapsed));
+
+        end;
+    end;
 
 % Test functions pwtimes_table and  pwtimes_table_f
 function test_pwtimes_table
