@@ -40,8 +40,7 @@ PerfAndPubTools
 5.13\.  [Custom performance plot](#customperformanceplot)  
 5.14\.  [Show a table instead of a plot](#showatableinsteadofaplot)  
 5.15\.  [Complex tables](#complextables)  
-6\.  [License](#license)  
-7\.  [References](#references)  
+6\.  [References](#references)  
 
 <a name="whatisperfandpubtools?"></a>
 
@@ -281,10 +280,63 @@ exec_time = gather_times('Quicksort', sortfolder_c, 'time_c_quick_1000000_*.txt'
 The first parameter names the list of gathered times, and is used as metadata by
 other functions. The second parameter specifies the folder where the [GNU time]
 output files are located. The vector of execution times is in the `elapsed`
-field of the returned structure:
+field of the returned structure, i.e. `exec_time.elapsed`:
+
+```
+ans =
+
+    0.1300
+    0.1300
+    0.1300
+    0.1300
+    0.1300
+    0.1300
+    0.1400
+    0.1400
+    0.1400
+    0.1400
+```
+
+The [gather_times] function can automatically discard the fastest and/or slowest
+elapsed times if the `perfnpubtools_remove_fastest` and/or
+`perfnpubtools_remove_slowest` global variables are set accordingly. Although
+set to zero by default (i.e., no observations are discarded), these variables
+control the number of automatically discarded observations by [gather_times] and
+all the functions that directly or indirectly invoke it. Using the previous
+example:
 
 ```matlab
-exec_time.elapsed
+% Remove the two fastest observations
+perfnpubtools_remove_fastest = 2;
+
+% Remove 30% of the slowest observations
+perfnpubtools_remove_slowest = 0.3;
+
+% Invoke gather_times
+exec_time = gather_times('Quicksort', sortfolder_c, 'time_c_quick_1000000_*.txt');
+```
+
+If we now check the `exec_time` variable, we notice that the 2 fastest
+observations and 30% of the slowest ones (i.e., 3) are not present in
+`exec_time.elapsed`:
+
+```
+ans =
+
+    0.1300
+    0.1300
+    0.1300
+    0.1300
+    0.1400
+```
+
+It's good practice to reset the global variables to their defaults if you're not
+planning to keep this setup:
+
+```matlab
+% Reset defaults
+perfnpubtools_remove_fastest = 0;
+perfnpubtools_remove_slowest = 0;
 ```
 
 <a name="averageexecutiontimesandstandarddeviations"></a>
@@ -1738,15 +1790,9 @@ times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 
 ![ex4 2 15](https://cloud.githubusercontent.com/assets/3018963/14706360/f6f17d18-07b5-11e6-926f-2314f9d59206.png)
 
-<a name="license"></a>
-
-## 6\. License
-
-[MIT License](LICENSE)
-
 <a name="references"></a>
 
-## 7\. References
+## 6\. References
 
 <a name="ref1"></a>
 
