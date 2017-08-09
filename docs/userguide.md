@@ -10,7 +10,7 @@ PerfAndPubTools
 2.5\.  [Pairwise speedups](#pairwisespeedups)  
 2.6\.  [Plotting](#plotting)  
 3\.  [Default benchmark file format and alternative implementations](#defaultbenchmarkfileformatandalternativeimplementations)  
-4\.  [Tutorial - performance analysis of sorting algorithms](#tutorial-performanceanalysisofsortingalgorithms)  
+4\.  [Tutorial - Performance analysis of sorting algorithms](#tutorial-performanceanalysisofsortingalgorithms)  
 4.1\.  [Extract performance data from a file](#extractperformancedatafromafile)  
 4.2\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder)  
 4.3\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations)  
@@ -24,24 +24,22 @@ PerfAndPubTools
 4.11\.  [Custom scalability plots](#customscalabilityplots)  
 4.12\.  [Produce a table instead of a plot](#produceatableinsteadofaplot)  
 4.13\.  [Pairwise speedups](#pairwisespeedups-1)  
-5\.  [Real world cases](#realworldcases)  
-5.1\.  [Performance analysis of a simulation model](#performanceanalysisofasimulationmodel)  
-5.1.1\.  [Implementations and setups of the PPHPC agent-based model](#implementationsandsetupsofthepphpcagent-basedmodel)  
-5.1.2\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
-5.1.3\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
-5.1.4\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations-1)  
-5.1.5\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation-1)  
-5.1.6\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
-5.1.7\.  [Compare different implementations](#comparedifferentimplementations-1)  
-5.1.8\.  [Speedup](#speedup-1)  
-5.1.9\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
-5.1.10\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
-5.1.11\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
-5.1.12\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
-5.1.13\.  [Custom performance plot](#customperformanceplot)  
-5.1.14\.  [Show a table instead of a plot](#showatableinsteadofaplot)  
-5.1.15\.  [Complex tables](#complextables)  
-5.2\.  [Pairwise comparison of two implementations of a GPU pseudo-random number generator](#pairwisecomparisonoftwoimplementationsofagpupseudo-randomnumbergenerator)  
+5\.  [A real world case - Performance analysis of a simulation model](#arealworldcase-performanceanalysisofasimulationmodel)  
+5.1\.  [Implementations and setups of the PPHPC agent-based model](#implementationsandsetupsofthepphpcagent-basedmodel)  
+5.2\.  [Extract performance data from a file](#extractperformancedatafromafile-1)  
+5.3\.  [Extract execution times from files in a folder](#extractexecutiontimesfromfilesinafolder-1)  
+5.4\.  [Average execution times and standard deviations](#averageexecutiontimesandstandarddeviations-1)  
+5.5\.  [Compare multiple setups within the same implementation](#comparemultiplesetupswithinthesameimplementation-1)  
+5.6\.  [Same as previous, with a log-log plot](#sameaspreviouswithalog-logplot)  
+5.7\.  [Compare different implementations](#comparedifferentimplementations-1)  
+5.8\.  [Speedup](#speedup-1)  
+5.9\.  [Speedup for multiple parallel implementations and sizes](#speedupformultipleparallelimplementationsandsizes)  
+5.10\.  [Scalability of the different implementations for increasing model sizes](#scalabilityofthedifferentimplementationsforincreasingmodelsizes)  
+5.11\.  [Scalability of parallel implementations for increasing number of threads](#scalabilityofparallelimplementationsforincreasingnumberofthreads)  
+5.12\.  [Performance of OD strategy for different values of _b_](#performanceofodstrategyfordifferentvaluesof_b_)  
+5.13\.  [Custom performance plot](#customperformanceplot)  
+5.14\.  [Show a table instead of a plot](#showatableinsteadofaplot)  
+5.15\.  [Complex tables](#complextables)  
 6\.  [License](#license)  
 7\.  [References](#references)  
 
@@ -189,7 +187,7 @@ seconds.
 
 <a name="tutorial-performanceanalysisofsortingalgorithms"></a>
 
-## 4\. Tutorial - performance analysis of sorting algorithms
+## 4\. Tutorial - Performance analysis of sorting algorithms
 
 This tutorial demonstrates how to benchmark several sorting algorithms with the
 [GNU time] command and analyze results with **PerfAndPubTools**. Since the
@@ -200,11 +198,12 @@ before proceeding:
 1. Download and compile the [sorttest.c] program (instructions are available in
 the linked page).
 2. Download the [sorttest.py] program.
-3. Confirm that the [GNU time] program is installed (instructions also available
-in [sorttest.c]).
+3. (Optional) Confirm that the [GNU time] program is installed (instructions
+also available in [sorttest.c]).
 4. In [MATLAB]/[Octave] create two variables, `sortfolder_c` and
 `sortfolder_py`, containing the full path where the C and Python benchmark
-output files will be placed, respectively.
+output files will be placed, respectively. If the previous step was skipped,
+these variables can be set to the **PerfAnfPubTools** [data][sort_data] folder.
 
 [GNU time] is usually invoked as `/usr/bin/time`, but this can vary for
 different Linux distributions. On OSX it is invoked as `gtime`. The usual Linux
@@ -835,19 +834,20 @@ with the [pwspeedup] function as follows:
 
 ```matlab
 c_py = pwspeedup(-1, {'C', 'Python'}, 'Bubble', bs, bspy, 'Selection', ss, sspy, 'Merge', ms, mspy, 'Quick', qs, qspy);
+legend({'Bubble', 'Selection', 'Merge', 'Quick'}, 'Location', 'NorthOutside', 'Orientation', 'horizontal');
 ```
 
-**TODO: PLACE IMAGE**
+![ex4 1 13](https://user-images.githubusercontent.com/3018963/29131676-882ab804-7d25-11e7-846b-3df6c3fc39f9.png)
 
 The exact speedups can be analyzed by looking at the `c_py` variable:
 
 ```
-ans =
+c_py =
 
-   12.395   22.952   28.450   39.000
-   14.698   31.575   25.659   40.750
-   15.572   35.996   27.167   43.700
-   17.245   40.906   26.259   35.275``
+   12.3946   22.9515   28.4500   39.0000
+   14.6980   31.5745   25.6585   40.7500
+   15.5717   35.9958   27.1667   43.7000
+   17.2447   40.9063   26.2588   35.2745
 ```
 
 Note that, analogously to [speedup], [pwspeedup] also returns the maximum and
@@ -908,22 +908,9 @@ pwtimes_table_f(1, tdata)
 ![ex_pw_table](https://user-images.githubusercontent.com/3018963/29043497-57cb5e52-7bb3-11e7-990a-7feb5db55726.png)
 
 
-<a name="realworldcases"></a>
+<a name="arealworldcase-performanceanalysisofasimulationmodel"></a>
 
-## 5\. Real world cases
-
-Two real world cases of how **PerfAndPubTools** was used to produce plots and
-tables for scientific papers are discussed in this section. The first case
-consists of a performance analysis of
-[multiple implementations simulation model](#rwsimmods), while the second
-consists of a [pairwise comparison](#rwlibrary) between two implementations of a
-GPU pseudo-random number generator.
-
-<a name="rwsimmods"></a>
-
-<a name="performanceanalysisofasimulationmodel"></a>
-
-### 5.1\. Performance analysis of a simulation model
+## 5\. A real world case - Performance analysis of a simulation model
 
 Here we describe how **PerfAndPubTools** was used to analyze performance data of
 multiple implementations of a [simulation model][PPHPC], replicating results
@@ -949,7 +936,7 @@ following examples show how to replicate these results.
 
 <a name="implementationsandsetupsofthepphpcagent-basedmodel"></a>
 
-#### 5.1.1\. Implementations and setups of the PPHPC agent-based model
+### 5.1\. Implementations and setups of the PPHPC agent-based model
 
 While most details about [PPHPC] and its various implementations are not
 important for this discussion, is convenient to know which implementations and
@@ -984,7 +971,7 @@ applicable).
 
 <a name="extractperformancedatafromafile-1"></a>
 
-#### 5.1.2\. Extract performance data from a file
+### 5.2\. Extract performance data from a file
 
 The [get_time_gnu] function extracts performance data from one file containing the
 default output of [GNU time] command. For example:
@@ -1006,7 +993,7 @@ p =
 
 <a name="extractexecutiontimesfromfilesinafolder-1"></a>
 
-#### 5.1.3\. Extract execution times from files in a folder
+### 5.3\. Extract execution times from files in a folder
 
 The [gather_times] function extracts execution times from multiple files in a
 folder, as shown in the following command:
@@ -1031,7 +1018,7 @@ of a program execution.
 
 <a name="averageexecutiontimesandstandarddeviations-1"></a>
 
-#### 5.1.4\. Average execution times and standard deviations
+### 5.4\. Average execution times and standard deviations
 
 In its most basic usage, the [perfstats] function obtains performance
 statistics. In this example, average execution times and standard deviations are
@@ -1058,7 +1045,7 @@ The [perfstats] function uses [gather_times] internally.
 
 <a name="comparemultiplesetupswithinthesameimplementation-1"></a>
 
-#### 5.1.5\. Compare multiple setups within the same implementation
+### 5.5\. Compare multiple setups within the same implementation
 
 A more advanced use case for [perfstats] consists of comparing multiple setups,
 associated with different computational sizes, within the same implementation.
@@ -1088,7 +1075,7 @@ avg_time =
 
 <a name="sameaspreviouswithalog-logplot"></a>
 
-#### 5.1.6\. Same as previous, with a log-log plot
+### 5.6\. Same as previous, with a log-log plot
 
 The [perfstats] function can also be used to generate scalability plots. For
 this purpose, the computational size, `csize`, must be specified in each
@@ -1126,7 +1113,7 @@ useful in this case.
 
 <a name="comparedifferentimplementations-1"></a>
 
-#### 5.1.7\. Compare different implementations
+### 5.7\. Compare different implementations
 
 Besides comparing multiple setups within the same implementation, the
 [perfstats] function is also able to compare multiple setups from a number
@@ -1161,7 +1148,7 @@ perfstats(4, 'NL', nlv1, 'ST', stv1);
 
 <a name="speedup-1"></a>
 
-#### 5.1.8\. Speedup
+### 5.8\. Speedup
 
 The [speedup] function is used to obtain relative speedups between different
 implementations. Using the variables defined in the previous example, the
@@ -1211,7 +1198,7 @@ speedup(-1, 1, 'NL', nlv1, 'ST', stv1);
 
 <a name="speedupformultipleparallelimplementationsandsizes"></a>
 
-#### 5.1.9\. Speedup for multiple parallel implementations and sizes
+### 5.9\. Speedup for multiple parallel implementations and sizes
 
 The [speedup] function is also able to determine speedups between different
 implementations for multiple computational sizes. In this example we plot the
@@ -1277,7 +1264,7 @@ legend(gca, 'Location', 'NorthOutside', 'Orientation', 'horizontal');
 
 <a name="scalabilityofthedifferentimplementationsforincreasingmodelsizes"></a>
 
-#### 5.1.10\. Scalability of the different implementations for increasing model sizes
+### 5.10\. Scalability of the different implementations for increasing model sizes
 
 In a slightly more complex scenario than the one described in a
 [previous example](#pphpccompdiffimpl), here we use the [perfstats] function to
@@ -1293,7 +1280,7 @@ perfstats(4, 'NL', nlv1, 'ST', stv1, 'EQ', eqv1t12, 'EX', exv1t12, 'ER', erv1t12
 
 <a name="scalabilityofparallelimplementationsforincreasingnumberofthreads"></a>
 
-#### 5.1.11\. Scalability of parallel implementations for increasing number of threads
+### 5.11\. Scalability of parallel implementations for increasing number of threads
 
 The 'computational size', i.e. the `csize` field, defined in the implementation
 specs passed to the [perfstats] function can be used in alternative contexts. In
@@ -1372,7 +1359,7 @@ legend(gca, 'Location', 'northeast');
 
 <a name="performanceofodstrategyfordifferentvaluesof_b_"></a>
 
-#### 5.1.12\. Performance of OD strategy for different values of _b_
+### 5.12\. Performance of OD strategy for different values of _b_
 
 For this example, in yet another possible use of the [perfstats] function,  we
 use the `csize` field to specify the value of the _b_ parameter of the [PPHPC]
@@ -1447,7 +1434,7 @@ legend(gca, 'Location', 'NorthOutside', 'Orientation', 'horizontal')
 
 <a name="customperformanceplot"></a>
 
-#### 5.1.13\. Custom performance plot
+### 5.13\. Custom performance plot
 
 As previously discussed, it is possible to generate custom plots using the data
 returned by [perfstats] and [speedup]. The following code snippet produces a
@@ -1509,7 +1496,7 @@ Compiling the `image.tex` file with a LaTeX engine yields the following figure:
 
 <a name="showatableinsteadofaplot"></a>
 
-#### 5.1.14\. Show a table instead of a plot
+### 5.14\. Show a table instead of a plot
 
 The [times_table] and [times_table_f] functions can be used to create
 performance tables formatted in plain text or LaTeX. Using the data defined in a
@@ -1557,7 +1544,7 @@ times_table_f(1, 'NL vs ST', tdata)
 
 <a name="complextables"></a>
 
-#### 5.1.15\. Complex tables
+### 5.15\. Complex tables
 
 The [times_table] and [times_table_f] functions are capable of producing more
 complex tables. In this example, we show how to reproduce table 7 of reference
@@ -1751,14 +1738,6 @@ times_table_f(1, 'Param. set 1', data_v1, 'Param. set 2', data_v2)
 
 ![ex4 2 15](https://cloud.githubusercontent.com/assets/3018963/14706360/f6f17d18-07b5-11e6-926f-2314f9d59206.png)
 
-<a name="rwlibrary"></a>
-
-<a name="pairwisecomparisonoftwoimplementationsofagpupseudo-randomnumbergenerator"></a>
-
-### 5.2\. Pairwise comparison of two implementations of a GPU pseudo-random number generator
-
-** TODO **
-
 <a name="license"></a>
 
 ## 6\. License
@@ -1784,12 +1763,6 @@ Journal of Parallel Programming*. 45(3):449–481.
 http://dx.doi.org/10.1007/s10766-015-0399-9
 ([arXiv preprint](http://arxiv.org/abs/1507.04047))
 
-<a name="ref3"></a>
-
-[\[3\]](#ref3) Fachada N, Lopes VV, Martins RC, Rosa AC. (2017)
-cf4ocl: A C framework for OpenCL. *Science of Computer Programming*. 143:9–19.
-https://doi.org/10.1016/j.scico.2017.03.005
-([arXiv preprint](https://arxiv.org/abs/1609.01257))
 
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
