@@ -267,7 +267,7 @@ ans =
     0.1400
 ```
 
-It's good practice to reset the global variables to their defaults if you're not
+It's good practice to reset the global variables to their defaults when not
 planning to keep this setup:
 
 ```matlab
@@ -821,7 +821,7 @@ Note that, analogously to [speedup], [pwspeedup] also returns the maximum and
 minimum speedups, mean and standard deviations of computational times, and so
 on.
 
-The [pwtimes_table] and [pw_times_table_f] functions, like their non-pairwise
+The [pwtimes_table] and [pwtimes_table_f] functions, like their non-pairwise
 counterparts, can be used to create performance tables formatted in plain text
 or LaTeX. Using the data defined in the previous examples, the following
 commands produce a plain text table comparing the performance of the C and
