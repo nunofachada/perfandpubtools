@@ -309,8 +309,8 @@ function test_times_table
         'Bubble', bs, 'Selection', ss, 'Merge', ms, 'Quick', qs);
     
     % Check if outputs are as expected    
-    assertEqual(tdata.snames, {'1e5','2e5','3e5','4e5'}');
-    assertEqual(tdata.inames, {'Bubble', 'Selection', 'Merge', 'Quick'}');
+    assertEqual(tdata.snames, {'1e5','2e5','3e5','4e5'});
+    assertEqual(tdata.inames, {'Bubble', 'Selection', 'Merge', 'Quick'});
     assertEqual(size(tdata.t), [16 4]);
 
     % Simple tests for times_table_f
@@ -401,7 +401,71 @@ function test_pwspeedup
 % Test functions pwtimes_table and  pwtimes_table_f
 function test_pwtimes_table
 
-    error('Test not implemented');
+    % Data folder
+    folder = ['..' filesep 'data'];
+    
+    % Specify merge sort implementation specs for C context
+    ms1e5c = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_c_merge_100000_*.txt');
+    ms1e6c = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_c_merge_200000_*.txt');
+    ms1e7c = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_c_merge_300000_*.txt');
+    ms1e8c = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_c_merge_400000_*.txt');
+    msc = {ms1e5c, ms1e6c, ms1e7c, ms1e8c};
+
+    % Specify Quicksort implementation specs for C context
+    qs1e5c = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_c_quick_100000_*.txt');
+    qs1e6c = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_c_quick_200000_*.txt');
+    qs1e7c = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_c_quick_300000_*.txt');
+    qs1e8c = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_c_quick_400000_*.txt');
+    qsc = {qs1e5c, qs1e6c, qs1e7c, qs1e8c};
+    
+    % Specify merge sort implementation specs for Python context
+    ms1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_py_merge_100000_*.txt');
+    ms1e6py = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_py_merge_200000_*.txt');
+    ms1e7py = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_py_merge_300000_*.txt');
+    ms1e8py = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_py_merge_400000_*.txt');
+    mspy = {ms1e5py, ms1e6py, ms1e7py, ms1e8py};
+
+    % Specify Quicksort implementation specs for Python context
+    qs1e5py = struct('sname', '1e5', 'csize', 1e5, 'folder', ...
+        folder, 'files', 'time_py_quick_100000_*.txt');
+    qs1e6py = struct('sname', '1e6', 'csize', 1e6, 'folder', ...
+        folder, 'files', 'time_py_quick_200000_*.txt');
+    qs1e7py = struct('sname', '1e7', 'csize', 1e7, 'folder', ...
+        folder, 'files', 'time_py_quick_300000_*.txt');
+    qs1e8py = struct('sname', '1e8', 'csize', 1e8, 'folder', ...
+        folder, 'files', 'time_py_quick_400000_*.txt');
+    qspy = {qs1e5py, qs1e6py, qs1e7py, qs1e8py};
+
+    % Put data in table format
+    tdata = pwtimes_table(...
+        {'C', 'Python'}, 'Merge', msc, mspy, 'Quick', qsc, qspy);
+    
+    % Check if outputs are as expected    
+    assertEqual(tdata.pnames, {'C', 'Python'});
+    assertEqual(tdata.snames, {'1e5','1e6','1e7','1e8'});
+    assertEqual(tdata.inames, {'Merge', 'Quick'});
+    assertEqual(size(tdata.t), [8 9]); % 2 impls * 4 setups, 9 data items
+     % Time pair1 (mean), Time pair1 (abs stdev), Time pair1 (rel stdev),
+     % Time pair2 (mean), Time pair2 (abs stdev), Time pair2 (rel stdev),
+     % Speedup (mean), Speedup (max), Speedup (min)
+
+    % Simple tests for pwtimes_table_f
+    t1 = pwtimes_table_f(0, tdata);
+    t2 = pwtimes_table_f(1, tdata);
+    assertEqual(class(t1), 'char');
+    assertEqual(class(t2), 'char');
 
 % Test several possible plots
 function test_plots
