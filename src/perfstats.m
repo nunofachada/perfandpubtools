@@ -62,7 +62,7 @@ std_times = zeros(nimpl, nset);
 times_raw = cell(nimpl, nset);
 
 % Initialize legends
-impl_legend = cell(nimpl, 1);
+impl_legend = cell(1, nimpl);
 
 % Determine mean time and sample standard deviation for all implementations
 % and setups
@@ -186,7 +186,7 @@ nimpl = numel(args) / 2;
 nset = numel(args{2});
 
 % Initialize setup legends
-set_legend = cell(nset, 1);
+set_legend = cell(1, nset);
 
 % Initialize computational work sizes of setups for plotting, if necessary
 set_sizes = zeros(1, nset);
