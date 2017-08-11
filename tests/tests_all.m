@@ -466,9 +466,3 @@ function test_pwtimes_table
     t2 = pwtimes_table_f(1, tdata);
     assertEqual(class(t1), 'char');
     assertEqual(class(t2), 'char');
-
-% Test several possible plots
-function test_plots
-
-    error('Test not implemented');
-    
