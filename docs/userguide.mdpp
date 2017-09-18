@@ -1,3 +1,8 @@
+<!--
+* Edit the userguide.mdpp file and convert it to userguide.md using the
+  markdown-pp utility (https://github.com/jreese/markdown-pp).
+* Do not edit userguide.md directly!
+-->
 PerfAndPubTools
 ===============
 
