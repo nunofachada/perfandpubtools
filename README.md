@@ -81,6 +81,12 @@ http://doi.acm.org/10.1145/3078155.3078174
 ![Scalability of on-demand parallelization strategy with block size for different simulation sizes](https://cloud.githubusercontent.com/assets/3018963/14706271/8e7c4fce-07b5-11e6-8ed5-09853541b4a4.png)
 ![Performance table for different parallelization strategies](https://cloud.githubusercontent.com/assets/3018963/14706360/f6f17d18-07b5-11e6-926f-2314f9d59206.png)
 
+## Documents
+
+* [User Guide](docs/userguide.md)
+* [Contributing guidelines](CONTRIBUTING.md)
+* [Code of conduct](CODE_OF_CONDUCT.md)
+
 ## License
 
 [MIT License](LICENSE)
