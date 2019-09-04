@@ -28,6 +28,11 @@ want your paper listed here, fork this repository, edit this file and open a
 pull request. Alternatively,
 [open an issue](https://github.com/fakenmc/perfandpubtools/issues).
 
+* Fernandes CM, Fachada N, Merelo J, Rosa AC. (2019)
+Steady state particle swarm.
+*PeerJ Computer Science* 5:e202
+https://doi.org/10.7717/peerj-cs.202
+
 * Fachada N, Lopes VV, Martins RC, Rosa AC. (2017)
 Parallelization strategies for spatial agent-based models. *International
 Journal of Parallel Programming*. 45(3):449–481.
