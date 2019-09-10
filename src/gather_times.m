@@ -19,7 +19,7 @@ function timings = gather_times(name, folder, files)
 %  program. To use use other type of output, specify an alternative
 %  output parsing function in the perfnpubtools_get_time_ global variable.
 %    
-% Copyright (c) 2015-2017 Nuno Fachada
+% Copyright (c) 2015-2019 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
@@ -39,7 +39,8 @@ numFiles = size(listing, 1);
 elapsed = zeros(numFiles, 1);
 
 if numFiles == 0
-    error(['No files found: ' folder filesep files]);
+    warning(['No files found: ' folder filesep files]);
+    elapsed = 0;
 end;
 
 for i = 1:numFiles
@@ -52,22 +53,28 @@ for i = 1:numFiles
 
 end;
 
-% Are there observations to remove?
-nrem_fastest = rem_times(perfnpubtools_remove_fastest, numFiles);
-nrem_slowest = rem_times(perfnpubtools_remove_slowest, numFiles);
-
-% How many observations are left after removal?
-nobs = numFiles - nrem_fastest - nrem_slowest;
-
-% At least one observation should exist after removal
-if nobs < 1
-    error(['Not enough observations after removal of fastest ' ... 
-        'and slowest times']);
-end;
-
-% Remove fastest and slowest observations
+% Sort observations
 elapsed = sort(elapsed);
-elapsed = elapsed((1 + nrem_fastest):(numFiles - nrem_slowest));
+
+% Should we remove fastest and/or slowest observations?
+if perfnpubtools_remove_fastest > 0 || perfnpubtools_remove_slowest > 0
+
+    % Are there observations to remove?
+    nrem_fastest = rem_times(perfnpubtools_remove_fastest, numFiles);
+    nrem_slowest = rem_times(perfnpubtools_remove_slowest, numFiles);
+
+    % How many observations are left after removal?
+    nobs = numFiles - nrem_fastest - nrem_slowest;
+
+    % At least one observation should exist after removal
+    if nobs < 1
+        error(['Not enough observations after removal of fastest ' ... 
+            'and slowest times']);
+    end;
+
+    % Remove fastest and slowest observations
+    elapsed = elapsed((1 + nrem_fastest):(numFiles - nrem_slowest));
+end;
 
 % Return struct with name and elapsed times
 timings = struct('name', name, 'elapsed', elapsed);
